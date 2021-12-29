@@ -19,7 +19,7 @@ MidBack has only been tested on Ubuntu Server LTS 18.04, if there is any deploym
 create a new topic and inform the server version and error details.
 
 Midback is designed for quick and easy installation.
-On a newly created ubuntu server, run the script in the deployment folder
+On a newly created linux server, run the script in the deployment folder
 
 Clone the Midback repository:
 ```
