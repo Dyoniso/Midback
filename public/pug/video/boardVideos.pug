@@ -1,0 +1,42 @@
+doctype html
+html
+    if (holidays === 'halloween')
+        title(id="pageTitle") !{vip ? '(VIP)' : ''} /h#{boards.VIDEOS.path.toUpperCase()}/ Horror Videos - Midback Halloween edition
+    else if (holidays === 'natal')    
+        title(id="pageTitle") !{vip ? '(VIP)' : ''} /#{boards.VIDEOS.path.toUpperCase()}/ Videos - Midback Christmas edition
+    else
+        title(id="pageTitle") !{vip ? '(VIP)' : ''} /#{boards.VIDEOS.path.toUpperCase()}/ Videos - Midback 2D
+
+    include ../templades/head.pug
+    include ../templades/themeChecker.pug
+
+    body(class=(theme))
+        include ../templades/boards.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+
+        - headerMode = 3
+        include ../templades/header.pug
+
+        section
+            input(type="hidden" id="passMode" value=(pass))
+            input(type="hidden" id="mode" value=(admin === true && aclAdmin === true ? 'admin' : 'normal'))
+
+            div(class="container-fluid")
+                div(class="row justify-content-center" id="itemContainer")
+                    if (files.length > 0)
+                        include ../templades/itemVideo.pug
+                        
+                    else 
+                        h4(id="notFoundMessage" class="text-center") Could not find any video. Buy another passport to upload videos        
+
+                include ../templades/pagination.pug
+
+        include ../templades/fotter.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+        include ../templades/snow.pug
+
+        script(src="/pub/itemPreview.js")
+        script(src="/pub/manager.js")
+                                  

@@ -1,0 +1,90 @@
+doctype html
+html
+    title Midback Admin
+    include ../templades/head.pug
+
+    body(class="theme-main")
+        div(class="apiContent")
+            div Midback API v2.1
+            div Logged in as Admin
+            a(class="text-warning" href="/admin/exit") Logout?
+
+        - headerMode = 22
+        include ../templades/header.pug
+        
+        section
+            div(class="container-fluid")
+                div(class="statsContainer")
+                    div(class="text-center p-2" style="font-size:18px")
+                        if (goalEnabled === true)
+                            if (data.goal.award && data.goal.award.length > 0)
+                                div The target for #{data.goal.begin} was reached (!{`<span class="text-warning">${data.goal.total}/${data.goal.limit}</span>`}), key generated: !{`<a href="/vip?activate=${data.goal.award}" class="text-warning">${data.goal.award}</a>`}
+                            else 
+                                div The goal for #{data.goal.begin} is !{`<span class="text-success">${data.goal.total}</span>`} with a limit of !{`<span class="text-danger">${data.goal.limit}</span>`} for creating a new vip key
+
+                        div There are currently !{`<span class="text-warning">${data.stats.images}</span>`} images, !{`<span class="text-warning">${data.stats.videos}</span>`} videos and !{`<span class="text-warning">${data.stats.audios}</span>`} audios on Midback
+                        hr
+
+                div(class="user-container")
+                    h2 +#{data.totalAccess} | Recent Access
+
+                    each u in data.uids
+                        div(class="uid-content" id="uid-"+u.id)
+                            span [!{`<strong>${u.id}</strong>`}]: #{u.date} | Uid: !{`<span class="text-success">${u.uid}</span>`}
+                    else
+                        div No Users found
+
+                    hr    
+
+                if (vipEnabled === true)
+                    div(class="key-container" id="keyContainer")
+                        h2 Vips Avaiable 
+                            a(class="text-warning" href="/vip") Generate?
+
+                        each k in data.vips
+                            div(class="key-content" id="key-"+k.id data-id=(k.id))
+                                span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expires} | Key: !{`<span class="text-warning">${k.key}</span>`} | Activations: #{k.activate_count} 
+                        else
+                            div No Vips found
+                        hr  
+
+                div(class="d-flex align-items-center justify-content-center")
+                    div(class="row")
+                        div(class="col-sm col-400 col-bw")
+                            h4(class="text-center") 
+                                a(class="text-light" href="/i") Recent Images 
+ 
+                            each file in data.images                
+                                div(class="file-item" id="file-item-"+file.id)
+                                    small
+                                        span(class="font-weight-bold") #{file.id}. 
+                                        a(class="text-warning" href="files/image/"+file.filename)= file.filename
+                            else
+                                div No images found!
+
+                        div(class="col-sm col-400 col-bw")
+                            h4(class="text-center") 
+                                a(class="text-light" href="/v") Recent Videos
+                            each file in data.videos                                
+                                div(class="file-item" id="file-item-"+file.id)
+                                    small
+                                        span(class="font-weight-bold") #{file.id}. 
+                                        a(class="text-warning" href="files/video/"+file.filename)= file.filename
+                            else
+                                div No Video found!
+
+                        div(class="col-sm col-400 col-bw")
+                            h4(class="text-center") 
+                                a(class="text-light" href="/a") Recent Audios
+                            each file in data.audios                                
+                                div(class="file-item" id="file-item-"+file.id)
+                                    small
+                                        span(class="font-weight-bold") #{file.id}. 
+                                        a(class="text-warning" href="files/audio/"+file.filename)= file.filename
+                            else
+                                div No audio found!
+
+
+        div(class="m-4 text-center")
+            hr
+            div Powered by Dyoniso - Copyright © Midback 2021-#{new Date().getFullYear()} - Contact: !{'<a class="text-light" href="mailto:7Retro.community@protonmail.com">7Retro.community@protonmail.com</a>'}

@@ -1,0 +1,19 @@
+if (admin === true && aclAdmin === true)
+    style.
+        .item-audio {
+            opacity: 0.7;
+            filter: hue-rotate(77deg) contrast(195%);
+            -webkit-filter: hue-rotate(77deg) contrast(195%);
+            -moz-filter: hue-rotate(77deg) contrast(195%);
+        }
+        .item-audio:hover {
+            opacity: 1;
+        }
+
+each r in files 
+    div(class=`item-audio ${r.vip ? 'audio-vip-highlight' : ''} m-2` id=`itemAudio-${r.id}` onClick=(admin === true && aclAdmin === true ? "delEvent(this)" : ""))
+        - src = `${archiveUrl}/${r.filename}`
+        img(src='/pub/audio_icon.png' data-type=(2) data-src=(src) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size))        
+
+        - let n = r.filename.length > 24 ? r.filename.substr(0, 24) : r.filename
+        small !{r.vip ? '(VIP)' : ''} #{n}

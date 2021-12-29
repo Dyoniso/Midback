@@ -1,0 +1,30 @@
+doctype html
+html
+    include ./head.pug
+
+    body(class="theme-main")
+        if (!vip)
+            include ./adsContent.pug
+        include ./header.pug
+
+        section
+            div(class="container")
+                div(class="d-flex justify-content-center")
+                    div(class="p-2 text-light font-weight-bold" style="font-size:18px;word-break:break-all") MidError: #{message}
+                h6(class="pixel-font text-warning text-center" id="redirectTimer") You will be redirected on 
+                    span 5
+
+        include ./fotter.pug
+        if (!vip)
+            include ./adsContent.pug
+
+        script.
+            let c = 5
+            let interval = setInterval(() => {
+                $('#redirectTimer').children('span').text(c)
+                if (c-- <= 0) {
+                    clearInterval(interval)
+                    history.go(-1)
+                }
+            }, 1000)        
+                                  

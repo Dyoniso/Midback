@@ -1,0 +1,30 @@
+{
+  "name": "midback",
+  "version": "1.0.0",
+  "description": "The Midback Project",
+  "main": "app",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Dyoniso",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.3.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "image-size": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "multer": "^1.4.3",
+    "node-cron": "^3.0.0",
+    "nodemon": "^2.0.14",
+    "pg": "^8.7.1",
+    "pg-promise": "^10.11.0",
+    "pug": "^3.0.2",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  }
+}

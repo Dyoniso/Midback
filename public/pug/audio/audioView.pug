@@ -1,0 +1,47 @@
+doctype html
+html
+    if (file !== null)
+        title(id="pageTitle") !{vip ? '(VIP)' : ''} #{file.filename} - Midback 2D
+    else
+        title(id="pageTitle") !{vip ? '(VIP)' : ''} /#{boards.AUDIOS.path.toUpperCase()}/ #{id} - Not Found
+
+    include ../templades/head.pug
+    include ../templades/themeChecker.pug
+
+    body(class=(theme) style="background:black")
+        include ../templades/boards.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+
+        - headerMode = 12
+        include ../templades/header.pug
+
+        section
+            if (file !== null)
+                div(class="m-4")
+                    div(class="video-container")
+                        div(class="video-header")
+                            div(class="video-title") #{file.filename} !{`<span class="font-weight-bold" style="font-size:12px">No. ${file.id}</span>`} 
+                            div(class="color-secondary" style="font-size:12px") (#{file.size}) Posted in: #{file.date} !{`<a target="_blank" href="${archiveUrl + '/' + file.filename}" class="color-link"> View raw source </a>`}
+
+                        div(class="video-content")    
+                            video(controls="" id=`video-${file.id}`)
+                                source(src=(archiveUrl + '/' + file.filename))
+
+                    div(class="container-fluid")
+                        h3(class="mt-4") Random Videos
+                        div(class="row pl-4 pr-4" id="itemContainer")
+                            if (files.length > 0)
+                                -rf2 = true
+                                include ../templades/itemVideo.pug
+
+                        div(class="row justify-content-end pl-4 pr-4")
+                            a(class="text-light" href="/v" style="font-size:18px") Back to /v
+            else
+                h3(class="text-center p-2") Video ID: #{id} not found
+
+        include ../templades/fotter.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+        include ../templades/snow.pug
+                                  

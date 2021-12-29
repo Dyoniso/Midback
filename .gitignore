@@ -1,0 +1,7 @@
+# Created By 7Retro Projects - Dyoniso
+logs/
+node_modules/
+public/files/
+package-lock.json
+deploy/templades/temp/
+.env

@@ -1,0 +1,14 @@
+[Unit]
+Description="Midback Service"
+
+[Service]
+ExecStart=/usr/bin/node app.js
+WorkingDirectory=/var/www/midback/
+Restart=always
+RestartSec=30
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=Midback
+
+[Install]
+WantedBy=multi-user.target

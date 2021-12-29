@@ -1,0 +1,59 @@
+doctype html
+html
+    title(id="pageTitle") Midback - VIP Status
+    include ../templades/head.pug
+
+    body(class="theme-main")
+        if (!vip)
+            include ../templades/adsContent.pug
+        include ../templades/header.pug
+
+        section
+            div(class="container")
+                div(class="text-center")
+                    div(id="modeMessage" style="display:none") #{mode}
+                    if (mode === 1)
+                        h2(class="text-color-change font-weight-bold") Congratulations
+                        div(class="p-2")
+                            div(class="text-light font-weight-bold" style="font-size:18px;word-break:break-all")  Your vip key has been successfully validated and activated! Enjoy ;D
+                    else if (mode === 3)
+                        h2(class="text-warning font-weight-bold") Key Warning
+                        div(class="p-2")
+                            div(class="text-light font-weight-bold" style="font-size:18px;word-break:break-all") You have already activated this key
+                    else
+                        h2(class="text-danger font-weight-bold") Key Error
+                        div(class="p-2")
+                            div(class="text-light font-weight-bold" style="font-size:18px;word-break:break-all") Couldn't find a VIP point key. Check that the key was entered correctly
+
+                    if (mode === 1 || mode === 3)
+                        h3(class="p-2") Key Info
+                        div !{'<strong>Uid Author:</strong>'} #{key.uid}
+                        div !{'<strong>Key:</strong>'} #{key.key}
+                        div !{'<strong>Expires:</strong>'} !{key.expiresFormat}
+                        div !{'<strong>Attribuited Uids:</strong>'}
+                            each u in key.activate_uids
+                                div
+                                    small(class="p-1") - #{u} -
+
+                    if (mode !== 3)    
+                        h6(class="mt-4 pixel-font text-warning" id="redirectTimer") You will be redirected on 
+                            span 5
+
+        include ../templades/fotter.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+
+        script.
+            let mode = parseInt($('#modeMessage').text())
+            if (mode !== 3) {
+                let c = 5
+                let interval = setInterval(() => {
+                    $('#redirectTimer').children('span').text(c)
+                    if (c-- <= 0) {
+                        clearInterval(interval)
+                        if (mode === 1) location.href = '/'
+                        else history.go(-1)
+                    }
+                }, 1000)
+            }
+                                  

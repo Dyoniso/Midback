@@ -1,0 +1,4 @@
+each r of files
+    div(class=`item-img-sm m-2 ${admin === true ? 'item-admin' : ''}` id=`itemImg-${r.id}` data-id=(r.id))
+        - href = board === boards.VIDEOS.path ? `${archiveUrl}/${r.thumb_name}` : `${archiveUrl}/${r.filename}`
+        img(src=(href) onerror="this.src='/pub/404.jpg'")

@@ -1,0 +1,95 @@
+header(class="m-4")
+    - if (!headerMode) headerMode = 1
+
+    
+    if (headerMode === 1)
+        div(class="text-center")      
+            a(href="/" class="title") Midback 2D
+
+    if (headerMode === 22)
+        div(class="text-center")      
+            a(href="/" class="title p-0") Midback ADMIN
+       
+    else if (headerMode === 2 || headerMode === 6)
+        div(class="text-center mt-2")    
+            a(href="/" class="title") Midback 2D
+            
+            if holidays === 'halloween'
+                h6(class="halloween-font") Halloween Edition
+            else if holidays === 'natal'
+                h6(class="christmas-title") We wish everyone a merry Christmas    
+            else
+                h6(class="anim-color-change") ▲ Infinite image interaction ▲
+
+    else if (headerMode === 3 || headerMode === 8 || headerMode === 9)
+        div(class="text-center mt-2")
+            a(href="/" class="title" style="color:#2196f3") Midback 2D
+
+            if holidays === 'halloween'
+                h6(class="halloween-font") Halloween Edition
+            else if holidays === 'natal'
+                h6(class="christmas-title") We wish everyone a merry Christmas
+            else
+                h6(class="anim-color-change") ▲ Infinite video interaction ▲
+
+    else if (headerMode === 10 || headerMode === 12 || headerMode === 14)
+        div(class="text-center mt-2")    
+            a(href="/" class="title" style="color:#f3216f") Midback 2D
+
+            if holidays === 'halloween'
+                h6(class="halloween-font") Halloween Edition
+            else if holidays === 'natal'
+                h6(class="christmas-title") We wish everyone a merry Christmas
+            else
+                h6(class="anim-color-change") ▲ Infinite audio interaction ▲     
+
+    else if (headerMode === 4)
+        div(class="text-center mt-2")  
+            span(class="title" style="color:#97f321") Midback 2D
+
+            if holidays === 'halloween'
+                h6(class="main-title") ▲ Endless interaction of images and other files. Hallowen edition of !{new Date().getFullYear()} !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲
+            else if holidays === 'natal'
+                h6(class="main-title") ▲ Endless interaction of images and other files. Christmas edition of !{new Date().getFullYear()} !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲
+            else
+                h6(class="main-title") ▲ Endless interaction of images and other files. Get your passport now !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲    
+
+
+    if (headerMode === 2 || headerMode === 3 || headerMode === 8 || headerMode === 14)
+        if (admin === true)
+            div(class="text-center")
+                if (aclAdmin === true)
+                    h6 
+                        a(class="text-warning" href=(board === 1 ? '/v' : board === 3 ? '/a' : '/i')) - Mode : Admin -
+                else
+                    h6
+                        a(class="text-warning" href=((board === 1 ? '/v' : board === 3 ? '/a' : '/i') + "?mode=admin")) - Moderate board -
+
+        //-if (mode === 'normal')
+            div(class="text-center")
+                div Passport Expires in: 
+                    span(id="stopwatch" class="text-warning") #{exp.minutes}/#{exp.seconds}  
+
+    if (headerMode === 2 || headerMode === 3 || headerMode === 14)
+        if (mode !== 'admin')
+            div(class="container thread-container")
+                form(action=((board === 1 ? `/${boards.VIDEOS.path}/` : board === 3 ? `/${boards.AUDIOS.path}/` : `/${boards.IMAGES.path}/`) + 'passport') class="passport-form" method="POST" enctype="multipart/form-data")
+                    div(class="form-group")
+                        label(class="w-100 drag-file" for="postFile")
+                            div(class="text-center" id="postFileTitle") Select or Drop the file
+
+                        if (board === 1)
+                            div(style="font-size:12px" align="left") Accept: wmv, avi, mov, webm, mkv, mp4 - Max: 4 files and 10mb / file
+                        else if (board === 3)
+                            div(style="font-size:12px" align="left") Accept: mp3 aac wav flac ogg - Max: 4 files and 10mb / file
+                        else
+                            div(style="font-size:12px" align="left")  Note: Please do not post Nazism, CP 3D, EXTREME GORE or Break Anonymity, your image will be deleted - Max: 10 files and 4mb / file    
+
+                        input(type="file" id="postFile" name="files" multiple accept=(board === 1 ? 'video/*' : board === 3 ? 'audio/*' : 'image/*'))
+                        div(class="p-2" id="filePreview")
+
+                        div(align="end")
+                            button(class="btn btn-danger font-weight-bold") POST        
+    hr                    
+
+

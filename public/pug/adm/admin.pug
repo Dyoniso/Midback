@@ -1,0 +1,22 @@
+doctype html
+html
+    title Midback Admin
+    include ../templades/head.pug
+
+    body(class="theme-main")
+        - headerMode = 22
+        include ../templades/header.pug
+        
+        section
+            div(class="container")
+                form(action="/admin/login"  method="POST" enctype="multipart/form-data")
+                    label(class="font-weight-bold" for="serverKey") Admin Password
+                    div(class="input-group")
+                        input(class="form-control" type="password" placeholder="Use a server activation password to access the admin panel" name="password" id="serverPassword")
+
+                    div(class="d-flex justify-content-end pt-2")
+                        button(class="btn btn-danger") Login
+
+        div(class="m-4 text-center")
+            hr
+            div Powered by Dyoniso - Copyright © Midback 2021-#{new Date().getFullYear()} - Contact: !{'<a class="text-light" href="mailto:7Retro.community@protonmail.com">7Retro.community@protonmail.com</a>'}

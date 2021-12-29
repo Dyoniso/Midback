@@ -1,0 +1,19 @@
+div(class="m-4 d-flex justify-content-end")
+    div(class="pagination" id="pagination")
+        - limit = 10
+        - l = page >= limit ? page + limit - 2 : limit
+        - m = page >= limit ? page - 2 : 0
+        - v = total > pageSize ? (Math.round(total / pageSize)) + 1 : 0
+        - if (v === 0) v = 1
+        - if (v >= l) v = l
+
+        span(class="pl-1" style="font-size:22px") Page: 
+            while m < v
+                -m++
+                if (parseInt(page) !== m)
+                    a(class=`pl-1 pr-1 color-secondary color-secondary-hover` href=`?&page=${m}`)= `[${m}]`
+                else
+                    span(class="quote-topic pl-1 pr-1")= `[${m}]`
+
+            span(class="ml-2 mr-2") / 
+            span(id="totalPage")= total

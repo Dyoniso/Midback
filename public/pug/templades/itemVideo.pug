@@ -1,0 +1,26 @@
+if (admin === true && aclAdmin === true)
+    style.
+        .item-video {
+            border: solid 2px #ef2b2b7a;
+            background : transparent;
+        }
+        .item-video:hover {
+            border: solid 2px #ef2b2b;
+        }
+        .item-video::after {
+            font-weight: bolder;
+            background: transparent; 
+            box-shadow: none;
+            font-size : 18px;
+            content : '';
+        }
+        .item-video:hover::after {
+            content : '>Del';
+        }
+
+
+each r in files 
+    div(class=`item-video ${r.vip ? 'vip-video-highlight' : ''} m-2` id=`itemVideo-${r.id}`)
+        - href = rf2 === true ? `${archiveUrlRF}/${r.thumb_name}` : `${archiveUrl}/${r.thumb_name}`
+        a(href=(admin && aclAdmin === true ? '#' : `?watch=${r.id}`) onClick=(admin === true && aclAdmin === true ? "delEvent(this)" : ''))
+            img(src=(href) data-type=(1) data-href=(href) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) onerror="this.src='/pub/404.jpg'")

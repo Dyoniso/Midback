@@ -1,0 +1,54 @@
+doctype html
+html
+    if (holidays === 'halloween')
+        title(id="pageTitle") /h#{boards.IMAGES.path.toUpperCase()}/ PASSPORT - Midback Halloween edition
+    else if (holidays === 'natal')
+        title(id="pageTitle") /#{boards.IMAGES.path.toUpperCase()}/ PASSPORT - Midback Christmas edition
+    else
+        title(id="pageTitle") /#{boards.IMAGES.path.toUpperCase()}/ PASSPORT - Midback 2D
+
+    include ../templades/head.pug
+    include ../templades/themeChecker.pug
+
+    body(class=(theme))
+        include ../templades/boards.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+
+        - headerMode = 6
+        include ../templades/header.pug
+        
+        section
+            div(class="container-fluid")
+                div(class="row justify-content-center" id="frameContext")    
+                    if (mode === 'pass')
+                        include ../templades/itemFrame.pug
+            
+
+                div(class="mt-4 row justify-content-center")
+                    div(class="bgr-transparent")
+                        form(action=`/${boards.IMAGES.path}/passport` class="passport-form" method="POST" enctype="multipart/form-data")
+                            div(class="p-2" style="font-size:18px") !{'<span class="font-weight-bold" style="color:red">PASSPORT REQUIRED!</span>'} To access the page, you must upload at least 1 image
+                            div(class="form-group")
+                                label(class="w-100 drag-file" for="postFile")
+                                    div(class="text-center" id="postFileTitle") Select or Drop the file
+                                input(type="file" id="postFile" name="files" multiple accept="image/*")
+                                div(class="p-2" id="filePreview")
+
+                                div(align="end")
+                                    if (vip)
+                                        button(class="m-1 btn btn-success font-weight-bold" id="btnSkip") (VIP) Skip
+                                    else    
+                                        button(class="m-1 btn btn-danger font-weight-bold" id="btnPassport") Get Passport
+
+                div(class="text-center p-2")
+                    div(style="font-size:12px") - Note: Please do not post Nazism, CP 3D, EXTREME GORE or Break Anonymity, your image will be deleted -
+                    div(style="font-size:12px") - Accept: Gif, png, jpeg, bmp, webp - Max: 10 files and 4mb / file
+                    
+        include ../templades/fotter.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+        include ../templades/snow.pug
+
+        script(src="/pub/itemPreview.js")
+                                  

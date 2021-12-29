@@ -1,0 +1,29 @@
+if (admin === true && aclAdmin === true)
+    style.
+        .item-video {
+            border: solid 2px #ef2b2b7a;
+            background : transparent;
+        }
+        .item-video:hover {
+            border: solid 2px #ef2b2b;
+        }
+        .item-video img:hover {
+            filter: saturate(0%);
+            -webkit-filter: saturate(0%);
+            -moz-filter: saturate(0%);
+        }
+        .item-video::after {
+            font-weight: bolder;
+            background: transparent; 
+            box-shadow: none;
+            font-size : 18px;
+            content : '';
+        }
+        .item-video:hover::after {
+            content : '>Del';
+        }
+
+each r in files 
+    div(onClick=(!admin || admin === true && !aclAdmin ? "openModal(this)" : "delEvent(this)") class=`item-img ${r.vip ? 'vip-highlight' : ''} m-2 ${admin === true && aclAdmin === true ? 'item-video' : ''}` id=`itemImg-${r.id}`)
+        - href = `${archiveUrl}/${r.filename}`
+        img(src=(href) data-href=(href) data-type=(0) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) data-width=(r.width) data-height=(r.height) data-vip=(String(r.vip)) onerror="this.src='/pub/404.jpg'")

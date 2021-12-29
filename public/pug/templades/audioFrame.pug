@@ -1,0 +1,4 @@
+each r of files
+    div(class=`item-audio m-1` id=`itemAudio-${r.id}` data-id=(r.id))
+        audio(controls="")
+            source(src=`${archiveUrl}/${r.filename}`)
