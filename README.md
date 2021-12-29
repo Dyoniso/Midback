@@ -15,7 +15,7 @@ Midback is an imageboard that only accepts images as a form of posting, it was d
 * [ffmpeg](https://ffmpeg.org/)
 
 # Instalation
-All System has only been tested on Ubuntu Server LTS 18.04, if there is any deployment error,
+The entire system has only been tested on [Ubuntu Server LTS 18.04](https://releases.ubuntu.com/18.04/), if there is any deployment error,
 create a new topic and inform the server version and error details.
 
 Midback is designed for quick and easy installation.
@@ -34,13 +34,14 @@ Set permission and run the setup script:
 chmod 777 setup.sh
 ./setup.sh
 ```
-The install script will configure all dependencies, database and nginx proxy automatically
+The install script will configure all dependencies, database and nginx proxy automatically.
+You can also choose manual installation, see more on the [wiki](https://github.com/Dyoniso/Midback/wiki)
 
 # Attention
-Generate a new set of RS256 security keys to prevent future attacks
+Generate a new set of [RS256 security keys](https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9) to prevent future attacks
 
 # Copyright
 Dyoniso - Copyright © Midback 2021
 
 # License
-Licensed under the WTFPL License.
+Licensed under the [WTFPL License](http://www.wtfpl.net/).
