@@ -15,7 +15,7 @@ Midback is an imageboard that only accepts images as a form of posting, it was d
 * [ffmpeg](https://ffmpeg.org/)
 
 # Instalation
-MidBack has only been tested on Ubuntu Server LTS 18.04, if there is any deployment error,
+All System has only been tested on Ubuntu Server LTS 18.04, if there is any deployment error,
 create a new topic and inform the server version and error details.
 
 Midback is designed for quick and easy installation.
