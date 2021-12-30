@@ -13,6 +13,7 @@ let PORT = process.env.PORT || process.env.SERVER_PORT
 const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
 const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
 const holidaysEnabled = Boolean(process.env.HOLIDAYS_CYCLE === 'true')
+const sameFiles = Boolean(process.env.SAME_FILES === 'true')
 
 if (!HOSTNAME) HOSTNAME = 'localhost'
 if (!PORT) PORT = 5000
@@ -61,7 +62,7 @@ const httpServer = http.createServer(app)
 httpServer.listen(PORT, HOSTNAME, () => {
     logger.info(`Midback API Started! Listening on port ${HOSTNAME}:${PORT}`)
     logger.info(`Enabled Boards: /${exports.boards.IMAGES.path.toUpperCase()}/ - ${exports.boards.IMAGES.name}, /${exports.boards.VIDEOS.path.toUpperCase()}/ - ${exports.boards.VIDEOS.name}, /${exports.boards.AUDIOS.path.toUpperCase()}/ - ${exports.boards.AUDIOS.name}`)
-    logger.info(`Vip System: ${vipEnabled === true ? 'ok' : 'disabled'}, Holidays System: ${holidaysEnabled === true ? 'ok' : 'disabled'}, Goal System: ${goalEnabled === true ? 'ok' : 'disabled'}`)
+    logger.info(`[SYSTEM STATUS] SPAM Files: ${sameFiles === true ? 'Accept same files' : 'Lock all the same files'}, Vip System: ${vipEnabled === true ? 'OK' : 'disabled'}, Holidays System: ${holidaysEnabled === true ? 'OK' : 'disabled'}, Goal System: ${goalEnabled === true ? 'OK' : 'disabled'}`)
 })
 
 module.exports.app = app

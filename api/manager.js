@@ -35,6 +35,7 @@ let archiveUrl = process.env.FILES_ACCESS_URL
 let admPassword = process.env.ADMIN_PASSWORD
 const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
 const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
+const sameFiles = Boolean(process.env.SAME_FILES === 'true')
 
 if (!archiveUrl) archiveUrl = '/files'
 if (!admPassword) admPassword = 'admin'
