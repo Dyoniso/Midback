@@ -1,6 +1,6 @@
 ![alt text](https://github.com/Dyoniso/Midback/blob/master/public/assets/final_image.png?raw=true)
 
-# Midback Relative 2D Imageboard
+# 7Retro Engine - Midback Relative 2D Imageboard
 
 Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
 
