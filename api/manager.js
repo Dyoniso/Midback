@@ -934,7 +934,7 @@ async function passportLogic(req, res, board) {
         //Function add file
         async function addFile() {
             try {
-                if (await checkSameFiles(sequence, board) === false) {
+                if (sameFiles === true || await checkSameFiles(sequence, board) === false) {
                     let tl = tables.IMAGES
                     if (board === boards.VIDEOS.path) tl = tables.VIDEOS
                     if (board === boards.AUDIOS.path) tl = tables.AUDIOS
