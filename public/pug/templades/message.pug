@@ -9,10 +9,11 @@ html
 
         section
             div(class="container")
-                div(class="d-flex justify-content-center")
-                    div(class="p-2 text-light font-weight-bold" style="font-size:18px;word-break:break-all") MidError: #{message}
-                h6(class="pixel-font text-warning text-center" id="redirectTimer") You will be redirected on 
-                    span 5
+                div(class="text-center")
+                    div Unable to process your post. The following errors occurred
+                    div(class="p-2 text-light font-weight-bold" style="font-size:18px;word-break:break-all") !{message}
+                    h6(class="pixel-font text-warning" id="redirectTimer") You will be redirected on 
+                        span 5
 
         include ./fotter.pug
         if (!vip)

@@ -5,7 +5,7 @@ html
 
     body(class="theme-main")
         div(class="apiContent")
-            div Midback API v2.1
+            div Midback API v#{API_VERSION}
             div Logged in as Admin
             a(class="text-warning" href="/admin/exit") Logout?
 
@@ -22,7 +22,20 @@ html
                             else 
                                 div The goal for #{data.goal.begin} is !{`<span class="text-success">${data.goal.total}</span>`} with a limit of !{`<span class="text-danger">${data.goal.limit}</span>`} for creating a new vip key
 
-                        div There are currently !{`<span class="text-warning">${data.stats.images}</span>`} images, !{`<span class="text-warning">${data.stats.videos}</span>`} videos and !{`<span class="text-warning">${data.stats.audios}</span>`} audios on Midback
+                        if (!boards.IMAGES.enabled && !boards.VIDEOS.enabled && !boards.AUDIOS.enabled)
+                            span There are no boards available to perform the analysis
+                        else
+                            div There are currently
+                                if (boards.IMAGES.enabled === true)
+                                    span(class="text-warning")  #{data.stats.images} 
+                                    span images
+                                if (boards.VIDEOS.enabled === true)
+                                    span(class="text-warning")  #{data.stats.videos} 
+                                    span videos
+                                if (boards.AUDIOS.enabled === true)
+                                    span(class="text-warning")  #{data.stats.audios} 
+                                    span audios
+                                span  on Midback
                         hr
 
                 div(class="user-container")

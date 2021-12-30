@@ -1,4 +1,5 @@
 const app = require('../app').app
+const API_VERSION = require('../app').API_VERSION
 
 const tables = require('../app').tables
 const boards = require('../app').boards
@@ -17,12 +18,6 @@ const pug = require('pug')
 const holidays = require('./holidays')
 const crypto = require('crypto')
 
-const allowedFormats = {
-    image : ['jpeg','jpg','gif','bmp','png','webp'],
-    video : ['wmv', 'avi', 'mov', 'webm', 'mkv', 'mp4'],
-    audio : ['mp3', 'aac', 'wav', 'flac', 'ogg', 'mpeg'],
-}
-
 const PRIVATE_KEY = fs.readFileSync('./security/jwtRS256.key', 'utf8')
 const Logger = require('./logger')
 const logger = new Logger('app')
@@ -36,6 +31,8 @@ let admPassword = process.env.ADMIN_PASSWORD
 const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
 const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
 const sameFiles = Boolean(process.env.SAME_FILES === 'true')
+const passportEnabled = Boolean(process.env.PASSPORT === 'true')
+let publicPost = Boolean(process.env.PUBLIC_POST === 'true')
 
 if (!archiveUrl) archiveUrl = '/files'
 if (!admPassword) admPassword = 'admin'
@@ -51,72 +48,84 @@ app.get('/render/' + boards.AUDIOS.path, middle.checkjwt, middle.indexLimitter, 
     return renderBoards(req, res, true, boards.AUDIOS.path)
 })
 
-app.get('/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderBoards(req, res, true, boards.IMAGES.path)
-})
-
 app.get('/render/' + boards.VIDEOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
     return renderBoards(req, res, true, boards.VIDEOS.path)
 })
 
-app.get('/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderBoards(req, res, false, boards.IMAGES.path)
-})
+if (boards.IMAGES.enabled === true) {
+    app.get('/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        return renderBoards(req, res, false, boards.IMAGES.path)
+    })
 
-app.get('/' + boards.VIDEOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderBoards(req, res, false, boards.VIDEOS.path)
-})
+    app.get('/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        return renderBoards(req, res, true, boards.IMAGES.path)
+    })
 
-app.get('/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderBoards(req, res, false, boards.AUDIOS.path)
-})
+    app.post(`/${boards.IMAGES.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+        return await passportLogic(req, res, boards.IMAGES.path)
+    })
 
-app.get(`/${boards.IMAGES.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderPass(req, res, boards.IMAGES.path)
-})
+    app.delete(`/${boards.IMAGES.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+        return await deleteLogic(req, res, boards.IMAGES.path)
+    })
 
-app.get(`/${boards.VIDEOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderPass(req, res, boards.VIDEOS.path)
-})
+    app.get(`/${boards.IMAGES.path}/touch`, async(req, res) => {
+        return youngFilesLogic(req, res, boards.IMAGES.path)
+    })
 
-app.get(`/${boards.AUDIOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
-    return renderPass(req, res, boards.AUDIOS.path)
-})
+    if (passportEnabled === true) {
+        app.get(`/${boards.IMAGES.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+            return renderPass(req, res, boards.IMAGES.path)
+        })
+    }
+}
 
-app.post(`/${boards.VIDEOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
-    return await passportLogic(req, res, boards.VIDEOS.path)
-})
+if (boards.VIDEOS.enabled === true) {
+    app.post(`/${boards.VIDEOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+        return await passportLogic(req, res, boards.VIDEOS.path)
+    })
 
-app.post(`/${boards.IMAGES.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
-    return await passportLogic(req, res, boards.IMAGES.path)
-})
+    app.delete(`/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+        return await deleteLogic(req, res, boards.VIDEOS.path)
+    })
+    
+    app.get(`/${boards.VIDEOS.path}/touch`, async(req, res) => {
+        return youngFilesLogic(req, res, boards.VIDEOS.path)
+    })
 
-app.post(`/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
-    return await passportLogic(req, res, boards.AUDIOS.path)
-})
+    app.get('/' + boards.VIDEOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        return renderBoards(req, res, false, boards.VIDEOS.path)
+    })
 
-app.delete(`/${boards.IMAGES.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
-    return await deleteLogic(req, res, boards.IMAGES.path)
-})
+    if (passportEnabled === true) {
+        app.get(`/${boards.VIDEOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+            return renderPass(req, res, boards.VIDEOS.path)
+        })
+    }
+}
 
-app.delete(`/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
-    return await deleteLogic(req, res, boards.VIDEOS.path)
-})
+if (boards.AUDIOS.enabled === true) {
+    app.post(`/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+        return await passportLogic(req, res, boards.AUDIOS.path)
+    })
+    
+    app.get('/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        return renderBoards(req, res, false, boards.AUDIOS.path)
+    })
 
-app.delete(`/${boards.AUDIOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
-    return await deleteLogic(req, res, boards.AUDIOS.path)
-})
+    app.delete(`/${boards.AUDIOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+        return await deleteLogic(req, res, boards.AUDIOS.path)
+    })
+
+    if (passportEnabled === true) {
+        app.get(`/${boards.AUDIOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+            return renderPass(req, res, boards.AUDIOS.path)
+        })
+    }
+}
 
 app.get('/', middle.checkVip, async(req, res) => {
     return renderIndex(req, res)
-})
-
-app.get(`/${boards.IMAGES.path}/touch`, async(req, res) => {
-    return youngFilesLogic(req, res, boards.IMAGES.path)
-})
-
-app.get(`/${boards.VIDEOS.path}/touch`, async(req, res) => {
-    return youngFilesLogic(req, res, boards.VIDEOS.path)
 })
 
 app.post('/admin/login', upload.any(), middle.adminLimitter, async(req, res) => {
@@ -154,6 +163,10 @@ if (vipEnabled === true) {
     })
 }
 
+app.get('/info', (req, res) => {
+    return renderInfo(req, res)
+})
+
 async function renderIndex(req, res) {
     let goal = await getGoalProgress()
 
@@ -167,6 +180,32 @@ async function renderIndex(req, res) {
         goal : goal,
         goalEnabled : goalEnabled,
      })
+}
+
+async function renderInfo(req, res) {
+    let stats = await getStats()
+    let boardInfo = JSON.parse(JSON.stringify(boards))
+    delete boardInfo.IMAGES.enabled
+    delete boardInfo.VIDEOS.enabled
+    delete boardInfo.AUDIOS.enabled
+
+    let totalSize = 0
+    let qi = await db.query(`SELECT size FROM ${tables.IMAGES}`)
+    let qv = await db.query(`SELECT size FROM ${tables.VIDEOS}`)
+    let qa = await db.query(`SELECT size FROM ${tables.AUDIOS}`)
+
+    for (s of qi) totalSize = totalSize + s.size
+    for (s of qv) totalSize = totalSize + s.size
+    for (s of qa) totalSize = totalSize + s.size
+
+    let renderObj = {
+        api_v : API_VERSION,
+        files : stats,
+        boardInfo : boardInfo,
+        rawTotalSize : totalSize,
+        totalSize : utils.formatSize(totalSize),
+    }
+    return res.status(200).send(renderObj).end()
 }
 
 async function getUids(limit) {
@@ -244,7 +283,13 @@ async function getAdminData(limit) {
 }
 
 async function renderAdmin(req, res) {
-    if (req.admin === true) return res.render('./adm/home.pug', { goalEnabled : goalEnabled, vipEnabled : vipEnabled, data : await getAdminData(200) })
+    if (req.admin === true) return res.render('./adm/home.pug', { 
+        API_VERSION : API_VERSION,
+        goalEnabled : goalEnabled,
+        vipEnabled : vipEnabled,
+        data : await getAdminData(200),
+        boards : boards,
+    })
     else return res.render('./adm/admin.pug')
 }
 
@@ -479,32 +524,47 @@ async function getVips(limit) {
 }
 
 async function getStats() {
-    let stats = { images : 0, videos : 0, audios : 0 }
+    let stats = { }
 
-    try {
-        let q = await db.query(`SELECT COUNT(*) FROM ${tables.IMAGES}`)
-        if (q[0] && q[0].count) stats.images = parseInt(q[0].count)
-        if (stats.images < 0 || isNaN(stats.images)) stats.images = 0
+    if (boards.IMAGES.enabled === true) {
+        stats.images = 0
 
-    } catch (err) {
-        logger.error('Error after get board stats {BOARD:IMAGES} ')
+        try {
+            let q = await db.query(`SELECT COUNT(*) FROM ${tables.IMAGES}`)
+            if (q[0] && q[0].count) stats.images = parseInt(q[0].count)
+            if (stats.images < 0 || isNaN(stats.images)) stats.images = 0
+    
+        } catch (err) {
+            logger.error('Error after get board stats {BOARD:IMAGES} ')
+        }
     }
-    try {
-        let q = await db.query(`SELECT COUNT(*) FROM ${tables.VIDEOS}`)
-        if (q[0] && q[0].count) stats.videos = parseInt(q[0].count)
-        if (stats.videos < 0 || isNaN(stats.videos)) stats.videos = 0
 
-    } catch (err) {
-        logger.error('Error after get board stats {BOARD:VIDEOS} ')
-    }
-    try {
-        let q = await db.query(`SELECT COUNT(*) FROM ${tables.AUDIOS}`)
-        if (q[0] && q[0].count) stats.audios = parseInt(q[0].count)
-        if (stats.audios < 0 || isNaN(stats.audios)) stats.audios = 0
+    if (boards.VIDEOS.enabled === true) {
+        stats.videos = 0
 
-    } catch (err) {
-        logger.error('Error after get board stats {BOARD:AUDIOS} ')
+        try {
+            let q = await db.query(`SELECT COUNT(*) FROM ${tables.VIDEOS}`)
+            if (q[0] && q[0].count) stats.videos = parseInt(q[0].count)
+            if (stats.videos < 0 || isNaN(stats.videos)) stats.videos = 0
+    
+        } catch (err) {
+            logger.error('Error after get board stats {BOARD:VIDEOS} ')
+        }
     }
+
+    if (boards.AUDIOS.enabled === true) {
+        stats.audios = 0
+
+        try {
+            let q = await db.query(`SELECT COUNT(*) FROM ${tables.AUDIOS}`)
+            if (q[0] && q[0].count) stats.audios = parseInt(q[0].count)
+            if (stats.audios < 0 || isNaN(stats.audios)) stats.audios = 0
+    
+        } catch (err) {
+            logger.error('Error after get board stats {BOARD:AUDIOS} ')
+        }
+    }
+
     return stats
 }
 
@@ -627,7 +687,7 @@ async function renderBoards(req, res, render, board) {
 
     if (!set || isNaN(set) || render === false) set = 0
 
-    if (!req.allowed) {
+    if (passportEnabled === true && !req.allowed) {
         if (render === true) return res.status(401).end()
         if (board === boards.AUDIOS.path) return res.redirect(`/${boards.AUDIOS.path}/pass`)
         else if (board === boards.VIDEOS.path) return res.redirect(`/${boards.VIDEOS.path}/pass`)
@@ -647,6 +707,8 @@ async function renderBoards(req, res, render, board) {
 
     let hdz = holidays.checkHoliDays()
 
+    if (admin === true) publicPost = true
+
     let renderObj = {
         vipEnabled : vipEnabled,
         boards : boards,
@@ -660,6 +722,7 @@ async function renderBoards(req, res, render, board) {
         pageSize : pageSize,
         total : totalFiles,
         holidays : hdz,
+        postEnabled : publicPost,
     }
 
     if (board === boards.AUDIOS.path) {
@@ -856,22 +919,27 @@ async function getFiles(page, limit, set, board, rnd) {
 }
 
 async function passportLogic(req, res, board) {
+    let admin = req.admin
     let uid = req.uuid
     let files = req.files
+    let errorMessage = ''
+
+    if (admin === true) {
+        postEnabled = true
+        publicPost = true
+    }
 
     if (files.length <= 0 && req.vip === true && req.allowed === false) {
         return createPassportToken(uid, 9999, board, res)
     }
 
-    if (req.admin === true && files.length <= 0) {
+    if (admin === true && files.length <= 0) {
         return createPassportToken(uid, 9999, board, res)
     }
     
     if (board === boards.AUDIOS.path && files.length > 4) files = files.splice(0, 4)
     else if (board === boards.VIDEOS.path && files.length > 4) files = files.splice(0, 4)
     else if (files.length > 10) files = files.splice(0, 10)
-
-    let errorMessage = ''
 
     for (f of files) {
         f.originalname = f.originalname.replace(/[#?&]/gm, '')
@@ -903,112 +971,122 @@ async function passportLogic(req, res, board) {
         if (!dims.width || dims.height < 0 || isNaN(dims.height)) dims.height = 0
 
         //Errors
+        function throwNotEnabledPostError() {
+            errorMessage = `[!] You are not allowed to post on this board` + '<br>'
+            logger.error(errorMessage)
+            remove(f)
+        }
+
         function throwErrorFileFormat() {
             let err = `[!] Mimetype not allowed: '${mime}'`
-            errorMessage = errorMessage + err + '\n'
+            errorMessage = errorMessage + err + '<br>'
             logger.error(err)
             remove(f)
         }
 
         function throwErrorFileSize(size) {
             let err = `[!] File size cannot be larger than ${size}`
-            errorMessage = errorMessage + err + '\n'
+            errorMessage = errorMessage + err + '<br>'
             logger.error(err)
             remove(f)
         }
 
         function throwErrorServer() {
             let err = `[!] Error after register file. Uid: ${uid}, Sequence: ${sequence}..`
-            errorMessage = errorMessage + err + '\n'
+            errorMessage = errorMessage + err + '<br>'
             logger.error(err)
             remove(f)
         }
 
         function throwErrorSameFiles() {
             let err = `[!] Error file sequence already exists Sequence: ${sequence.substr(0, sequence.length > 32 ? 32 : sequence.length)}..`
-            errorMessage = errorMessage + err + '\n'
+            errorMessage = errorMessage + err + '<br>'
             logger.error(err)
             remove(f)
         }
 
         //Function add file
         async function addFile() {
-            try {
-                if (sameFiles === true || await checkSameFiles(sequence, board) === false) {
-                    let tl = tables.IMAGES
-                    if (board === boards.VIDEOS.path) tl = tables.VIDEOS
-                    if (board === boards.AUDIOS.path) tl = tables.AUDIOS
+            try {                
+                if (publicPost === true) {
+                    if (sameFiles === true || await checkSameFiles(sequence, board) === false) {
+                        let tl = tables.IMAGES
+                        if (board === boards.VIDEOS.path) tl = tables.VIDEOS
+                        if (board === boards.AUDIOS.path) tl = tables.AUDIOS
 
-                    let nc = await db.query(`SELECT COUNT(filename) FROM ${tl} WHERE filename = $1`, [filename])
-                    nc = nc[0]
+                        let nc = await db.query(`SELECT COUNT(filename) FROM ${tl} WHERE filename = $1`, [filename])
+                        nc = nc[0]
 
-                    if (nc && nc.count > 0) {
-                        let rnd = String(Math.floor(Math.random() * Date.now())).substr(0, 8)
-                        filename = filename.split('.')[0] + '-' + rnd + '.' + filename.split('.').pop()
-                    }
-
-                    try {
-                        let totalFiles = 0
-                        let cf = await db.query(`
-                            SELECT COUNT(*) FROM ${tl}
-                        `)
-                        cf = cf[0]
-
-                        if (cf && cf.count) totalFiles = parseInt(cf.count)
-
-                        if (totalFiles > maxFiles) {
-                            let delVal = await db.query(`
-                                DELETE FROM ${tl} WHERE id IN (
-                                    SELECT id
-                                    FROM ${tl}
-                                    ORDER BY id ASC
-                                    LIMIT $1
-                                ) RETURNING id,filename,mimetype
-                                ${board === boards.VIDEOS.path ? ',thumb_name' : ''}
-
-                            `, [totalFiles - (maxFiles - 1)])
-                            
-                            for (f of delVal) {
-                                let delObj = { name : f.filename, mime : f.mimetype }
-                                if (board === boards.VIDEOS.path) delObj.thumb = f.thumb_name
-
-                                await fm.deleteFile(delObj)
-                            }
+                        if (nc && nc.count > 0) {
+                            let rnd = String(Math.floor(Math.random() * Date.now())).substr(0, 8)
+                            filename = filename.split('.')[0] + '-' + rnd + '.' + filename.split('.').pop()
                         }
 
-                    } catch (err) {
-                        logger.error('Error after check range of files')
-                    }
+                        try {
+                            let totalFiles = 0
+                            let cf = await db.query(`
+                                SELECT COUNT(*) FROM ${tl}
+                            `)
+                            cf = cf[0]
 
-                    let thv = await fm.registerFile({
-                        name : filename,
-                        base64 : base64,
-                        mime : f.mimetype,
-                    })
+                            if (cf && cf.count) totalFiles = parseInt(cf.count)
 
-                    if (board === boards.AUDIOS.path) {
-                        await db.query(`
-                            INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip) 
-                            VALUES ($1, $2, $3, $4, $5, $6)`, [uid, filename, f.mimetype, sequence, size, req.vip]
-                        )
+                            if (totalFiles > maxFiles) {
+                                let delVal = await db.query(`
+                                    DELETE FROM ${tl} WHERE id IN (
+                                        SELECT id
+                                        FROM ${tl}
+                                        ORDER BY id ASC
+                                        LIMIT $1
+                                    ) RETURNING id,filename,mimetype
+                                    ${board === boards.VIDEOS.path ? ',thumb_name' : ''}
 
-                    } else if (board === boards.VIDEOS.path) {
-                        await db.query(`
-                            INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip) 
-                            VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, thv, req.vip]
-                        )
+                                `, [totalFiles - (maxFiles - 1)])
+                                
+                                for (f of delVal) {
+                                    let delObj = { name : f.filename, mime : f.mimetype }
+                                    if (board === boards.VIDEOS.path) delObj.thumb = f.thumb_name
+
+                                    await fm.deleteFile(delObj)
+                                }
+                            }
+
+                        } catch (err) {
+                            logger.error('Error after check range of files')
+                        }
+
+                        let thv = await fm.registerFile({
+                            name : filename,
+                            base64 : base64,
+                            mime : f.mimetype,
+                        })
+
+                        if (board === boards.AUDIOS.path) {
+                            await db.query(`
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip) 
+                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, filename, f.mimetype, sequence, size, req.vip]
+                            )
+
+                        } else if (board === boards.VIDEOS.path) {
+                            await db.query(`
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, thv, req.vip]
+                            )
+                        } else {
+                            await db.query(`
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip]
+                            )
+                        }
+
+                        await appendGoal(uid, 1)
+                        logger.info(`File info registered on db! Name: ${filename}, Mime:${mime}, Sequence: ${sequence}`) 
+
                     } else {
-                        await db.query(`
-                            INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip) 
-                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip]
-                        )
+                        throwErrorSameFiles()
                     }
-
-                    await appendGoal(uid, 1)
-                    logger.info(`File info registered on db! Name: ${filename}, Mime:${mime}, Sequence: ${sequence}`) 
-
                 } else {
-                    throwErrorSameFiles()
+                    throwNotEnabledPostError()
                 }
 
             } catch (err) {
@@ -1018,7 +1096,7 @@ async function passportLogic(req, res, board) {
 
         //File Checker
         if (board === boards.AUDIOS.path) {
-            if (allowedFormats.audio.includes(mime) === true) {
+            if (boards.AUDIOS.type.includes(mime) === true) {
                 if (size <= 10000000) {
                     await addFile()
                 } else {
@@ -1028,7 +1106,7 @@ async function passportLogic(req, res, board) {
                 throwErrorFileFormat()
             }
         } else if (board === boards.VIDEOS.path) {
-            if (allowedFormats.video.includes(mime) === true) {
+            if (boards.VIDEOS.type.includes(mime) === true) {
                 if (size <= 10000000) {
                     await addFile()
                 } else {
@@ -1038,7 +1116,7 @@ async function passportLogic(req, res, board) {
                 throwErrorFileFormat()
             }
         } else {
-            if (allowedFormats.image.includes(mime) === true) {
+            if (boards.IMAGES.type.includes(mime) === true) {
                 if (size <= 4000000) {
                     await addFile()
                 } else {
