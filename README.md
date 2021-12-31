@@ -37,9 +37,6 @@ chmod 777 setup.sh
 The install script will configure all dependencies, database and nginx proxy automatically.
 You can also choose manual installation, see more on the [wiki](https://github.com/Dyoniso/Midback/wiki)
 
-# Attention
-Generate a new set of [RS256 security keys](https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9) to prevent future attacks
-
 # Copyright
 Dyoniso - Copyright © Midback 2021
 
