@@ -32,10 +32,16 @@ if [ "$CONFIG_MASTER_PASSWORD" == "" ]; then
 fi
 
 if [ "$answerConfirm" == "y" ]; then
-    cd ../
     echo "Installing node modules"
+    cd ../
     npm install
     echo "[OK] Node modules installed!"
+
+    echo "Generating RS256 Keyset"
+    mkdir security
+    ssh-keygen -p -t rsa -N '' -b 4096 -m PEM -f ./security/jwtRS256.key
+    openssl rsa -in jwtRS256.key -pubout -outform PEM -out ./security/jwtRS256.key.pub
+    echo "[OK] Keys have been saved in folder: './security'"
 
     cd ./deploy/templades
 

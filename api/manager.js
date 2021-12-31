@@ -18,9 +18,16 @@ const pug = require('pug')
 const holidays = require('./holidays')
 const crypto = require('crypto')
 
-const PRIVATE_KEY = fs.readFileSync('./security/jwtRS256.key', 'utf8')
 const Logger = require('./logger')
 const logger = new Logger('app')
+
+//TOKEN PRIVATE KEY
+try {
+    if (!fs.existsSync('./security')) fs.mkdirSync('./security')
+    PRIVATE_KEY = fs.readFileSync('./security/jwtRS256.key', 'utf8')
+} catch (err) {
+    throw new Error(`JWTRS256 private key not found. Generate a new key and place it in the folder: './security'`)
+}
 
 //ENV
 let maxFiles = parseInt(process.env.MAX_FILES)

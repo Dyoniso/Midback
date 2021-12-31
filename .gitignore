@@ -4,4 +4,5 @@ node_modules/
 public/files/
 package-lock.json
 deploy/templades/temp/
+security/
 .env

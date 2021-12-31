@@ -3,9 +3,16 @@ const boards = require('../app').boards
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const rateLimit = require("express-rate-limit");
-const PUBLIC_KEY = fs.readFileSync('./security/jwtRS256.key.pub', 'utf8')
 const db = require('./database')
 const md5 = require('md5')
+
+//TOKEN PUBLIC KEY
+try {
+    if (!fs.existsSync('./security')) fs.mkdirSync('./security')
+    PUBLIC_KEY = fs.readFileSync('./security/jwtRS256.key.pub', 'utf8')
+} catch (err) {
+    throw new Error(`JWTRS256 public key not found. Generate a new key and place it in the folder: './security'`)        
+}
 
 const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
 
