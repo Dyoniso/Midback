@@ -56,46 +56,53 @@ html
 
                         each k in data.vips
                             div(class="key-content" id="key-"+k.id data-id=(k.id))
-                                span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expires} | Key: !{`<span class="text-warning">${k.key}</span>`} | Activations: #{k.activate_count} 
+                                span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expires} | Key: !{`<a href="/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
                         else
                             div No Vips found
                         hr  
 
                 div(class="d-flex align-items-center justify-content-center")
                     div(class="row")
-                        div(class="col-sm col-400 col-bw")
-                            h4(class="text-center") 
-                                a(class="text-light" href="/i") Recent Images 
- 
-                            each file in data.images                
-                                div(class="file-item" id="file-item-"+file.id)
-                                    small
-                                        span(class="font-weight-bold") #{file.id}. 
-                                        a(class="text-warning" href="files/image/"+file.filename)= file.filename
-                            else
-                                div No images found!
+                        if (!boards.IMAGES.enabled && !boards.VIDEOS.enabled && !boards.AUDIOS.enabled)
+                            div(class="col-sm")
+                                h4(class="text-center p-2") For now there is no preview of available files
 
-                        div(class="col-sm col-400 col-bw")
-                            h4(class="text-center") 
-                                a(class="text-light" href="/v") Recent Videos
-                            each file in data.videos                                
-                                div(class="file-item" id="file-item-"+file.id)
-                                    small
-                                        span(class="font-weight-bold") #{file.id}. 
-                                        a(class="text-warning" href="files/video/"+file.filename)= file.filename
-                            else
-                                div No Video found!
+                        if (boards.IMAGES.enabled === true)
+                            div(class="col-sm col-400 col-bw")
+                                h4(class="text-center") 
+                                    a(class="text-light" href="/i") Recent Images 
+    
+                                each file in data.images                
+                                    div(class="file-item" id="file-item-"+file.id)
+                                        small
+                                            span(class="font-weight-bold") #{file.id}. 
+                                            a(class="text-warning" href="files/image/"+file.filename)= file.filename
+                                else
+                                    div No images found!
 
-                        div(class="col-sm col-400 col-bw")
-                            h4(class="text-center") 
-                                a(class="text-light" href="/a") Recent Audios
-                            each file in data.audios                                
-                                div(class="file-item" id="file-item-"+file.id)
-                                    small
-                                        span(class="font-weight-bold") #{file.id}. 
-                                        a(class="text-warning" href="files/audio/"+file.filename)= file.filename
-                            else
-                                div No audio found!
+                        if (boards.VIDEOS.enabled === true)
+                            div(class="col-sm col-400 col-bw")
+                                h4(class="text-center") 
+                                    a(class="text-light" href="/v") Recent Videos
+                                each file in data.videos                                
+                                    div(class="file-item" id="file-item-"+file.id)
+                                        small
+                                            span(class="font-weight-bold") #{file.id}. 
+                                            a(class="text-warning" href="files/video/"+file.filename)= file.filename
+                                else
+                                    div No Video found!
+
+                        if (boards.AUDIOS.enabled === true)
+                            div(class="col-sm col-400 col-bw")
+                                h4(class="text-center") 
+                                    a(class="text-light" href="/a") Recent Audios
+                                each file in data.audios                                
+                                    div(class="file-item" id="file-item-"+file.id)
+                                        small
+                                            span(class="font-weight-bold") #{file.id}. 
+                                            a(class="text-warning" href="files/audio/"+file.filename)= file.filename
+                                else
+                                    div No audio found!
 
 
         div(class="m-4 text-center")

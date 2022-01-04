@@ -495,6 +495,7 @@ async function renderVip(req, res) {
             let uids = JSON.parse(q.activate_uids)
             let mask = []
             for (f of uids) mask.push(f.replace(/(?<=.{28})./g, 'X'))
+            q.uid = q.uid.replace(/(?<=.{28})./g, 'X')
             q.expiresFormat = utils.formatTimestamp(q.expires)
             q.activate_uids = mask
         }
@@ -930,17 +931,18 @@ async function passportLogic(req, res, board) {
     let uid = req.uuid
     let files = req.files
     let errorMessage = ''
+    let allowed = req.allowed
 
     if (admin === true) {
         postEnabled = true
         publicPost = true
     }
 
-    if (files.length <= 0 && req.vip === true && req.allowed === false) {
+    if (files.length <= 0 && req.vip === true && !allowed) {
         return createPassportToken(uid, 9999, board, res)
     }
 
-    if (admin === true && files.length <= 0) {
+    if (!allowed && admin === true && files.length <= 0) {
         return createPassportToken(uid, 9999, board, res)
     }
     
