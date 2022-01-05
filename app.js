@@ -50,7 +50,7 @@ exports.boards = {
         enabled     :   true,
     },
     AUDIOS   :   {
-        name        :   'Audio',
+        name        :   'Audios',
         path        :   'a',
         type        :   ['mp3', 'aac', 'wav', 'flac', 'ogg', 'mpeg'],
         enabled     :   true,

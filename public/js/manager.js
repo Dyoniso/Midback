@@ -84,8 +84,11 @@ $(document).ready((e) => {
                     if (raw && raw.length > 0) notifyCount += raw.length
                     
                     if (notifyCount > 0) {
+                        let totalPage = parseInt($('#totalPage').val())
+                        if (isNaN(totalPage) || totalPage <= 0) totalPage = 0
+                    
                         $('#notFoundMessage').hide()
-                        $('#totalPage').text(parseInt($('#totalPage').text()) + raw.length)
+                        $('#totalPagePreview').text(totalPage + raw.length)
                         $('#pageTitle').text(`(${notifyCount}) ` + defaultTitle)
                     }
                 }
@@ -104,7 +107,10 @@ $(document).ready((e) => {
             if (c-- < 0) {
                 if (tinInit < 120) tinInit = tinInit + 2            
                 c = tinInit
-                fetchFiles(parseInt($('#totalPage').text()))
+
+                let totalPage = parseInt($('#totalPage').val())
+                if (isNaN(totalPage) || totalPage <= 0) totalPage = 0
+                fetchFiles(totalPage)
             }
         }, 1000)
     }

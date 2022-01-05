@@ -612,3 +612,46 @@ hr {
     overflow:hidden; 
     background-color: transparent;
 }
+
+.pagination {
+    margin: 8px;
+    display: flex;
+    justify-content: end;
+}
+
+.pagination .page {
+    color: #1b1b1b;
+    cursor: pointer;
+    font-size: 12px;
+    background: #dddddd96;
+    padding: 4px;
+    border-radius: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.pagination .page:hover {
+    text-decoration: none;
+    color: black;
+    background: #ddddddd5;
+}
+
+.pagination .quote {
+    color: white;
+    background : #a37c07;
+}
+
+.pagination .quote:hover {
+    color: white;
+    background : #a37c07;
+}
+
+.pagination .preview {
+    color: #1b1b1b;
+    font-size: 12px;
+    background: #dddddd96;
+    padding: 4px;
+    border-radius: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}

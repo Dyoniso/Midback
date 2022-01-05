@@ -122,7 +122,8 @@ exports.uidGen = async(req, res, next) => {
     })
 }
 
-exports.limitter = rateLimit(limitObj)
+//LIMITER
+exports.limitter = rateLimit(limitObj) 
 
 limitObj.max = 50
 limitObj.windowMs = 10 * 60 * 1000,

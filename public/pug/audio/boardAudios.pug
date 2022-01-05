@@ -19,6 +19,7 @@ html
         include ../templades/header.pug
 
         section
+            input(type="hidden" id="totalPage" value=(total))
             input(type="hidden" id="passMode" value=(pass))
             input(type="hidden" id="mode" value=(admin === true && aclAdmin === true ? 'admin' : 'normal'))
 
