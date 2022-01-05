@@ -480,6 +480,9 @@ hr {
     .col-400 {
         max-width: unset;
     }
+    .igr {
+        display: none;
+    }
 }
 @media only screen and (max-width: 400px) {
     .title {
