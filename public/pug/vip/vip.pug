@@ -48,7 +48,7 @@ html
                         div(class="key-container" id="keyContainer")
                             each k in keys
                                 div(class="key-content" id="key-"+k.id data-id=(k.id))
-                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} | Key: !{`<span class="text-warning">${k.key}</span>`} | Activations: #{k.activate_count} 
+                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expiresFormat} | Key: !{`<a href="/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
                                     span(class="ml-auto btn-close btnDelete") X
 
         include ../templades/fotter.pug

@@ -566,10 +566,15 @@ hr {
 }
 
 .vip-tag {
+    font-size: 10px;
     font-weight: bold;
-    background-color: #007413;
+    background-color: #008c17;
     border-radius: 4px;
-    padding: 2px;
+    padding: 4px;
+    margin: 2px;
+    color: white;
+    box-shadow: 1px 1px #003509;
+    cursor: pointer;
 }
 
 .audio-vip-highlight {

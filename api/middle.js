@@ -98,7 +98,7 @@ let limitObj = {
     max: 10,
     skipFailedRequests: true,
     skipSuccessfulRequests: false,
-    message: {
+    message : {
         status: 429,
         error: 'You are doing that too much. Please try again in 10 minutes.'
     }
@@ -123,6 +123,13 @@ exports.uidGen = async(req, res, next) => {
 }
 
 //LIMITER
+limitObj.max = (req, res) => {
+    let path = req.path.split('/')[2]
+    if (path === 'passport') {
+        if (!req.files || req.files.length <= 0) return 100
+    }
+    return 10
+}
 exports.limitter = rateLimit(limitObj) 
 
 limitObj.max = 50
@@ -133,5 +140,11 @@ exports.delLimiter = rateLimit(limitObj)
 limitObj.max = 500
 exports.indexLimitter = rateLimit(limitObj)
 
-limitObj.max = 10
+limitObj.max = (req, res) => {
+    let path = req.path.split('/')[1]
+    if (path === 'admin') {
+        if (!req.body.password || req.body.password === '') return 100
+    }
+    return 10
+}
 exports.adminLimitter = rateLimit(limitObj)

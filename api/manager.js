@@ -522,6 +522,7 @@ async function getVips(limit) {
         for (k of q) {
             k.date = utils.formatTimestamp(k.date)
             k.activate_count = JSON.parse(k.activate_uids).length
+            k.expiresFormat = utils.formatTimestamp(k.expires)
             keys.push(k)
         }
 
