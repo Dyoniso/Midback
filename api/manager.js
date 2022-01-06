@@ -216,7 +216,7 @@ async function renderInfo(req, res) {
 }
 
 async function getUids(limit) {
-    if (!limit) limit = 100
+    if (!limit) limit = 30
     let uids = []
 
     try {
