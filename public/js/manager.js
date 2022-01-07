@@ -86,9 +86,11 @@ $(document).ready((e) => {
                     if (notifyCount > 0) {
                         let totalPage = parseInt($('#totalPage').val())
                         if (isNaN(totalPage) || totalPage <= 0) totalPage = 0
+                        totalPage = totalPage + raw.length
                     
                         $('#notFoundMessage').hide()
-                        $('#totalPagePreview').text(totalPage + raw.length)
+                        $('#totalPagePreview').text(totalPage)
+                        $('#totalPage').val(totalPage)
                         $('#pageTitle').text(`(${notifyCount}) ` + defaultTitle)
                     }
                 }

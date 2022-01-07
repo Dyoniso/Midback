@@ -216,7 +216,7 @@ async function renderInfo(req, res) {
 }
 
 async function getUids(limit) {
-    if (!limit) limit = 30
+    if (!limit) limit = 15
     let uids = []
 
     try {
@@ -244,7 +244,7 @@ async function getAdminData(limit) {
     data.stats = await getStats()
     data.goal = await getGoalProgress()
     data.vips = await getVips()
-    data.uids = await getUids(100)
+    data.uids = await getUids(15)
 
     for (v of data.vips) {
         v.rawExpires = v.expires
