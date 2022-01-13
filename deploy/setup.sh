@@ -40,7 +40,7 @@ if [ "$answerConfirm" == "y" ]; then
     echo "Generating RS256 Keyset"
     mkdir security
     ssh-keygen -t rsa -P "" -b 4096 -m PEM -f ./security/jwtRS256.key
-    openssl rsa -in jwtRS256.key -pubout -outform PEM -out ./security/jwtRS256.key.pub
+    openssl rsa -in ./security/jwtRS256.key -pubout -outform PEM -out ./security/jwtRS256.key.pub
     echo "[OK] Keys have been saved in folder: './security'"
 
     cd ./deploy/templades
