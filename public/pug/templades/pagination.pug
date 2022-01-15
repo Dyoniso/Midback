@@ -12,18 +12,18 @@ div(class="mt-4")
 
         span(class="pagination-content")
             if (page > 1)
-                a(class="page font-weight-bold igr" href=`?&page=${page - 1}`) Previous  
+                a(class="page font-weight-bold igr" href=`?&page=${page - 1}${search.length > 0 ? `&search=${search}` : ''}`) Previous  
             if (page >= limit)
-                a(class="page mr-1" href=`?&page=1`) 1
+                a(class="page mr-1" href=`?&page=1${search.length > 0 ? `&search=${search}` : ''}`) 1
 
             while m < v
                 -m++
                 if (parseInt(page) !== m)
-                    a(class="page" href=`?&page=${m}`)= m
+                    a(class="page" href=`?&page=${m}${search.length > 0 ? `&search=${search}` : ''}`)= m
                 else
                     span(class="page quote")= m
         
         if (m !== page)
-            a(class="page font-weight-bold igr" href=`?&page=${page + 1}`) Next  
+            a(class="page font-weight-bold igr" href=`?&page=${page + 1}${search.length > 0 ? `&search=${search}` : ''}`) Next  
 
         span(class="preview igr" id="totalPagePreview") Of #{total} files

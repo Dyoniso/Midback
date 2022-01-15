@@ -63,7 +63,7 @@ if (boards.IMAGES.enabled === true) {
     app.get('/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.IMAGES.path)
     })
-
+    
     app.get('/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, true, boards.IMAGES.path)
     })
@@ -687,9 +687,13 @@ async function renderBoards(req, res, render, board) {
     let admin = req.admin
     let set = parseInt(req.query.set)
     let page = parseInt(req.query.page)
+    let search = req.query.search
 
     if (!page && isNaN(page)) page = 1
     if (isNaN(watch) || watch <= 0) watch = -1
+    if (!search) search = ''
+    if (search.length > 200) search = search.substr(200)
+    if (search.length > 0) logger.info(`New search started! [ Query: ${search} ]`)
     //if (!mode && admin === true) admin = false
 
     let hasViewVideo = Boolean((watch > 0 && board === boards.VIDEOS.path))
@@ -708,8 +712,8 @@ async function renderBoards(req, res, render, board) {
     let totalFiles = 0
 
     if (hasViewVideo === false) {
-        if (render === false) totalFiles = await getFilesLength(board)
-        files = await getFiles(page, pageSize, set, board)
+        if (render === false) totalFiles = await getFilesLength(board, search)
+        files = await getFiles(page, pageSize, set, board, false, search)
     } else {
         file = await getFile(watch, board)
     }
@@ -732,6 +736,7 @@ async function renderBoards(req, res, render, board) {
         total : totalFiles,
         holidays : hdz,
         postEnabled : publicPost,
+        search : search,
     }
 
     if (board === boards.AUDIOS.path) {
@@ -853,7 +858,8 @@ async function checkSameFiles(sequence, board) {
     return false
 }
 
-async function getFilesLength(board) {
+async function getFilesLength(board, search) {
+    if (!search) search = ''
     let count = 0
     try {
         let tl = tables.IMAGES
@@ -861,8 +867,9 @@ async function getFilesLength(board) {
         if (board === boards.AUDIOS.path) tl = tables.AUDIOS
 
         let q = await db.query(`
-            SELECT COUNT(*) FROM ${tl}
-        `)
+            SELECT COUNT(*) FROM ${tl} WHERE  
+            id::varchar LIKE $1 OR filename LIKE $1 OR mimetype LIKE $1
+        `, [`%${search}%`])
 
         if (q[0] && q[0].count) count = q[0].count
 
@@ -891,7 +898,8 @@ async function getFile(id, board) {
     return file
 }
 
-async function getFiles(page, limit, set, board, rnd) {
+async function getFiles(page, limit, set, board, rnd, search) {
+    if (!search) search = ''
     if (!rnd) rnd = false
     if (!page) page = 1
 
@@ -905,12 +913,20 @@ async function getFiles(page, limit, set, board, rnd) {
 
         let q = []
         if (rnd === true) {
-            q = await db.query(`SELECT * FROM ${tl} WHERE id != $2 ORDER by random() LIMIT $1`, [limit, set])
+            q = await db.query(`
+                SELECT * FROM ${tl} 
+                WHERE id != $2 
+                AND id::varchar LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
+                ORDER by random() 
+                LIMIT $1
+            `, [limit, set, `%${search}%`])
 
         } else {
             q = await db.query(`
-            SELECT * FROM ${tl} ORDER by ID ${settable ? 'DESC' : 'ASC'} OFFSET $1 LIMIT $2
-            `, [settable ? page * limit - limit : set, limit])
+                SELECT * FROM ${tl} WHERE 
+                id::varchar LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
+                ORDER by ID ${settable ? 'DESC' : 'ASC'} OFFSET $1 LIMIT $2
+            `, [settable ? page * limit - limit : set, limit, `%${search}%`])
         }
         
         files = q
@@ -921,9 +937,8 @@ async function getFiles(page, limit, set, board, rnd) {
         if (rnd === false) files = files.sort((x, y) => y.id - x.id)
 
     } catch (err) {
-        logger.error('Error in get all files')
+        logger.error('Error in get files')
     }
-
     return files
 }
 
@@ -951,6 +966,21 @@ async function passportLogic(req, res, board) {
     else if (board === boards.VIDEOS.path && files.length > 4) files = files.splice(0, 4)
     else if (files.length > 10) files = files.splice(0, 10)
 
+    function generateFileSequence(base64) {
+        let sequence = ''
+        let maxLength = 30
+        let eachLine = 3
+        let insideLine = Math.round((base64.length / maxLength) / eachLine * 2)
+        let count = 0
+    
+        for (let i = 0; i <= base64.length; i++) {
+            count = count + (insideLine + eachLine) <= base64.length ? count + insideLine : count
+            sequence += base64.substring(count - eachLine, count + eachLine)
+            if (sequence.length > maxLength) break
+        }
+        return sequence
+    }
+
     for (f of files) {
         f.originalname = f.originalname.replace(/[#?&]/gm, '')
         if (f.originalname.split('.')[0].length === 0) f.originalname = String(Math.floor(Math.random() * Date.now())).substr(0, 8) + '.' + f.originalname.split('.').pop()
@@ -969,7 +999,7 @@ async function passportLogic(req, res, board) {
         if (filename < 3) filename = utils.generateHash(12)
         if (filename > 120) filename = filename.substr(0, 120)
         
-        let sequence = base64.substr(0, base64.length > 250 ? 250 : base64.length)
+        let sequence = generateFileSequence(base64)
         
         try {
             dims = sizeOf(Buffer.from(base64, 'base64'))

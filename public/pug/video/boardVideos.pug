@@ -29,9 +29,10 @@ html
                         include ../templades/itemVideo.pug
                         
                     else 
-                        h4(id="notFoundMessage" class="text-center") Could not find any video. Buy another passport to upload videos        
+                        h4(id="notFoundMessage" class="text-center") Could not find any video        
 
                 include ../templades/pagination.pug
+                include ../templades/search.pug
 
         include ../templades/fotter.pug
         if (!vip)

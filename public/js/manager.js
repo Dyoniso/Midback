@@ -14,8 +14,6 @@ function openModal(e) {
     if (vip) $('.custom-modal-header').css({'background' : '#460875' })
     else $('.custom-modal-header').css({'background' : '' })
 
-    console.log(type)
-
     if (type !== 1) {
         $('#btnDownloadImgPreview').attr('href', href)
         $('#modalPreviewTitle').html(`
@@ -68,9 +66,10 @@ $(document).ready((e) => {
     })
     
     let defaultTitle = $('#pageTitle').text()
+    let search = $('#searchContent').val()
     let notifyCount = 0
     async function fetchFiles(len) {
-        fetch(`/render/${boardType}?set=${len}`, {
+        fetch(`/render/${boardType}?set=${len}&search=${search}`, {
             method: 'GET',
             headers: { 'Content-Type' : 'text/html; charset=utf-8' },
         })
@@ -78,10 +77,15 @@ $(document).ready((e) => {
             if (res && res.status === 200) {
                 let data = await res.text()
                 if (data.length > 0) {
-                    $('#itemContainer').prepend(data)
-                                        
+                    await $('#itemContainer').prepend(data)
+                    
                     let raw = $($.parseHTML(data))
-                    if (raw && raw.length > 0) notifyCount += raw.length
+                    if (raw && raw.length > 0) {
+                        notifyCount += raw.length
+                        for (i of raw) {
+                            $('#'+$(i).attr('id')).find('img').css('background', '#ff000038')
+                        }
+                    }
                     
                     if (notifyCount > 0) {
                         let totalPage = parseInt($('#totalPage').val())
@@ -100,6 +104,7 @@ $(document).ready((e) => {
     $(document).on('mousemove', (e) => {
         $('#pageTitle').text(defaultTitle)
         notifyCount = 0
+        $('#itemContainer').find('img').removeAttr('style')
     })
 
     function startNotifyTimer() {

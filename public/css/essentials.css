@@ -663,3 +663,19 @@ hr {
     margin-left: 2px;
     margin-right: 2px;
 }
+
+.search-form input {
+    width: 120px;
+    height: 25px;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-left: 10px;
+    color: white;
+    background: #dddddd96;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.search-form input::placeholder {
+    color: #dddbdb!important;
+}

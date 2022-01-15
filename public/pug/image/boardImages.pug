@@ -31,9 +31,10 @@ html
                         include ../templades/itemImage.pug
                         
                     else 
-                        h4(id="notFoundMessage" class="text-center") Could not find any image. Buy another passport to upload images        
+                        h4(id="notFoundMessage" class="text-center") Could not find any image
 
                 include ../templades/pagination.pug
+                include ../templades/search.pug
 
         include ../templades/fotter.pug
         if (!vip)

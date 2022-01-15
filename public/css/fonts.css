@@ -1,19 +1,13 @@
 @font-face {
     font-family: 'halloween';
-    src: url('/pub/fonts/font_halloween.eot'); /* IE9 Compat Modes */
-    src: url('/pub/fonts/font_halloween.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('/pub/fonts/font_halloween.woff') format('woff'), /* Modern Browsers */
-         url('/pub/fonts/font_halloween.ttf')  format('truetype'), /* Safari, Android, iOS */
-         url('/pub/fonts/font_halloween.svg#svgFontName') format('svg'); /* Legacy iOS */
+    src: url('/pub/fonts/font_halloween.ttf')  format('truetype');
+    
 }
 
 @font-face {
     font-family: 'boulder';
-    src: url('/pub/fonts/font_boulder.eot'); /* IE9 Compat Modes */
-    src: url('/pub/fonts/font_boulder.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('/pub/fonts/font_boulder.woff') format('woff'), /* Modern Browsers */
-         url('/pub/fonts/font_boulder.ttf')  format('truetype'), /* Safari, Android, iOS */
-         url('/pub/fonts/font_boulder.svg#svgFontName') format('svg'); /* Legacy iOS */
+    src: url('/pub/fonts/font_boulder.ttf');
+         
 }
 
 .halloween-font {
