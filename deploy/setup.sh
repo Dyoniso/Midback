@@ -49,18 +49,13 @@ if [ "$answerConfirm" == "y" ]; then
     echo "Node env updated!"
 
     mkdir ./temp
-    cp midback.service ./temp/midback.service && cp nginx-proxy.conf ./temp/nginx-proxy.conf && cp node-env.conf ./temp/node-env.conf && cp pg_default.conf ./temp/pg_default.conf && cp pg_hba.conf ./temp/pg_hba.conf
+    cp midback.service ./temp/midback.service && cp nginx-proxy.conf ./temp/nginx-proxy.conf && cp node-env.conf ./temp/node-env.conf
     cd ./temp
 
     mv node-env.conf .env
     mv .env ../../../.env
 
     echo "Setting up postgresql database"
-    mv pg_default.conf postgresql.conf
-    mv postgresql.conf /etc/postgresql/10/main/postgresql.conf
-    mv pg_hba.conf /etc/postgresql/10/main/pg_hba.conf
-
-    systemctl enable postgresql
     sudo -i -u postgres psql -c "ALTER USER postgres PASSWORD '$CONFIG_MASTER_PASSWORD';"
     sudo -i -u postgres createdb Midback
     ufw allow from any to any port 5432 proto tcp
