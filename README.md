@@ -10,7 +10,7 @@ Midback is an imageboard that only accepts images as a form of posting, it was d
 4. Easy instalation
 
 # Required dependencies
-* [Node.js](http://nodejs.org) 16.x
+* [Node.js](http://nodejs.org)
 * [Postgresql 10](https://www.postgresql.org)
 * [ffmpeg](https://ffmpeg.org/)
 
