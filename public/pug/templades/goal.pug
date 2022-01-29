@@ -9,4 +9,4 @@ if (!goal.error)
                     div(class="m-auto progress-info") #{goal.total} / #{goal.limit} Files    
             else 
                 h6 Goal achieved! Thank you for contributing
-                div VIP Key: !{`<a href="/vip?activate=${goal.award}" class="text-warning">${goal.award}</span>`}    
+                div VIP Key: !{`<a href="${bdgePath}/vip?activate=${goal.award}" class="text-warning">${goal.award}</span>`}    

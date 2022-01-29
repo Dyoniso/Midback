@@ -29,7 +29,7 @@ html
 
                 div(class="mt-4 row justify-content-center")
                     div(class="bgr-transparent")
-                        form(action=`/${boards.IMAGES.path}/passport` class="passport-form" method="POST" enctype="multipart/form-data")
+                        form(action=`${bdgePath}/${boards.IMAGES.path}/passport` class="passport-form" method="POST" enctype="multipart/form-data")
                             div(class="p-2" style="font-size:18px") !{'<span class="font-weight-bold" style="color:red">PASSPORT REQUIRED!</span>'} To access the page, you must upload at least 1 image
                             div(class="form-group")
                                 label(class="w-100 drag-file" for="postFile")

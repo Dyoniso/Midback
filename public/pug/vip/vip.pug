@@ -29,7 +29,7 @@ html
                             li Exclusive VIP Board (Coming Soon)
                             li VIP tag next to the file name
 
-                    form(action="/vip/assign" method="POST" enctype="multipart/form-data" class="vip-form w-100")
+                    form(action=(bdgePath + "/vip/assign") method="POST" enctype="multipart/form-data" class="vip-form w-100")
                         label(for="vipKey") Activate VIP key
                         div(class="input-group")
                             input(class="form-control"  placeholder="Type your exclusive VIP key" name="key" id="vipKey")
@@ -50,7 +50,7 @@ html
                         div(class="key-container" id="keyContainer")
                             each k in keys
                                 div(class="key-content" id="key-"+k.id data-id=(k.id))
-                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expiresFormat} | Key: !{`<a href="/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
+                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expiresFormat} | Key: !{`<a href="${bdgePath}/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
                                     span(class="ml-auto btn-close btnDelete") X
 
         include ../templades/fotter.pug

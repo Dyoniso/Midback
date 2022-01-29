@@ -7,7 +7,7 @@ html
         div(class="apiContent")
             div Midback API v#{API_VERSION}
             div Logged in as Admin
-            a(class="text-warning" href="/admin/exit") Logout?
+            a(class="text-warning" href=(bdgePath + "/admin/exit")) Logout?
 
         - headerMode = 22
         include ../templades/header.pug
@@ -18,7 +18,7 @@ html
                     div(class="text-center p-2" style="font-size:18px")
                         if (goalEnabled === true)
                             if (data.goal.award && data.goal.award.length > 0)
-                                div The target for #{data.goal.begin} was reached (!{`<span class="text-warning">${data.goal.total}/${data.goal.limit}</span>`}), key generated: !{`<a href="/vip?activate=${data.goal.award}" class="text-warning">${data.goal.award}</a>`}
+                                div The target for #{data.goal.begin} was reached (!{`<span class="text-warning">${data.goal.total}/${data.goal.limit}</span>`}), key generated: !{`<a href="${bdgePath}/vip?activate=${data.goal.award}" class="text-warning">${data.goal.award}</a>`}
                             else 
                                 div The goal for #{data.goal.begin} is !{`<span class="text-success">${data.goal.total}</span>`} with a limit of !{`<span class="text-danger">${data.goal.limit}</span>`} for creating a new vip key
 
@@ -52,11 +52,11 @@ html
                 if (vipEnabled === true)
                     div(class="key-container" id="keyContainer")
                         h2 Vips Avaiable 
-                            a(class="text-warning" href="/vip") Generate?
+                            a(class="text-warning" href=(bdgePath + "/vip")) Generate?
 
                         each k in data.vips
                             div(class="key-content" id="key-"+k.id data-id=(k.id))
-                                span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expires} | Key: !{`<a href="/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
+                                span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expires} | Key: !{`<a href="${bdgePath}/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
                         else
                             div No Vips found
                         hr  
@@ -70,37 +70,37 @@ html
                         if (boards.IMAGES.enabled === true)
                             div(class="col-sm col-400 col-bw")
                                 h4(class="text-center") 
-                                    a(class="text-light" href="/i") Recent Images 
+                                    a(class="text-light" href=(bdgePath + "/i")) Recent Images 
     
                                 each file in data.images                
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href="files/image/"+file.filename)= file.filename
+                                            a(class="text-warning" href=(bdgePath + "files/image/" + file.filename))= file.filename
                                 else
                                     div No images found!
 
                         if (boards.VIDEOS.enabled === true)
                             div(class="col-sm col-400 col-bw")
                                 h4(class="text-center") 
-                                    a(class="text-light" href="/v") Recent Videos
+                                    a(class="text-light" href=(bdgePath + "/v")) Recent Videos
                                 each file in data.videos                                
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href="files/video/"+file.filename)= file.filename
+                                            a(class="text-warning" href=(bdgePath + "files/video/" + file.filename))= file.filename
                                 else
                                     div No Video found!
 
                         if (boards.AUDIOS.enabled === true)
                             div(class="col-sm col-400 col-bw")
                                 h4(class="text-center") 
-                                    a(class="text-light" href="/a") Recent Audios
+                                    a(class="text-light" href=(bdgePath + "/a")) Recent Audios
                                 each file in data.audios                                
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href="files/audio/"+file.filename)= file.filename
+                                            a(class="text-warning" href=(bdgePath + "files/audio/" + file.filename))= file.filename
                                 else
                                     div No audio found!
 

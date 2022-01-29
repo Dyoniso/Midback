@@ -6,11 +6,13 @@ const fs = require('fs')
 exports.MODE_BRIDGE = false
 
 exports.init = (path, app, p) => {
-    app.use('/' + p.route + '/files', express.static(path + '/public/files'))
-    app.use('/' + p.route + '/pub', express.static(path + '/public/lib'))
-    app.use('/' + p.route + '/pub', express.static(path + '/public/js'))
-    app.use('/' + p.route + '/pub', express.static(path + '/public/css'))
-    app.use('/' + p.route + '/pub', express.static(path + '/public/assets'))
+    let br = ''
+    if (p.route && p.route.length > 0) br = '/'
+    app.use(br + p.route + '/files', express.static(path + '/public/files'))
+    app.use(br + p.route + '/pub', express.static(path + '/public/lib'))
+    app.use(br + p.route + '/pub', express.static(path + '/public/js'))
+    app.use(br + p.route + '/pub', express.static(path + '/public/css'))
+    app.use(br + p.route + '/pub', express.static(path + '/public/assets'))
 
     module.exports.app = app
     exports.MODE_BRIDGE = true
