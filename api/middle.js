@@ -1,5 +1,7 @@
-const tables = require('../app').tables
-const boards = require('../app').boards
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+if (MODE_BRIDGE) boards = require('../bridge').boards
+else boards = require('../app').boards
+const tables = require('./database').tables
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const rateLimit = require("express-rate-limit");
@@ -8,8 +10,10 @@ const md5 = require('md5')
 
 //TOKEN PUBLIC KEY
 try {
-    if (!fs.existsSync('./security')) fs.mkdirSync('./security')
-    PUBLIC_KEY = fs.readFileSync('./security/jwtRS256.key.pub', 'utf8')
+    let path = '.'
+    if (MODE_BRIDGE) path = require('../bridge').path
+    if (!fs.existsSync(path + '/security')) fs.mkdirSync(path + '/security')
+    PUBLIC_KEY = fs.readFileSync(path + '/security/jwtRS256.key.pub', 'utf8')
 } catch (err) {
     throw new Error(`JWTRS256 public key not found. Generate a new key and place it in the folder: './security'`)        
 }

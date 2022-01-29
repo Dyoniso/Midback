@@ -3,7 +3,7 @@ const cron = require('node-cron')
 const Logger = require('./logger')
 const logger = new Logger('cron')
 const utils = require('./utils')
-const tables = require('../app').tables
+const tables = require('./database').tables
 
 const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
 const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')

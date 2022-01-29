@@ -4,15 +4,15 @@ header(class="m-4")
     
     if (headerMode === 1)
         div(class="text-center")      
-            a(href="/" class="title") Midback 2D
+            a(href=(bdgePath + "/") class="title") Midback 2D
 
     if (headerMode === 22)
         div(class="text-center")      
-            a(href="/" class="title p-0" style="white-space: pre;") Midback ADMIN
+            a(href=(bdgePath + "/") class="title p-0" style="white-space: pre;") Midback ADMIN
        
     else if (headerMode === 2 || headerMode === 6)
         div(class="text-center mt-2")    
-            a(href="/" class="title") Midback 2D
+            a(href=(bdgePath + "/") class="title") Midback 2D
             
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -23,7 +23,7 @@ header(class="m-4")
 
     else if (headerMode === 3 || headerMode === 8 || headerMode === 9)
         div(class="text-center mt-2")
-            a(href="/" class="title" style="color:#2196f3") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:#2196f3") Midback 2D
 
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -34,7 +34,7 @@ header(class="m-4")
 
     else if (headerMode === 10 || headerMode === 12 || headerMode === 14)
         div(class="text-center mt-2")    
-            a(href="/" class="title" style="color:#f3216f") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:#f3216f") Midback 2D
 
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -60,10 +60,10 @@ header(class="m-4")
             div(class="text-center")
                 if (aclAdmin === true)
                     h6 
-                        a(class="text-warning" href=(board === boards.VIDEOS.path ? '/v' : board === boards.AUDIOS.path ? '/a' : '/i')) - Mode : Admin -
+                        a(class="text-warning" href=(board === boards.VIDEOS.path ? (bdgePath + '/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i'))) - Mode : Admin -
                 else
                     h6
-                        a(class="text-warning" href=((board === boards.VIDEOS.path ? '/v' : board === boards.AUDIOS.path ? '/a' : '/i') + "?mode=admin")) - Moderate board -
+                        a(class="text-warning" href=((board === boards.VIDEOS.path ? (bdgePath +'/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i')) + "?mode=admin")) - Moderate board -
 
         //-if (mode === 'normal')
             div(class="text-center")
@@ -74,7 +74,7 @@ header(class="m-4")
         if (mode !== 'admin')
             div(class="container thread-container")
                 if (postEnabled === true)
-                    form(action=((board === boards.VIDEOS.path ? `/${boards.VIDEOS.path}/` : board === boards.AUDIOS.path ? `/${boards.AUDIOS.path}/` : `/${boards.IMAGES.path}/`) + 'passport') class="passport-form" method="POST" enctype="multipart/form-data")
+                    form(action=((board === boards.VIDEOS.path ? `${bdgePath}/${boards.VIDEOS.path}/` : board === boards.AUDIOS.path ? `${bdgePath}/${boards.AUDIOS.path}/` : `${bdgePath}/${boards.IMAGES.path}/`) + 'passport') class="passport-form" method="POST" enctype="multipart/form-data")
                         div(class="form-group")
                             label(class="w-100 drag-file" for="postFile")
                                 div(class="text-center" id="postFileTitle") Select or Drop the file

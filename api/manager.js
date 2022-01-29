@@ -1,9 +1,16 @@
-const app = require('../app').app
-const API_VERSION = require('../app').API_VERSION
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+if (MODE_BRIDGE) {
+    let p = require('../bridge').P
+    boards = require('../bridge').boards
+    app = require('../bridge').app
+    API_VERSION = p.version
+} else {
+    API_VERSION = require('../app').API_VERSION
+    boards = require('../app').boards
+    app = require('../app').app
+}
 
-const tables = require('../app').tables
-const boards = require('../app').boards
-
+const tables = require('./database').tables
 const jwt = require('jsonwebtoken')
 const middle = require('./middle')
 const multer = require('multer')
@@ -23,8 +30,10 @@ const logger = new Logger('app')
 
 //TOKEN PRIVATE KEY
 try {
-    if (!fs.existsSync('./security')) fs.mkdirSync('./security')
-    PRIVATE_KEY = fs.readFileSync('./security/jwtRS256.key', 'utf8')
+    let path = '.'
+    if (MODE_BRIDGE) path = require('../bridge').path
+    if (!fs.existsSync(path + '/security')) fs.mkdirSync(path + '/security')
+    PRIVATE_KEY = fs.readFileSync(path + '/security/jwtRS256.key', 'utf8')
 } catch (err) {
     throw new Error(`JWTRS256 private key not found. Generate a new key and place it in the folder: './security'`)
 }
@@ -41,143 +50,154 @@ const sameFiles = Boolean(process.env.SAME_FILES === 'true')
 const passportEnabled = Boolean(process.env.PASSPORT === 'true')
 let publicPost = Boolean(process.env.PUBLIC_POST === 'true')
 
-if (!archiveUrl) archiveUrl = '/files'
+let bdgePath = ''
+if (MODE_BRIDGE) {
+    let route = require('../bridge').P.route
+    if (route && route.length > 0) bdgePath = '/' + route 
+}
+
+if (!archiveUrl) archiveUrl = (bdgePath + '/files')
+else archiveUrl = bdgePath + archiveUrl
 if (!admPassword) admPassword = 'admin'
 if (!adsKey) adsKey = '-1'
 if (pageSize < 0 || isNaN(pageSize)) pageSize = 80
 if (maxFiles < 3 || isNaN(maxFiles)) maxFiles = 10000
 
-app.all('*', middle.uidGen, async(req, res, next) => {
+app.all(bdgePath + '/*', middle.uidGen, async(req, res, next) => {
     return next()      
 })
 
-app.get('/render/' + boards.AUDIOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
+app.get(bdgePath + '/render/' + boards.AUDIOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
     return renderBoards(req, res, true, boards.AUDIOS.path)
 })
 
-app.get('/render/' + boards.VIDEOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
+app.get(bdgePath + '/render/' + boards.VIDEOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
     return renderBoards(req, res, true, boards.VIDEOS.path)
 })
 
 if (boards.IMAGES.enabled === true) {
-    app.get('/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+    app.get(bdgePath + '/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.IMAGES.path)
     })
     
-    app.get('/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
+    app.get(bdgePath + '/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, true, boards.IMAGES.path)
     })
 
-    app.post(`/${boards.IMAGES.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+    app.post(bdgePath + `/${boards.IMAGES.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
         return await passportLogic(req, res, boards.IMAGES.path)
     })
 
-    app.delete(`/${boards.IMAGES.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+    app.delete(bdgePath + `/${boards.IMAGES.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
         return await deleteLogic(req, res, boards.IMAGES.path)
     })
 
-    app.get(`/${boards.IMAGES.path}/touch`, async(req, res) => {
+    app.get(bdgePath + `/${boards.IMAGES.path}/touch`, async(req, res) => {
         return youngFilesLogic(req, res, boards.IMAGES.path)
     })
 
     if (passportEnabled === true) {
-        app.get(`/${boards.IMAGES.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        app.get(bdgePath + `/${boards.IMAGES.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
             return renderPass(req, res, boards.IMAGES.path)
         })
     }
 }
 
 if (boards.VIDEOS.enabled === true) {
-    app.post(`/${boards.VIDEOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+    app.post(bdgePath + `/${boards.VIDEOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
         return await passportLogic(req, res, boards.VIDEOS.path)
     })
 
-    app.delete(`/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+    app.delete(bdgePath + `/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
         return await deleteLogic(req, res, boards.VIDEOS.path)
     })
     
-    app.get(`/${boards.VIDEOS.path}/touch`, async(req, res) => {
+    app.get(bdgePath + `/${boards.VIDEOS.path}/touch`, async(req, res) => {
         return youngFilesLogic(req, res, boards.VIDEOS.path)
     })
 
-    app.get('/' + boards.VIDEOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+    app.get(bdgePath + '/' + boards.VIDEOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.VIDEOS.path)
     })
 
     if (passportEnabled === true) {
-        app.get(`/${boards.VIDEOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        app.get(bdgePath + `/${boards.VIDEOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
             return renderPass(req, res, boards.VIDEOS.path)
         })
     }
 }
 
 if (boards.AUDIOS.enabled === true) {
-    app.post(`/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
+    app.post(bdgePath + `/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
         return await passportLogic(req, res, boards.AUDIOS.path)
     })
     
-    app.get('/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+    app.get(bdgePath + '/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.AUDIOS.path)
     })
 
-    app.delete(`/${boards.AUDIOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
+    app.delete(bdgePath + `/${boards.AUDIOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
         return await deleteLogic(req, res, boards.AUDIOS.path)
     })
 
     if (passportEnabled === true) {
-        app.get(`/${boards.AUDIOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
+        app.get(bdgePath + `/${boards.AUDIOS.path}/pass`, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
             return renderPass(req, res, boards.AUDIOS.path)
         })
     }
 }
 
-app.get('/', middle.checkVip, async(req, res) => {
+app.get(bdgePath + '/', middle.checkVip, async(req, res) => {
     return renderIndex(req, res)
 })
 
-app.post('/admin/login', upload.any(), middle.adminLimitter, async(req, res) => {
+app.post(bdgePath + '/admin/login', upload.any(), middle.adminLimitter, async(req, res) => {
     return adminLogic(req, res)
 })
 
-app.get('/admin', middle.checkAdmin, async(req, res) => {
+app.get(bdgePath + '/admin', middle.checkAdmin, async(req, res) => {
     return renderAdmin(req, res)
 })
 
-app.get('/admin/exit', middle.checkAdmin, async(req, res) => {
+app.get(bdgePath + '/admin/exit', middle.checkAdmin, async(req, res) => {
     return removeAdmin(req, res)
 })
 
-app.get(`/${boards.AUDIOS.path}/touch`, async(req, res) => {
+app.get(bdgePath + `/${boards.AUDIOS.path}/touch`, async(req, res) => {
     return youngFilesLogic(req, res, boards.AUDIOS.path)
 })
 
 //VIP System
 if (vipEnabled === true) {
-    app.get('/vip', middle.checkAdmin, middle.checkVip, async(req, res) => {
+    app.get(bdgePath + '/vip', middle.checkAdmin, middle.checkVip, async(req, res) => {
         return renderVip(req, res)
     })
     
-    app.post('/vip/assign', upload.any(), async(req, res) => {
+    app.post(bdgePath + '/vip/assign', upload.any(), async(req, res) => {
         return vipLogic(req, res)
     })
     
-    app.put('/vip/generate', middle.checkAdmin, middle.limitter, async(req, res) => {
+    app.put(bdgePath + '/vip/generate', middle.checkAdmin, middle.limitter, async(req, res) => {
         return vipGenerateLogic(req, res)
     })
     
-    app.put('/vip/delete', middle.checkAdmin, middle.limitter, async(req, res) => {
+    app.put(bdgePath + '/vip/delete', middle.checkAdmin, middle.limitter, async(req, res) => {
         return vipDeleteLogic(req, res)
     })
 }
 
-app.get('/info', (req, res) => {
+app.get(bdgePath + '/info', (req, res) => {
     return renderInfo(req, res)
 })
+
+if (utils.checkRouteExists(app, '/' + boards.IMAGES.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
+if (utils.checkRouteExists(app, '/' + boards.VIDEOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
+if (utils.checkRouteExists(app, '/' + boards.AUDIOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
 
 async function renderIndex(req, res) {
     let goal = await getGoalProgress()
 
-    return res.render('./home/index.pug', { 
+    return utils.renderHtml(res, '/home/index.pug',  { 
         boards : boards,
         adsKey : adsKey,
         vip : req.vip, 
@@ -186,7 +206,8 @@ async function renderIndex(req, res) {
         stats : await getStats(),
         goal : goal,
         goalEnabled : goalEnabled,
-     })
+        bdgePath : bdgePath
+    })
 }
 
 async function renderInfo(req, res) {
@@ -290,14 +311,14 @@ async function getAdminData(limit) {
 }
 
 async function renderAdmin(req, res) {
-    if (req.admin === true) return res.render('./adm/home.pug', { 
+    if (req.admin === true) return utils.renderHtml(res, '/adm/home.pug', { 
         API_VERSION : API_VERSION,
         goalEnabled : goalEnabled,
         vipEnabled : vipEnabled,
         data : await getAdminData(200),
         boards : boards,
     })
-    else return res.render('./adm/admin.pug')
+    else return utils.renderHtml(res, '/adm/admin.pug')
 }
 
 async function removeAdmin(req, res) {
@@ -317,7 +338,7 @@ async function adminLogic(req, res) {
         res.cookie('X-ADMIN', token)
         return res.redirect('/admin')
     }
-    return res.render('templades/message.pug', { vipEnabled : vipEnabled, adsKey : adsKey, message : 'Your admin password does not match the password registered on the server. Try again' })
+    return utils.renderHtml(res, 'templades/message.pug', { vipEnabled : vipEnabled, adsKey : adsKey, message : 'Your admin password does not match the password registered on the server. Try again' })
 }
 
 async function appendGoal(uid, len) {
@@ -452,18 +473,18 @@ async function vipLogic(req, res) {
 
             } else {
                 generateToken()
-                return res.render('./vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
+                return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
             }
 
             generateToken()
-            return res.render('./vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 1 })
+            return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 1 })
         }
 
     } catch (err) {
         logger.error('Error after check Vip Key: '+key)
     }
 
-    return res.render('./vip/vipMessage.pug', { vipEnabled : vipEnabled, adsKey : adsKey, mode : 2 })
+    return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, adsKey : adsKey, mode : 2 })
 }
 
 function generateVipKey(uid, expires) {
@@ -499,7 +520,7 @@ async function renderVip(req, res) {
             q.expiresFormat = utils.formatTimestamp(q.expires)
             q.activate_uids = mask
         }
-        return res.render('./vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
+        return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
     }
 
     if (activate && activate.length > 0) {
@@ -508,7 +529,7 @@ async function renderVip(req, res) {
     }
 
     if (admin === true) keys = await getVips()
-    return res.render('./vip/vip.pug', { vipEnabled : vipEnabled, adsKey : adsKey, admin : admin,  keys : keys })
+    return utils.renderHtml(res, '/vip/vip.pug', { vipEnabled : vipEnabled, adsKey : adsKey, admin : admin,  keys : keys })
 }
 
 async function getVips(limit) {
@@ -585,20 +606,20 @@ async function youngFilesLogic(req, res, board) {
 
     let raw = ''
     if (board === boards.AUDIOS.path) {
-        if (files.length > 0) raw = pug.renderFile('./public/pug/templades/audioFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/audioFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.audio,
             files : files,
             board : 3
         })
 
     } else if (board === boards.VIDEOS.path) {
-        if (files.length > 0) raw = pug.renderFile('./public/pug/templades/itemFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/itemFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.thumb,
             files : files,
             board : 1
         })
     } else {
-        if (files.length > 0) raw = pug.renderFile('./public/pug/templades/itemFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/itemFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.image,
             files : files,
             board : 0
@@ -737,14 +758,15 @@ async function renderBoards(req, res, render, board) {
         holidays : hdz,
         postEnabled : publicPost,
         search : search,
+        bdgePath : bdgePath
     }
 
     if (board === boards.AUDIOS.path) {
         if (render === false) {
             renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.audio
-            return res.render('./audio/boardAudios.pug', renderObj)
+            return utils.renderHtml(res, '/audio/boardAudios.pug', renderObj)
         } else {
-            return res.end(pug.renderFile('./public/pug/templades/itemAudio.pug', {
+            return res.end(pug.renderFile('/public/pug/templades/itemAudio.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.audio,
                 files : files,
             }))
@@ -754,7 +776,7 @@ async function renderBoards(req, res, render, board) {
         if (render === false) {
             if (hasViewVideo === false) {
                 renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.thumb
-                return res.render('./video/boardVideos.pug', renderObj)
+                return utils.renderHtml(res, '/video/boardVideos.pug', renderObj)
             } else {
                 let rfFiles = await getFiles(0, 24, watch, board, true)
                 
@@ -764,10 +786,10 @@ async function renderBoards(req, res, render, board) {
                 renderObj.file = file
                 renderObj.files = rfFiles
 
-                return res.render('./video/videoView.pug', renderObj)
+                return utils.renderHtml(res, '/video/videoView.pug', renderObj)
             }
         } else {
-            return res.end(pug.renderFile('./public/pug/templades/itemVideo.pug', {
+            return res.end(pug.renderFile('/public/pug/templades/itemVideo.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.thumb,
                 files : files,
             }))
@@ -775,9 +797,9 @@ async function renderBoards(req, res, render, board) {
     } else {
         if (render === false) {
             renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
-            return res.render('./image/boardImages.pug', renderObj)
+            return utils.renderHtml(res, '/image/boardImages.pug', renderObj)
         } else {
-            return res.end(pug.renderFile('./public/pug/templades/itemImage.pug', {
+            return res.end(pug.renderFile('/public/pug/templades/itemImage.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.image,
                 files : files,
             }))
@@ -817,22 +839,23 @@ async function renderPass(req, res, board) {
         board : board,
         mode : 'pass' ,
         files : files,
+        bdgePath : bdgePath
     }
 
     if (board === boards.AUDIOS.path) {
         if (req.allowed === true) return res.redirect('/' + boards.AUDIOS.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.audio
-        return res.render('./audio/passAudios.pug', renderObj)
+        return utils.renderHtml(res, '/audio/passAudios.pug', renderObj)
         
     } else if (board === boards.VIDEOS.path) {
         if (req.allowed === true) return res.redirect('/' + boards.VIDEOS.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.thumb
-        return res.render('./video/passVideos.pug', renderObj)
+        return utils.renderHtml(res, '/video/passVideos.pug', renderObj)
 
     } else {
         if (req.allowed === true) return res.redirect('/' + boards.IMAGES.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
-        return res.render('./image/passImages.pug', renderObj)
+        return utils.renderHtml(res, '/image/passImages.pug', renderObj)
     }
 }
 
@@ -1173,7 +1196,7 @@ async function passportLogic(req, res, board) {
     }
     
     if (files.length === 0) {
-        return res.render('templades/message.pug', { adsKey : adsKey, message : errorMessage })
+        return utils.renderHtml(res, 'templades/message.pug', { adsKey : adsKey, message : errorMessage })
     }
     createPassportToken(uid, files.length * 9999, board, res)
 }

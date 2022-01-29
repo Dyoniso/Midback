@@ -1,5 +1,14 @@
-- theme = "theme-image"
-- if (board === boards.VIDEOS.path) theme = "theme-video"
-- if (board === boards.AUDIOS.path) theme = "theme-audio"
-- if (holidays && holidays === 'halloween') theme = "theme-halloween"
-- if (holidays && holidays === 'natal') theme = "theme-christmas"
+- styleTheme = "background-image: url('%s');"
+if (board)
+    if (board === boards.IMAGES.path) 
+        - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_image.png')
+    if (board === boards.VIDEOS.path) 
+        - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_video.png')
+    if (board === boards.AUDIOS.path) 
+        - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_audio.png')
+    if (holidays && holidays === 'halloween') 
+        - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_halloween.png')
+    if (holidays && holidays === 'natal') 
+    - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_christmas.png')
+else
+    - styleTheme = styleTheme.replace('%s', bdgePath + '/pub/theme_main.png')

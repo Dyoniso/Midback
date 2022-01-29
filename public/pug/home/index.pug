@@ -1,8 +1,9 @@
 doctype html
 html
     include ../templades/head.pug
+    include ../templades/themeChecker.pug
 
-    body(class="theme-main")
+    body(class="theme-templade" style=(styleTheme))
         if (!vip)
             include ../templades/adsContent.pug
 
@@ -18,18 +19,18 @@ html
                         div Available Boards: 
                         if (holidays === 'halloween')
                             if (boards.IMAGES.enabled === true)
-                                a(href=('/' + boards.IMAGES.path) class="text-light")  /h#{boards.IMAGES.path.toUpperCase()}/ - Horror #{boards.IMAGES.name}
+                                a(href=(bdgePath + '/' + boards.IMAGES.path) class="text-light")  /h#{boards.IMAGES.path.toUpperCase()}/ - Horror #{boards.IMAGES.name}
                             if (boards.VIDEOS.enabled === true) 
-                                a(href=('/' + boards.VIDEOS.path) class="text-light")  /h#{boards.VIDEOS.path.toUpperCase()}/ - Horror #{boards.VIDEOS.name}
+                                a(href=(bdgePath + '/' + boards.VIDEOS.path) class="text-light")  /h#{boards.VIDEOS.path.toUpperCase()}/ - Horror #{boards.VIDEOS.name}
                             if (boards.AUDIOS.enabled === true)
-                                a(href=('/' + boards.AUDIOS.path) class="text-light")  /h#{boards.AUDIOS.path.toUpperCase()}/ - Horror #{boards.AUDIOS.name}
+                                a(href=(bdgePath + '/' + boards.AUDIOS.path) class="text-light")  /h#{boards.AUDIOS.path.toUpperCase()}/ - Horror #{boards.AUDIOS.name}
                         else
                             if (boards.IMAGES.enabled === true)
-                                a(href=('/' + boards.IMAGES.path) class="text-light")  /#{boards.IMAGES.path.toUpperCase()}/ - #{boards.IMAGES.name}
+                                a(href=(bdgePath + '/' + boards.IMAGES.path) class="text-light")  /#{boards.IMAGES.path.toUpperCase()}/ - #{boards.IMAGES.name}
                             if (boards.VIDEOS.enabled === true) 
-                                a(href=('/' + boards.VIDEOS.path) class="text-light")  /#{boards.VIDEOS.path.toUpperCase()}/ - #{boards.VIDEOS.name}
+                                a(href=(bdgePath + '/' + boards.VIDEOS.path) class="text-light")  /#{boards.VIDEOS.path.toUpperCase()}/ - #{boards.VIDEOS.name}
                             if (boards.AUDIOS.enabled === true)
-                                a(href=('/' + boards.AUDIOS.path) class="text-light")  /#{boards.AUDIOS.path.toUpperCase()}/ - #{boards.AUDIOS.name}
+                                a(href=(bdgePath + '/' + boards.AUDIOS.path) class="text-light")  /#{boards.AUDIOS.path.toUpperCase()}/ - #{boards.AUDIOS.name}
 
             div(class="statsContainer")
                 div(class="text-center p-2" style="font-size:18px")
@@ -55,6 +56,4 @@ html
         if (!vip)
             include ../templades/adsContent.pug
         include ../templades/snow.pug
-
-        script(src="pub/itemPreview.js")
                                   

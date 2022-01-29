@@ -1,3 +1,6 @@
+const pug = require('pug')
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+
 exports.formatSize = (bytes, decimals = 2) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -42,4 +45,28 @@ exports.generateHash = (length) => {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result
+}
+
+exports.checkRouteExists = (app, route) => {
+    let exists = false
+    app._router.stack.forEach((r, i) => {
+        if (r.route) {
+            if (r.route.path === route) return exists = true
+        }
+    })
+    return exists
+}
+
+let bdgePath = ''
+if (MODE_BRIDGE) bdgePath = require('../bridge').path
+exports.renderHtml = (res, path, o) => {
+    let access = './public/pug'
+    let html = ''
+    console.log('>>>>>>', access)
+    if (MODE_BRIDGE) {
+        access = bdgePath + '/public/pug'
+        html = o ? pug.renderFile(access + path, o) : pug.renderFile(access + path)
+        return res.status(200).send(html).end()
+    }
+    return o ? res.render(access, o) : res.render(access)
 }

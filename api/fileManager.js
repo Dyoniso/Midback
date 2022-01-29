@@ -2,8 +2,9 @@ require('dotenv').config()
 const Logger = require('./logger')
 const logger = new Logger('app')
 const ffmpeg = require('fluent-ffmpeg')
-
 const fs = require('fs')
+
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
 
 const dirName = { 
     files : 'files',
@@ -14,7 +15,13 @@ const dirName = {
 }
 
 exports.dirName = dirName
-const filesPath = './public/files/'
+let filesPath = '/public/files/'
+
+let bdgePath = ''
+if (MODE_BRIDGE) {
+    bdgePath = require('../bridge').path
+    filesPath = bdgePath + filesPath
+} else filesPath = '.' + bdgePath + filesPath
 
 exports.registerFile = async(file) => {
     let mime = file.mime.split('/')[0]

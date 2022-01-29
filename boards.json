@@ -1,0 +1,41 @@
+{
+    "IMAGES": {
+      "name": "Images",
+      "path": "i",
+      "type": [
+        "jpeg",
+        "jpg",
+        "gif",
+        "bmp",
+        "png",
+        "webp"
+      ],
+      "enabled": true
+    },
+    "VIDEOS": {
+      "name": "Videos",
+      "path": "v",
+      "type": [
+        "wmv",
+        "avi",
+        "mov",
+        "webm",
+        "mkv",
+        "mp4"
+      ],
+      "enabled": true
+    },
+    "AUDIOS": {
+      "name": "Audios",
+      "path": "a",
+      "type": [
+        "mp3",
+        "aac",
+        "wav",
+        "flac",
+        "ogg",
+        "mpeg"
+      ],
+      "enabled": true
+    }
+}

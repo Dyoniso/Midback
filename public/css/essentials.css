@@ -17,40 +17,9 @@ hr {
     padding: 8px;
 }
 
-.theme-audio {
+.theme-templade {
     color: #bebfc0;
     background-color: #181818;
-    background-image: url('/pub/theme_audio.png'); 
-}
-
-.theme-christmas {
-    color: #bebfc0;
-    background-color: #181818;
-    background-image: url('/pub/theme_christmas.png'); 
-}
-
-.theme-halloween { 
-    color: #bebfc0;
-    background-color: #181818;
-    background-image: url('/pub/theme_halloween.png'); 
-}
-
-.theme-main {
-    color: #bebfc0;
-    background-color: #181818;
-    background-image: url('/pub/theme_main.png'); 
-}
-
-.theme-image {
-    color: #bebfc0;
-    background-color: #181818;
-    background-image: url('/pub/theme_image.png'); 
-}
-
-.theme-video {
-    color: #bebfc0;
-    background-color: #181818;
-    background-image: url('/pub/theme_video.png'); 
 }
 
 .passport-form {

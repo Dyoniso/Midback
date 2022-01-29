@@ -4,6 +4,7 @@ const http = require('http')
 const Logger = require('./api/logger')
 const logger = new Logger('app')
 const cookieParser = require('cookie-parser')
+const fs = require('fs')
 
 const app = express()
 
@@ -25,36 +26,11 @@ if (!HOSTNAME) HOSTNAME = 'localhost'
 if (!PORT) PORT = 5000
 
 /* Midback Config */
-// Default Tables
-exports.tables = {
-    IMAGES  :   'images',
-    VIDEOS  :   'videos',
-    AUDIOS  :   'audios',
-    VIP     :   'vip',
-    GOAL    :   'goal',
-    UIDS    :   'uids',
-}
-
 // Default Boards
-exports.boards = {
-    IMAGES   :   {
-        name        :   'Images',
-        path        :   'i',
-        type        :   [ 'jpeg','jpg','gif','bmp','png','webp' ],
-        enabled     :   true,
-    },
-    VIDEOS   :   {
-        name        :   'Videos',
-        path        :   'v',
-        type        :   ['wmv', 'avi', 'mov', 'webm', 'mkv', 'mp4'],
-        enabled     :   true,
-    },
-    AUDIOS   :   {
-        name        :   'Audios',
-        path        :   'a',
-        type        :   ['mp3', 'aac', 'wav', 'flac', 'ogg', 'mpeg'],
-        enabled     :   true,
-    },
+try {
+    exports.boards = JSON.parse(fs.readFileSync('./boards.json'))
+} catch (err) {
+    throw new Error('Invalid board config. Please check boards.json')
 }
 
 app.set('view engine', 'pug')

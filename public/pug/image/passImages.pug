@@ -10,7 +10,7 @@ html
     include ../templades/head.pug
     include ../templades/themeChecker.pug
 
-    body(class=(theme))
+    body(class="theme-templade" style=(styleTheme))
         include ../templades/boards.pug
         if (!vip)
             include ../templades/adsContent.pug
@@ -20,6 +20,8 @@ html
         
         section
             div(class="container-fluid")
+                input(type="hidden" id="bridgePath" value=(bdgePath))
+
                 div(class="row justify-content-center" id="frameContext")    
                     if (mode === 'pass')
                         include ../templades/itemFrame.pug
@@ -50,5 +52,5 @@ html
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
-        script(src="/pub/itemPreview.js")
+        script(src=(bdgePath + "/pub/itemPreview.js"))
                                   

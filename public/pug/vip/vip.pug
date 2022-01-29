@@ -10,6 +10,8 @@ html
 
         section
             div(class="container")
+                input(type="hidden" id="bridgePath" value=(bdgePath))
+
                 div(class="mt-5 mb-5 text-gray" style="word-break: break-all;")
                     h2(class="font-weight-bold") KEY VIP
                     div Tired of the same old advertisements or the Passport screen that appears more than files on the site. Get Midback VIP Access now and get rid of all that headache.
@@ -37,7 +39,7 @@ html
 
                         h6(class="mt-2") Do you need another type of key? Support Midback and get unique keys
                         a(target="_blank" href="https://www.patreon.com/dyoniso")
-                            img(class="patreon-button" src="/pub/support_me.png")
+                            img(class="patreon-button" src=(bdgePath + "/pub/support_me.png"))
                         
                             
 
@@ -58,6 +60,7 @@ html
         if (admin)
             script.
                 $(document).ready((e) => {
+                    let bridgePath = $('#bridgePath').val()
                     const shParams = new URLSearchParams(location.search)
                     let adminPassword = shParams.has('pass') ? shParams.get('pass') : ''
 
@@ -65,7 +68,7 @@ html
                         e.preventDefault()
                         $('#btnGenerateKey').prop('disabled', true)
 
-                        fetch(`/vip/generate`, {
+                        fetch(`${bridgePath}/vip/generate`, {
                             method: 'PUT',
                             headers: { 'Content-Type' : 'application/json' },
                             body: JSON.stringify({ adminPassword : adminPassword })
@@ -92,7 +95,7 @@ html
                         let id = parseInt(el.data('id'))
 
                         if (id && !isNaN(id)) {
-                            fetch(`/vip/delete`, {
+                            fetch(`${bridgePath}/vip/delete`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type' : 'application/json' },
                                 body: JSON.stringify({ keyId : id, adminPassword : adminPassword })

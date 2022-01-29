@@ -41,7 +41,7 @@ function delEvent(e) {
         if (type === 1) boardType = 'v'
         if (type === 2) boardType = 'a'
 
-        fetch(`/${boardType}/del?pass=${pass}`, {
+        fetch(`${bridgePath}/${boardType}/del?pass=${pass}`, {
             method: 'DELETE',
             headers: { 'Content-Type' : 'application/json' },
             body : JSON.stringify({ id : id })
@@ -58,8 +58,8 @@ $(document).ready((e) => {
     const shParams = new URLSearchParams(location.search)
     let page = shParams.has('page') ? shParams.get('page') : ''
 
-    let boardType = location.pathname.replace(/\//g, '')
-
+    let boardType = $('#boardPath').val()
+    let bridgePath = $('#bridgePath').val()
 
     $('#btnCloseImgPreviewModal').on('click', (e) => {
         $('#imgViewModal').modal('hide')
@@ -69,7 +69,7 @@ $(document).ready((e) => {
     let search = $('#searchContent').val()
     let notifyCount = 0
     async function fetchFiles(len) {
-        fetch(`/render/${boardType}?set=${len}&search=${search}`, {
+        fetch(`${bridgePath}/render/${boardType}?set=${len}&search=${search}`, {
             method: 'GET',
             headers: { 'Content-Type' : 'text/html; charset=utf-8' },
         })

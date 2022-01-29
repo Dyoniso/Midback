@@ -1,13 +1,20 @@
-const tables = require('../app').tables
+const tables = require('./database').tables
 const db = require('./database')
 const Logger = require('./logger')
 const logger = new Logger('app')
 const fs = require('fs')
 const fm = require('./fileManager')
 
-function createFileSystem() {
-    let filesPath = './public/files/'
+let filesPath = '/public/files/'
 
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+let bdgePath = ''
+if (MODE_BRIDGE) {
+    bdgePath = require('../bridge').path
+    filesPath = bdgePath + filesPath
+} else filesPath = '.' + filesPath
+
+function createFileSystem() {
     if (!fs.existsSync(filesPath)) fs.mkdirSync(filesPath)
     if (!fs.existsSync(filesPath + fm.dirName.image)) fs.mkdirSync(filesPath + fm.dirName.image)
     if (!fs.existsSync(filesPath + fm.dirName.thumb)) fs.mkdirSync(filesPath + fm.dirName.thumb)

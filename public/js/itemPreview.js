@@ -1,4 +1,5 @@
 $(document).ready(async() => {
+    let bridgePath = $('#bridgePath').val()
     let files = []
 
     $('.drag-file').on('dragleave', (e) => {
@@ -136,7 +137,7 @@ $(document).ready(async() => {
     function touchYoungFiles(id) {
         let board = location.pathname.split('/')[1]
 
-        fetch(`/${board}/touch?id=${id}`, {
+        fetch(`${bridgePath}/${board}/touch?id=${id}`, {
             method: 'GET',
             headers: { 'Content-Type' : 'text/html; charset=utf-8' },
         })
