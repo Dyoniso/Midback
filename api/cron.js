@@ -1,7 +1,14 @@
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+const Logger = require('./logger')
+let logger
+if (MODE_BRIDGE) {
+    logger = new Logger('cron-'+require('../bridge').P.name)
+} else {
+    logger = new Logger('cron')
+}
+
 const db = require('./database')
 const cron = require('node-cron')
-const Logger = require('./logger')
-const logger = new Logger('cron')
 const utils = require('./utils')
 const tables = require('./database').tables
 

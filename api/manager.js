@@ -1,13 +1,17 @@
 const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+const Logger = require('./logger')
+let app = logger = null
 if (MODE_BRIDGE) {
     let p = require('../bridge').P
     boards = require('../bridge').boards
     app = require('../bridge').app
+    logger = new Logger(require('../bridge').P.name)
     API_VERSION = p.version
 } else {
     API_VERSION = require('../app').API_VERSION
     boards = require('../app').boards
     app = require('../app').app
+    logger = new Logger('app')
 }
 
 const tables = require('./database').tables
@@ -24,9 +28,6 @@ const sizeOf = require('image-size')
 const pug = require('pug')
 const holidays = require('./holidays')
 const crypto = require('crypto')
-
-const Logger = require('./logger')
-const logger = new Logger('app')
 
 //TOKEN PRIVATE KEY
 try {

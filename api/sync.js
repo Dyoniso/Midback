@@ -1,13 +1,19 @@
+const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
+const Logger = require('./logger')
+let logger
+if (MODE_BRIDGE) {
+    logger = new Logger(require('../bridge').P.name)
+} else {
+    logger = new Logger('app')
+}
+
 const tables = require('./database').tables
 const db = require('./database')
-const Logger = require('./logger')
-const logger = new Logger('app')
 const fs = require('fs')
 const fm = require('./fileManager')
 
 let filesPath = '/public/files/'
 
-const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
 let bdgePath = ''
 if (MODE_BRIDGE) {
     bdgePath = require('../bridge').path
