@@ -36,6 +36,7 @@ function delEvent(e) {
     let id = e.data('id')
 
     if (mode === 'admin') {
+        let bridgePath = $('#bridgePath').val()
         let pass = $('#passMode').val()
         let boardType = 'i'
         if (type === 1) boardType = 'v'

@@ -5,8 +5,8 @@ const logger = new Logger('cron')
 const utils = require('./utils')
 const tables = require('./database').tables
 
-const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
-const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
+const vipEnabled = Boolean(process.env.MB_VIP_CYCLE === 'true')
+const goalEnabled = Boolean(process.env.MB_GOAL_CYCLE === 'true')
 
 if (goalEnabled === true || vipEnabled === true) {
     cron.schedule('0 0 0 * * *', async() => {

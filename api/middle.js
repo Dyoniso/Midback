@@ -18,7 +18,7 @@ try {
     throw new Error(`JWTRS256 public key not found. Generate a new key and place it in the folder: './security'`)        
 }
 
-const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
+const vipEnabled = Boolean(process.env.MB_VIP_CYCLE === 'true')
 
 exports.checkAdmin = async(req, res, next) => {
     let token = req.headers.cookie

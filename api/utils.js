@@ -62,7 +62,6 @@ if (MODE_BRIDGE) bdgePath = require('../bridge').path
 exports.renderHtml = (res, path, o) => {
     let access = './public/pug'
     let html = ''
-    console.log('>>>>>>', access)
     if (MODE_BRIDGE) {
         access = bdgePath + '/public/pug'
         html = o ? pug.renderFile(access + path, o) : pug.renderFile(access + path)

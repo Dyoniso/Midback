@@ -2,8 +2,10 @@ doctype html
 html
     title(id="pageTitle") Midback - VIP Status
     include ../templades/head.pug
+    style(id="fontStyle")
+    include ../templades/themeChecker.pug
 
-    body(class="theme-main")
+    body(class="theme-templade" style=(styleTheme))
         if (!vip)
             include ../templades/adsContent.pug
         include ../templades/header.pug

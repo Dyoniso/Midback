@@ -8,6 +8,7 @@ html
         title(id="pageTitle") !{vip ? '(VIP)' : ''} /#{boards.VIDEOS.path.toUpperCase()}/ PASSPORT - Midback 2D
 
     include ../templades/head.pug
+    style(id="fontStyle")
     include ../templades/themeChecker.pug
 
     body(class="theme-templade" style=(styleTheme))
@@ -21,6 +22,7 @@ html
         section
             div(class="container-fluid")
                 input(type="hidden" id="bridgePath" value=(bdgePath))
+                input(type="hidden" id="boardPath" value=(board))
                 
                 div(class="row justify-content-center" id="frameContext")    
                     if (mode === 'pass')
@@ -51,5 +53,6 @@ html
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
+        script(src=(bdgePath + "/pub/fonts.js")) 
         script(src=(bdgePath + "/pub/itemPreview.js"))
                                   

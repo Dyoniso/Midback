@@ -8,6 +8,7 @@ html
         title(id="pageTitle") !{vip ? '(VIP)' : ''} /#{boards.IMAGES.path.toUpperCase()}/ Images - Midback 2D
 
     include ../templades/head.pug
+    style(id="fontStyle")
     include ../templades/themeChecker.pug
 
     body(class="theme-templade" style=(styleTheme))
@@ -43,7 +44,7 @@ html
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
-
+        script(src=(bdgePath + "/pub/fonts.js")) 
         script(src=(bdgePath + "/pub/itemPreview.js"))
         script(src=(bdgePath + "/pub/manager.js"))
                                   

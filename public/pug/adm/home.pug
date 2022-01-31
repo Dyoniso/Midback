@@ -2,8 +2,10 @@ doctype html
 html
     title Midback Admin
     include ../templades/head.pug
+    style(id="fontStyle")
+    include ../templades/themeChecker.pug
 
-    body(class="theme-main")
+    body(class="theme-templade" style=(styleTheme))
         div(class="apiContent")
             div Midback API v#{API_VERSION}
             div Logged in as Admin
@@ -13,6 +15,8 @@ html
         include ../templades/header.pug
         
         section
+            input(type="hidden" value=(bdgePath) id="bdgePath")
+
             div(class="container-fluid")
                 div(class="statsContainer")
                     div(class="text-center p-2" style="font-size:18px")
@@ -76,7 +80,7 @@ html
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href=(bdgePath + "files/image/" + file.filename))= file.filename
+                                            a(class="text-warning" href=(archiveUrl + '/' + file.filename))= file.filename
                                 else
                                     div No images found!
 
@@ -88,7 +92,7 @@ html
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href=(bdgePath + "files/video/" + file.filename))= file.filename
+                                            a(class="text-warning" href=(archiveUrl + '/' + file.filename))= file.filename
                                 else
                                     div No Video found!
 
@@ -100,7 +104,7 @@ html
                                     div(class="file-item" id="file-item-"+file.id)
                                         small
                                             span(class="font-weight-bold") #{file.id}. 
-                                            a(class="text-warning" href=(bdgePath + "files/audio/" + file.filename))= file.filename
+                                            a(class="text-warning" href=(archiveUrl + '/' + file.filename))= file.filename
                                 else
                                     div No audio found!
 
@@ -108,3 +112,5 @@ html
         div(class="m-4 text-center")
             hr
             div Powered by Dyoniso - Copyright © Midback 2021-#{new Date().getFullYear()} - Contact: !{'<a class="text-light" href="mailto:7Retro.community@protonmail.com">7Retro.community@protonmail.com</a>'}
+
+        script(src=(bdgePath + "/pub/fonts.js")) 

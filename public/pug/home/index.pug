@@ -1,6 +1,7 @@
 doctype html
 html
     include ../templades/head.pug
+    style(id="fontStyle")
     include ../templades/themeChecker.pug
 
     body(class="theme-templade" style=(styleTheme))
@@ -12,6 +13,8 @@ html
         
         section
             div(class="boardContainer")
+                input(type="hidden" value=(bdgePath) id="bdgePath")
+
                 div(class="text-center" style="font-size:22px")
                     if (!boards.IMAGES.enabled && !boards.VIDEOS.enabled && !boards.AUDIOS.enabled)
                         div / No boards available /
@@ -56,4 +59,6 @@ html
         if (!vip)
             include ../templades/adsContent.pug
         include ../templades/snow.pug
+
+        script(src=(bdgePath + "/pub/fonts.js")) 
                                   

@@ -131,11 +131,11 @@ $(document).ready(async() => {
             }
         }, 1000)
     }
-    let urlPath = location.pathname.split('/')[2]
-    if (urlPath === 'pass') startNotifyTimer()
+    let urlPath = location.pathname
+    if (urlPath.includes('/pass')) startNotifyTimer()
     
     function touchYoungFiles(id) {
-        let board = location.pathname.split('/')[1]
+        let board = $('#boardPath').val()
 
         fetch(`${bridgePath}/${board}/touch?id=${id}`, {
             method: 'GET',

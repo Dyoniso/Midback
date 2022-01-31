@@ -1,13 +1,17 @@
 doctype html
 html
     include ./head.pug
+    style(id="fontStyle")
+    include ./themeChecker.pug
 
-    body(class="theme-main")
+    body(class="theme-templade" style=(styleTheme))
         if (!vip)
             include ./adsContent.pug
         include ./header.pug
 
         section
+            input(type="hidden" id="boardPath" value=(board))
+            
             div(class="container")
                 div(class="text-center")
                     div Unable to process your post. The following errors occurred
@@ -19,6 +23,7 @@ html
         if (!vip)
             include ./adsContent.pug
 
+        script(src=(bdgePath + "/pub/fonts.js")) 
         script.
             let c = 5
             let interval = setInterval(() => {

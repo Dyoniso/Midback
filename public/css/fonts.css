@@ -6,12 +6,5 @@
 
 @font-face {
     font-family: 'boulder';
-    src: url('/pub/fonts/font_boulder.ttf');
-         
-}
-
-.halloween-font {
-    font-size: 32px;
-    color:red;
-    font-family: halloween;
+    src: url('/pub/fonts/font_boulder.ttf');   
 }

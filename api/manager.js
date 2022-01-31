@@ -39,21 +39,24 @@ try {
 }
 
 //ENV
-let maxFiles = parseInt(process.env.MAX_FILES)
-let pageSize = parseInt(process.env.PAGE_SIZE)
-let adsKey = process.env.ADS_KEY
-let archiveUrl = process.env.FILES_ACCESS_URL
-let admPassword = process.env.ADMIN_PASSWORD
-const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
-const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
-const sameFiles = Boolean(process.env.SAME_FILES === 'true')
-const passportEnabled = Boolean(process.env.PASSPORT === 'true')
-let publicPost = Boolean(process.env.PUBLIC_POST === 'true')
+let maxFiles = parseInt(process.env.MB_MAX_FILES)
+let pageSize = parseInt(process.env.MB_PAGE_SIZE)
+let adsKey = process.env.MB_ADS_KEY
+let archiveUrl = process.env.MB_FILES_ACCESS_URL
+let admPassword = process.env.MB_ADMIN_PASSWORD
+const vipEnabled = Boolean(process.env.MB_VIP_CYCLE === 'true')
+const goalEnabled = Boolean(process.env.MB_GOAL_CYCLE === 'true')
+const sameFiles = Boolean(process.env.MB_SAME_FILES === 'true')
+const passportEnabled = Boolean(process.env.MB_PASSPORT === 'true')
+let publicPost = Boolean(process.env.MB_PUBLIC_POST === 'true')
 
 let bdgePath = ''
+let bdgeRf = '.'
 if (MODE_BRIDGE) {
     let route = require('../bridge').P.route
+    let path = require('../bridge').path
     if (route && route.length > 0) bdgePath = '/' + route 
+    if (path && path.length > 0) bdgeRf = path
 }
 
 if (!archiveUrl) archiveUrl = (bdgePath + '/files')
@@ -317,8 +320,10 @@ async function renderAdmin(req, res) {
         vipEnabled : vipEnabled,
         data : await getAdminData(200),
         boards : boards,
+        bdgePath : bdgePath,
+        archiveUrl : archiveUrl,
     })
-    else return utils.renderHtml(res, '/adm/admin.pug')
+    else return utils.renderHtml(res, '/adm/admin.pug', { bdgePath : bdgePath })
 }
 
 async function removeAdmin(req, res) {
@@ -326,7 +331,7 @@ async function removeAdmin(req, res) {
     if (admin === true) {
         res.cookie('X-ADMIN', '')
     }
-    return res.redirect('/')
+    return res.redirect(bdgePath + '/')
 }
 
 async function adminLogic(req, res) {
@@ -336,9 +341,9 @@ async function adminLogic(req, res) {
     if (password === admPassword) {
         const token = generateToken(uid, 99999)
         res.cookie('X-ADMIN', token)
-        return res.redirect('/admin')
+        return res.redirect(bdgePath + '/admin')
     }
-    return utils.renderHtml(res, 'templades/message.pug', { vipEnabled : vipEnabled, adsKey : adsKey, message : 'Your admin password does not match the password registered on the server. Try again' })
+    return utils.renderHtml(res, '/templades/message.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, adsKey : adsKey, message : 'Your admin password does not match the password registered on the server. Try again' })
 }
 
 async function appendGoal(uid, len) {
@@ -473,18 +478,18 @@ async function vipLogic(req, res) {
 
             } else {
                 generateToken()
-                return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
+                return utils.renderHtml(res, '/vip/vipMessage.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
             }
 
             generateToken()
-            return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 1 })
+            return utils.renderHtml(res, '/vip/vipMessage.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 1 })
         }
 
     } catch (err) {
         logger.error('Error after check Vip Key: '+key)
     }
 
-    return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, adsKey : adsKey, mode : 2 })
+    return utils.renderHtml(res, '/vip/vipMessage.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, adsKey : adsKey, mode : 2 })
 }
 
 function generateVipKey(uid, expires) {
@@ -520,7 +525,7 @@ async function renderVip(req, res) {
             q.expiresFormat = utils.formatTimestamp(q.expires)
             q.activate_uids = mask
         }
-        return utils.renderHtml(res, '/vip/vipMessage.pug', { vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
+        return utils.renderHtml(res, '/vip/vipMessage.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, vipEnabled : vipEnabled, adsKey : adsKey, key : q, mode : 3 })
     }
 
     if (activate && activate.length > 0) {
@@ -529,7 +534,7 @@ async function renderVip(req, res) {
     }
 
     if (admin === true) keys = await getVips()
-    return utils.renderHtml(res, '/vip/vip.pug', { vipEnabled : vipEnabled, adsKey : adsKey, admin : admin,  keys : keys })
+    return utils.renderHtml(res, '/vip/vip.pug', { bdgePath : bdgePath, vipEnabled : vipEnabled, adsKey : adsKey, admin : admin,  keys : keys })
 }
 
 async function getVips(limit) {
@@ -606,23 +611,26 @@ async function youngFilesLogic(req, res, board) {
 
     let raw = ''
     if (board === boards.AUDIOS.path) {
-        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/audioFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile(bdgeRf + '/public/pug/templades/audioFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.audio,
             files : files,
-            board : 3
+            board : board,
+            bdgePath : bdgePath,
         })
 
     } else if (board === boards.VIDEOS.path) {
-        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/itemFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile(bdgeRf + '/public/pug/templades/itemFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.thumb,
             files : files,
-            board : 1
+            board : board,
+            bdgePath, bdgePath,
         })
     } else {
-        if (files.length > 0) raw = pug.renderFile('/public/pug/templades/itemFrame.pug', {
+        if (files.length > 0) raw = pug.renderFile(bdgeRf + '/public/pug/templades/itemFrame.pug', {
             archiveUrl : archiveUrl + '/' + fm.dirName.image,
             files : files,
-            board : 0
+            board : board,
+            bdgePath : bdgePath,
         })
     }
     return res.end(raw)
@@ -723,9 +731,9 @@ async function renderBoards(req, res, render, board) {
 
     if (passportEnabled === true && !req.allowed) {
         if (render === true) return res.status(401).end()
-        if (board === boards.AUDIOS.path) return res.redirect(`/${boards.AUDIOS.path}/pass`)
-        else if (board === boards.VIDEOS.path) return res.redirect(`/${boards.VIDEOS.path}/pass`)
-        else return res.redirect(`/${boards.IMAGES.path}/pass`)
+        if (board === boards.AUDIOS.path) return res.redirect(`${bdgePath}/${boards.AUDIOS.path}/pass`)
+        else if (board === boards.VIDEOS.path) return res.redirect(`${bdgePath}/${boards.VIDEOS.path}/pass`)
+        else return res.redirect(`${bdgePath}/${boards.IMAGES.path}/pass`)
     }
 
     let files = []
@@ -766,9 +774,10 @@ async function renderBoards(req, res, render, board) {
             renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.audio
             return utils.renderHtml(res, '/audio/boardAudios.pug', renderObj)
         } else {
-            return res.end(pug.renderFile('/public/pug/templades/itemAudio.pug', {
+            return res.end(pug.renderFile(bdgeRf + '/public/pug/templades/itemAudio.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.audio,
                 files : files,
+                bdgePath : bdgePath,
             }))
         }
 
@@ -789,9 +798,10 @@ async function renderBoards(req, res, render, board) {
                 return utils.renderHtml(res, '/video/videoView.pug', renderObj)
             }
         } else {
-            return res.end(pug.renderFile('/public/pug/templades/itemVideo.pug', {
+            return res.end(pug.renderFile(bdgeRf + '/public/pug/templades/itemVideo.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.thumb,
                 files : files,
+                bdgePath : bdgePath,
             }))
         }
     } else {
@@ -799,9 +809,10 @@ async function renderBoards(req, res, render, board) {
             renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
             return utils.renderHtml(res, '/image/boardImages.pug', renderObj)
         } else {
-            return res.end(pug.renderFile('/public/pug/templades/itemImage.pug', {
+            return res.end(pug.renderFile(bdgeRf + '/public/pug/templades/itemImage.pug', {
                 archiveUrl : archiveUrl + '/' + fm.dirName.image,
                 files : files,
+                bdgePath : bdgePath,
             }))
         }
     }
@@ -811,13 +822,13 @@ function createPassportToken(uid, len, board, res) {
     let token = generateToken(uid, len)
     if (board === boards.AUDIOS.path) {
         res.cookie((boards.AUDIOS.path).toUpperCase() + '-Passport', token)
-        return res.redirect('/' + boards.AUDIOS.path)
+        return res.redirect(bdgePath + '/' + boards.AUDIOS.path)
     } else if (board === boards.VIDEOS.path) {
         res.cookie((boards.VIDEOS.path).toUpperCase() + '-Passport', token)
-        return res.redirect('/' + boards.VIDEOS.path)
+        return res.redirect(bdgePath + '/' + boards.VIDEOS.path)
     } else {
         res.cookie((boards.IMAGES.path).toUpperCase() + '-Passport', token)
-        return res.redirect('/' + boards.IMAGES.path)
+        return res.redirect(bdgePath + '/' + boards.IMAGES.path)
     }
 }
 
@@ -843,17 +854,17 @@ async function renderPass(req, res, board) {
     }
 
     if (board === boards.AUDIOS.path) {
-        if (req.allowed === true) return res.redirect('/' + boards.AUDIOS.path)
+        if (req.allowed === true) return res.redirect(bdgePath + '/' + boards.AUDIOS.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.audio
         return utils.renderHtml(res, '/audio/passAudios.pug', renderObj)
         
     } else if (board === boards.VIDEOS.path) {
-        if (req.allowed === true) return res.redirect('/' + boards.VIDEOS.path)
+        if (req.allowed === true) return res.redirect(bdgePath + '/' + boards.VIDEOS.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.thumb
         return utils.renderHtml(res, '/video/passVideos.pug', renderObj)
 
     } else {
-        if (req.allowed === true) return res.redirect('/' + boards.IMAGES.path)
+        if (req.allowed === true) return res.redirect(bdgePath + '/' + boards.IMAGES.path)
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
         return utils.renderHtml(res, '/image/passImages.pug', renderObj)
     }
@@ -1196,7 +1207,7 @@ async function passportLogic(req, res, board) {
     }
     
     if (files.length === 0) {
-        return utils.renderHtml(res, 'templades/message.pug', { adsKey : adsKey, message : errorMessage })
+        return utils.renderHtml(res, '/templades/message.pug', { bdgePath : bdgePath, adsKey : adsKey, message : errorMessage })
     }
     createPassportToken(uid, files.length * 9999, board, res)
 }

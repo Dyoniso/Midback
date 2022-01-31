@@ -39,6 +39,12 @@ hr {
     border-style: dashed;
 }
 
+.halloween-font {
+    font-size: 32px;
+    color:red;
+    font-family: halloween;
+}
+
 .bgr-transparent {
     background: rgba(7, 1, 42, 0.486);
 }

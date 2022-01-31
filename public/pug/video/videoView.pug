@@ -6,6 +6,7 @@ html
         title(id="pageTitle") /#{boards.VIDEOS.path.toUpperCase()}/ #{id} - Not Found
 
     include ../templades/head.pug
+    style(id="fontStyle")
     include ../templades/themeChecker.pug
 
     body(class="theme-templade" style=(styleTheme))
@@ -17,6 +18,8 @@ html
         include ../templades/header.pug
 
         section
+            input(type="hidden" id="bridgePath" value=(bdgePath))
+            
             if (file !== null)
                 div(class="m-4")
                     div(class="video-container")
@@ -44,4 +47,6 @@ html
         if (!vip)
             include ../templades/adsContent.pug
         include ../templades/snow.pug
+
+        script(src=(bdgePath + "/pub/fonts.js")) 
                                   

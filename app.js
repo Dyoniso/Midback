@@ -15,12 +15,12 @@ exports.API_VERSION = API_VERSION
 //ENV
 let HOSTNAME = process.env.HOSTNAME
 let PORT = process.env.PORT || process.env.SERVER_PORT
-const vipEnabled = Boolean(process.env.VIP_CYCLE === 'true')
-const goalEnabled = Boolean(process.env.GOAL_CYCLE === 'true')
-const holidaysEnabled = Boolean(process.env.HOLIDAYS_CYCLE === 'true')
-const sameFiles = Boolean(process.env.SAME_FILES === 'true')
-const passportEnabled = Boolean(process.env.PASSPORT === 'true')
-const publicPost = Boolean(process.env.PUBLIC_POST === 'true')
+const vipEnabled = Boolean(process.env.MB_VIP_CYCLE === 'true')
+const goalEnabled = Boolean(process.env.MB_GOAL_CYCLE === 'true')
+const holidaysEnabled = Boolean(process.env.MB_HOLIDAYS_CYCLE === 'true')
+const sameFiles = Boolean(process.env.MB_SAME_FILES === 'true')
+const passportEnabled = Boolean(process.env.MB_PASSPORT === 'true')
+const publicPost = Boolean(process.env.MB_PUBLIC_POST === 'true')
 
 if (!HOSTNAME) HOSTNAME = 'localhost'
 if (!PORT) PORT = 5000
