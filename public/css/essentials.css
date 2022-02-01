@@ -288,12 +288,6 @@ hr {
     max-width:max-content;
 }
 
-.midicon {
-    background: url('/pub/midback_icon.png');
-    width: 32px;
-    height: 32px;
-}
-
 .img-preview .modal-content {
     background-color: transparent;
 }

@@ -8,10 +8,10 @@ exports.static = (app, path, route) => {
     let br = ''
     if (p.route && p.route.length > 0) br = '/'
     app.use(br + route + '/files', express.static(path + '/public/files'))
-    app.use(br + route + '/pub', express.static(path + '/public/lib'))
-    app.use(br + route + '/pub', express.static(path + '/public/js'))
-    app.use(br + route + '/pub', express.static(path + '/public/css'))
-    app.use(br + route + '/pub', express.static(path + '/public/assets'))
+    app.use(br + route + '/lib', express.static(path + '/public/lib'))
+    app.use(br + route + '/js', express.static(path + '/public/js'))
+    app.use(br + route + '/css', express.static(path + '/public/css'))
+    app.use(br + route + '/assets', express.static(path + '/public/assets'))
 }
 
 exports.init = (path, app, p) => {

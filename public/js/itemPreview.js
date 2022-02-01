@@ -52,7 +52,7 @@ $(document).ready(async() => {
         let type = file.type.split('/')[0]
         let size = file.size
 
-        let previewFrame = `<img id="imgItem-${id}" src="${b64}" onerror="this.src='/pub/404.jpg'"/>`
+        let previewFrame = `<img id="imgItem-${id}" src="${b64}" onerror="this.src='${bdgePath}/assets/404.jpg'"/>`
         if (type === 'video') previewFrame = `<video id="videoItem-${id}" controls="" loop=""><source src="${b64}" /></video>`
         if (type === 'audio') previewFrame = `<audio id="audioItem-${id}" controls="" loop=""><source src="${b64}" /></audio>`
 

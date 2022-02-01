@@ -64,7 +64,7 @@ exports.renderHtml = (res, path, o) => {
     if (MODE_BRIDGE) {
         access = bdgePath + '/public/pug'
         let html = o ? pug.renderFile(access + path, o) : pug.renderFile(access + path)
-        return res.status(200).send(html).end()
+        return res.status(200).send(html)
     } 
     return o ? res.render(access + path, o) : res.render(access + path)
 }

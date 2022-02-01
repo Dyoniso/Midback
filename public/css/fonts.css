@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'halloween';
-    src: url('/pub/fonts/font_halloween.ttf')  format('truetype');
+    src: url('/css/fonts/font_halloween.ttf')  format('truetype');
     
 }
 
 @font-face {
     font-family: 'boulder';
-    src: url('/pub/fonts/font_boulder.ttf');   
+    src: url('/css/fonts/font_boulder.ttf');   
 }

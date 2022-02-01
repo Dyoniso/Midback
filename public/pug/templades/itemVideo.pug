@@ -23,4 +23,4 @@ each r in files
     div(class=`item-video ${r.vip && !aclAdmin ? 'vip-video-highlight' : ''} m-2` id=`itemVideo-${r.id}`)
         - href = rf2 === true ? `${archiveUrlRF}/${r.thumb_name}` : `${archiveUrl}/${r.thumb_name}`
         a(href=(admin && aclAdmin === true ? '#' : `?watch=${r.id}`) onClick=(admin === true && aclAdmin === true ? "delEvent(this)" : ''))
-            img(src=(href) data-type=(1) data-href=(href) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) onerror=`this.src='${bdgePath}/pub/404.jpg'`)
+            img(src=(href) data-type=(1) data-href=(href) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) onerror=`this.src='${bdgePath}/assets/404.jpg'`)
