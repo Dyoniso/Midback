@@ -60,12 +60,11 @@ exports.checkRouteExists = (app, route) => {
 let bdgePath = ''
 if (MODE_BRIDGE) bdgePath = require('../bridge').path
 exports.renderHtml = (res, path, o) => {
-    let access = './public/pug'
-    let html = ''
+    let access = '.'
     if (MODE_BRIDGE) {
         access = bdgePath + '/public/pug'
-        html = o ? pug.renderFile(access + path, o) : pug.renderFile(access + path)
+        let html = o ? pug.renderFile(access + path, o) : pug.renderFile(access + path)
         return res.status(200).send(html).end()
-    }
-    return o ? res.render(access, o) : res.render(access)
+    } 
+    return o ? res.render(access + path, o) : res.render(access + path)
 }

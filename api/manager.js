@@ -60,6 +60,10 @@ if (MODE_BRIDGE) {
     if (path && path.length > 0) bdgeRf = path
 }
 
+if (utils.checkRouteExists(app, '/' + boards.IMAGES.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
+if (utils.checkRouteExists(app, '/' + boards.VIDEOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
+if (utils.checkRouteExists(app, '/' + boards.AUDIOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
+
 if (!archiveUrl) archiveUrl = (bdgePath + '/files')
 else archiveUrl = bdgePath + archiveUrl
 if (!admPassword) admPassword = 'admin'
@@ -193,10 +197,6 @@ if (vipEnabled === true) {
 app.get(bdgePath + '/info', (req, res) => {
     return renderInfo(req, res)
 })
-
-if (utils.checkRouteExists(app, '/' + boards.IMAGES.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
-if (utils.checkRouteExists(app, '/' + boards.VIDEOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
-if (utils.checkRouteExists(app, '/' + boards.AUDIOS.path)) throw new Error('Conflicts between board path names. Please choose a different pathname')
 
 async function renderIndex(req, res) {
     let goal = await getGoalProgress()
