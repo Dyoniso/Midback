@@ -1,6 +1,7 @@
 const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
 const Logger = require('./logger')
-let app = logger = null
+let app
+let logger
 if (MODE_BRIDGE) {
     let p = require('../bridge').P
     boards = require('../bridge').boards
@@ -1130,32 +1131,33 @@ async function passportLogic(req, res, board) {
                             logger.error('Error after check range of files')
                         }
 
-                        let thv = await fm.registerFile({
+                        let file = await fm.registerFile({
                             name : filename,
                             base64 : base64,
                             mime : f.mimetype,
+                            size : size,
                         })
 
                         if (board === boards.AUDIOS.path) {
                             await db.query(`
                                 INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, filename, f.mimetype, sequence, size, req.vip]
+                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, file.name, f.mimetype, sequence, file.size, req.vip]
                             )
 
                         } else if (board === boards.VIDEOS.path) {
                             await db.query(`
                                 INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, thv, req.vip]
+                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, file.name, f.mimetype, sequence, file.size, file.thumbName, req.vip]
                             )
                         } else {
                             await db.query(`
                                 INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip]
+                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, file.name, f.mimetype, sequence, file.size, dims.width, dims.height, req.vip]
                             )
                         }
 
                         await appendGoal(uid, 1)
-                        logger.info(`File info registered on db! Name: ${filename}, Mime:${mime}, Sequence: ${sequence}`) 
+                        logger.info(`File info registered on db! Name: ${file.name}, Mime:${mime}, Sequence: ${sequence}`) 
 
                     } else {
                         throwErrorSameFiles()

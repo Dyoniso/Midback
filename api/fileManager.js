@@ -35,6 +35,16 @@ exports.registerFile = async(file) => {
     if (mime === 'audio') path = filesPath + '/' + dirName.audio + '/' + file.name
  
     if (!fs.existsSync(path)) fs.writeFileSync(path, Buffer.from(file.base64, 'base64'))
+    delete file.base64
+
+    //TODO CRIAR UMA SISTEMA PARA PRE VISUALIZAR IMAGENS GRANDES
+
+    let jpgFileName = await convertJPG(filesPath + dirName.image, file)
+    if (jpgFileName !== null) {
+        let stats = fs.statSync(filesPath + dirName.image + '/' + jpgFileName)
+        file.name = jpgFileName
+        file.size = stats.size
+    }
 
     let thumbName = ''
     if (mime === 'video') {
@@ -44,9 +54,10 @@ exports.registerFile = async(file) => {
            logger.error('Error after create video thumb', err)        
         }
     }
+    file.thumbName = thumbName
 
     logger.info(`File: ${file.name} successful registered! `)
-    return thumbName
+    return file
 }
 
 exports.deleteFile = async(file) => {
@@ -72,6 +83,32 @@ exports.deleteFile = async(file) => {
     } else if (file.thumb !== '') {
         logger.info(`Error after delete video thumb. Thumb not exists (Path: ${path})`)
     }
+}
+
+async function convertJPG(path, file) {
+    let filename = null
+    let mime = file.mime.split('/')[1]
+    if (mime === 'png') {
+        let filePath = path + '/' + file.name
+        if (fs.existsSync(filePath)) {
+            return await new Promise((resolve, reject) => {
+                ffmpeg(filePath)
+                .on('end', () => {
+                    logger.info('PNG to JPG Converted! ' + file.name)
+                    exports.deleteFile(file)
+                    filename = file.name.split('.')[0]+'.jpg'
+                    return resolve(filename)
+                })
+                .on('error', (err) => {
+                    logger.error('Error in convert file to jpg' + err)
+                    return resolve(filename)
+                })
+                .output(path + '/' + filename)
+                .run()
+            })
+        }
+    }
+    return filename
 }
 
 exports.generateThumb = async(file) => {
