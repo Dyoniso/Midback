@@ -797,6 +797,7 @@ async function renderBoards(req, res, render, board) {
                 renderObj.id = watch
                 renderObj.file = file
                 renderObj.files = rfFiles
+                renderObj.files = renderObj.files.filter((f) => f.id !== file.id)
 
                 return utils.renderHtml(res, '/video/videoView.pug', renderObj)
             }
