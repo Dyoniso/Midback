@@ -1050,7 +1050,7 @@ async function passportLogic(req, res, board) {
             dims = sizeOf(Buffer.from(base64, 'base64'))
 
         } catch (err) {
-            logger.error(`Error after get base64 dims.`)
+            logger.info(`Error after get base64 dims. Setting default value`)
         }
         if (!dims.width || dims.width < 0 || isNaN(dims.width)) dims.width = 0
         if (!dims.width || dims.height < 0 || isNaN(dims.height)) dims.height = 0
