@@ -629,6 +629,7 @@ async function youngFilesLogic(req, res, board) {
         })
     } else {
         if (files.length > 0) raw = pug.renderFile(bdgeRf + '/public/pug/templades/itemFrame.pug', {
+            archivePreviewUrl : archiveUrl + '/' + fm.dirName.preview,
             archiveUrl : archiveUrl + '/' + fm.dirName.image,
             files : files,
             board : board,
@@ -808,10 +809,12 @@ async function renderBoards(req, res, render, board) {
         }
     } else {
         if (render === false) {
+            renderObj.archivePreviewUrl = archiveUrl + '/' + fm.dirName.preview
             renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
             return utils.renderHtml(res, '/image/boardImages.pug', renderObj)
         } else {
             return res.end(pug.renderFile(bdgeRf + '/public/pug/templades/itemImage.pug', {
+                archivePreviewUrl : archiveUrl + '/' + fm.dirName.preview,
                 archiveUrl : archiveUrl + '/' + fm.dirName.image,
                 files : files,
                 bdgePath : bdgePath,
@@ -867,6 +870,7 @@ async function renderPass(req, res, board) {
 
     } else {
         if (req.allowed === true) return res.redirect(bdgePath + '/' + boards.IMAGES.path)
+        renderObj.archivePreviewUrl = archiveUrl + '/' + fm.dirName.preview
         renderObj.archiveUrl = archiveUrl + '/' + fm.dirName.image
         return utils.renderHtml(res, '/image/passImages.pug', renderObj)
     }
@@ -967,6 +971,10 @@ async function getFiles(page, limit, set, board, rnd, search) {
         
         files = q
         for (r of files) {
+            r.mime = ''
+            try {
+                r.mime = r.mimetype.split('/').pop()
+            } catch {}
             r.date = utils.formatTimestamp(r.date)
             r.size = utils.formatSize(r.size)
         }
@@ -1141,18 +1149,18 @@ async function passportLogic(req, res, board) {
                         if (board === boards.AUDIOS.path) {
                             await db.query(`
                                 INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, file.name, f.mimetype, sequence, file.size, req.vip]
+                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, filename, f.mimetype, sequence, size, req.vip]
                             )
 
                         } else if (board === boards.VIDEOS.path) {
                             await db.query(`
                                 INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, file.name, f.mimetype, sequence, file.size, file.thumbName, req.vip]
+                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, file.thumbName, req.vip]
                             )
                         } else {
                             await db.query(`
-                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, file.name, f.mimetype, sequence, file.size, dims.width, dims.height, req.vip]
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip, preview) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip, file.preview]
                             )
                         }
 

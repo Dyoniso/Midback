@@ -26,6 +26,7 @@ function createFileSystem() {
     if (!fs.existsSync(filesPath + fm.dirName.thumb)) fs.mkdirSync(filesPath + fm.dirName.thumb)
     if (!fs.existsSync(filesPath + fm.dirName.video)) fs.mkdirSync(filesPath + fm.dirName.video)
     if (!fs.existsSync(filesPath + fm.dirName.audio)) fs.mkdirSync(filesPath + fm.dirName.audio)
+    if (!fs.existsSync(filesPath + fm.dirName.preview)) fs.mkdirSync(filesPath + fm.dirName.preview)
     logger.info('Dir sync completed!')
 }
 
@@ -42,6 +43,7 @@ function createImagesTables() {
                 filename varchar(300) DEFAULT(''),
                 mimetype varchar(300) DEFAULT(''),
                 sequence varchar(300) DEFAULT(''),
+                preview varchar(300) DEFAULT(''),
                 date timestamp DEFAULT current_timestamp
             );  
         `)
@@ -162,6 +164,12 @@ async function checkTableExists(table) {
 }
 
 ;(async() => {
+    try {
+        await db.query(`CREATE SCHEMA IF NOT EXISTS public`)
+    } catch (err) {
+        logger.fatal('Error after create boards schema')
+    }
+    
     createFileSystem()
     if (await checkTableExists(tables.IMAGES) === false) createImagesTables()
     if (await checkTableExists(tables.VIDEOS) === false) createVideosTable()

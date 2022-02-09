@@ -16,6 +16,7 @@ const dirName = {
     image : 'image',
     video : 'video',
     thumb : 'thumb',
+    preview : 'preview',
     audio : 'audio'
 }
 
@@ -37,24 +38,13 @@ exports.registerFile = async(file) => {
     if (!fs.existsSync(path)) fs.writeFileSync(path, Buffer.from(file.base64, 'base64'))
     delete file.base64
 
-    //TODO CRIAR UMA SISTEMA PARA PRE VISUALIZAR IMAGENS GRANDES
+    let jpgFileName = await convertJPG(file)
+    if (jpgFileName !== null) file.preview = jpgFileName
+    else file.preview = ''
 
-    let jpgFileName = await convertJPG(filesPath + dirName.image, file)
-    if (jpgFileName !== null) {
-        let stats = fs.statSync(filesPath + dirName.image + '/' + jpgFileName)
-        file.name = jpgFileName
-        file.size = stats.size
-    }
-
-    let thumbName = ''
-    if (mime === 'video') {
-        try {
-            thumbName = await exports.generateThumb({ name : file.name })
-        } catch (err) {
-           logger.error('Error after create video thumb', err)        
-        }
-    }
-    file.thumbName = thumbName
+    let thumbName = await exports.generateThumb(file)
+    if (thumbName !== null) file.thumbName = thumbName
+    else file.thumbName = ''
 
     logger.info(`File: ${file.name} successful registered! `)
     return file
@@ -85,25 +75,28 @@ exports.deleteFile = async(file) => {
     }
 }
 
-async function convertJPG(path, file) {
+async function convertJPG(file) {
     let filename = null
     let mime = file.mime.split('/')[1]
-    if (mime === 'png') {
-        let filePath = path + '/' + file.name
+    if (mime === 'png' || mime === 'jpg' && file.size > 800000 || mime === 'jpeg' && file.size > 800000) {
+        let filePath = filesPath + dirName.image + '/' + file.name
         if (fs.existsSync(filePath)) {
+            filename = String(Math.floor(Math.random() * Date.now())).substr(0, 18)
+            filename = filename +'.jpg'
+            let outputPath = filesPath + dirName.preview + '/' + filename
+            
             return await new Promise((resolve, reject) => {
                 ffmpeg(filePath)
                 .on('end', () => {
                     logger.info('PNG to JPG Converted! ' + file.name)
-                    exports.deleteFile(file)
-                    filename = file.name.split('.')[0]+'.jpg'
                     return resolve(filename)
                 })
                 .on('error', (err) => {
                     logger.error('Error in convert file to jpg' + err)
+                    filename = null
                     return resolve(filename)
                 })
-                .output(path + '/' + filename)
+                .output(outputPath)
                 .run()
             })
         }
@@ -112,27 +105,33 @@ async function convertJPG(path, file) {
 }
 
 exports.generateThumb = async(file) => {
-    let path = filesPath + dirName.video + '/' + file.name
+    let thumbName = null
+    let mime = file.mime.split('/')[0]
+    if (mime === 'video') {
+        let path = filesPath + dirName.video + '/' + file.name
 
-    if (fs.existsSync(path)) {
-        let thumbName = String(Math.floor(Math.random() * Date.now())).substr(0, 18)
-        thumbName = thumbName + '.jpg'
+        if (fs.existsSync(path)) {
+            thumbName = String(Math.floor(Math.random() * Date.now())).substr(0, 18)
+            thumbName = thumbName + '.jpg'
 
-        return await new Promise((resolve, reject) => {
-            ffmpeg(path)
-            .on('end', () => {
-                logger.info('Video screenshot taken. Name: ' + file.name)
-                resolve(thumbName)
+            return await new Promise((resolve, reject) => {
+                ffmpeg(path)
+                .on('end', () => {
+                    logger.info('Video screenshot taken. Name: ' + file.name)
+                    resolve(thumbName)
+                })
+                .on('error', (err) => {
+                    logger.error('Error in salve video screenshot. ' + err)
+                    thumbName = null
+                    resolve(thumbName)
+                })
+                .screenshots({
+                    count: 1,
+                    filename : thumbName,
+                    folder: filesPath + dirName.thumb
+                })
             })
-            .on('error', (err) => {
-                logger.error('Error in salve video screenshot. ' + err)
-                reject(err)
-            })
-            .screenshots({
-                count: 1,
-                filename : thumbName,
-                folder: filesPath + dirName.thumb
-            })
-        })
+        }
     }
+    return thumbName
 }

@@ -9,7 +9,7 @@ const fs = require('fs')
 const app = express()
 
 //VERSION
-let API_VERSION = '2.1'
+let API_VERSION = '2.7'
 exports.API_VERSION = API_VERSION
 
 //ENV
@@ -54,13 +54,21 @@ httpServer.listen(PORT, HOSTNAME, () => {
     } else {
         logger.info(`Enabled Boards: ${exports.boards.IMAGES.enabled === true ? `/${exports.boards.IMAGES.path.toUpperCase()}/ - ${exports.boards.IMAGES.name},` : ''} ${exports.boards.VIDEOS.enabled === true ? `/${exports.boards.VIDEOS.path.toUpperCase()}/ - ${exports.boards.VIDEOS.name},` : ''} ${exports.boards.AUDIOS.enabled ? `/${exports.boards.AUDIOS.path.toUpperCase()}/ - ${exports.boards.AUDIOS.name}` : ''}`)
     }
-    logger.info(`[SYSTEM STATUS]:
-    - Vip System: ${vipEnabled === true ? 'OK' : 'disabled'}, 
-    - Holidays System: ${holidaysEnabled === true ? 'OK' : 'disabled'}, 
-    - Goal System: ${goalEnabled === true ? 'OK' : 'disabled'}
-    - Passport Status: ${passportEnabled === true ? 'OK' : 'Free entrance'}
-    - Post Access: ${publicPost === true ? 'Public' : 'Restricted'}
-    - SPAM Files: ${sameFiles === true ? 'Accept same files' : 'Lock all the same files'}`)
+    
+    console.log(`
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    Z                                         Z
+    Z [MIDBACK STATUS]:                       Z
+    Z  - Vip System: ${vipEnabled === true ? 'OK                       Z' : 'disabled                 Z'} 
+    Z  - Holidays System: ${holidaysEnabled === true ? 'OK                  Z' : 'disabled            Z'}
+    Z  - Goal System: ${goalEnabled === true ? 'OK                      Z' : 'disabled                Z'}
+    Z  - Passport Status: ${passportEnabled === true ? 'OK                  Z' : 'Free entrance       Z'}
+    Z  - Post Access: ${publicPost === true ? 'Public                  Z' : 'Restricted              Z'}
+    Z  - SPAM Files: ${sameFiles === true ? 'Accept Same Files        Z' : 'Lock all the same files  Z'}
+    Z                                         Z
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                  7Retro Engine
+    `)                                  
 })
 
 module.exports.app = app
