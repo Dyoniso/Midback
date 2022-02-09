@@ -94,7 +94,7 @@ $(document).ready((e) => {
                         totalPage = totalPage + raw.length
                     
                         $('#notFoundMessage').hide()
-                        $('#totalPagePreview').text(totalPage)
+                        $('#totalPagePreview').text(`Of ${totalPage} files`)
                         $('#totalPage').val(totalPage)
                         $('#pageTitle').text(`(${notifyCount}) ` + defaultTitle)
                     }
