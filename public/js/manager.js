@@ -10,6 +10,7 @@ function openModal(e) {
     let href = e.data('href')
     let type = e.data('type')
     let vip = e.data('vip')
+    let tag = e.data('tag')
 
     if (vip) $('.custom-modal-header').css({'background' : 'var(--bgr-vip)' })
     else $('.custom-modal-header').css({'background' : '' })
@@ -17,7 +18,7 @@ function openModal(e) {
     if (type !== 1) {
         $('#btnDownloadImgPreview').attr('href', href)
         $('#modalPreviewTitle').html(`
-        ${vip ? '<span class="vip-tag">VIP</span>' : ''} ${id} - <a href="${href}" class="file-name color-accent">${filename}</a> (${size} ${width}x${heigth}px) - ${date}
+        ${vip ? '<span class="vip-tag">VIP</span>' : ''}${tag && tag !== '' ? ` <span class="tag-model">${tag}</span>` : ''} ${id} - <a href="${href}" class="file-name color-accent">${filename}</a> (${size} ${width}x${heigth}px) - ${date}
         `)
         href = location.origin + href
         $('#searchUrl').html(`

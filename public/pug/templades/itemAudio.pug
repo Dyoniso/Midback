@@ -13,7 +13,7 @@ if (admin === true && aclAdmin === true)
 each r in files 
     div(class=`item-audio ${r.vip ? 'audio-vip-highlight' : ''} m-2` id=`itemAudio-${r.id}` onClick=(admin === true && aclAdmin === true ? "delEvent(this)" : ""))
         - src = `${archiveUrl}/${r.filename}`
-        img(src=(bdgePath + '/assets/audio_icon.png') data-type=(2) data-src=(src) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size))        
+        img(src=(bdgePath + '/assets/audio_icon.png') data-type=(2) data-src=(src) data-date=(r.date) data-tag=(r.tag) data-vip=(String(r.vip)) data-filename=(r.filename) data-id=(r.id) data-size=(r.size))        
 
         - let n = r.filename.length > 24 ? r.filename.substr(0, 24) : r.filename
         small !{r.vip ? '(VIP)' : ''} #{n}

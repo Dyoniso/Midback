@@ -91,8 +91,11 @@ header(class="m-4")
                             input(type="file" id="postFile" name="files" multiple accept=(board === boards.VIDEOS.path ? 'video/*' : board === boards.AUDIOS.path ? 'audio/*' : 'image/*'))
                             div(class="p-2" id="filePreview")
 
-                            div(align="end")
-                                button(class="btn btn-danger font-weight-bold") POST        
+                            div(class="d-flex")
+                                div(class="mr-auto mt-auto mb-auto")
+                                    input(class="tag-input" placeholder="Insert TAG" name="tag")
+                                div(class="ml-auto")    
+                                    button(class="btn btn-danger font-weight-bold") POST
     hr                    
 
 

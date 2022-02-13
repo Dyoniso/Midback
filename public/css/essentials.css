@@ -87,11 +87,12 @@ a:hover {
 }
 
 .bgr-transparent {
-    background: rgba(7, 1, 42, 0.486);
+    background: var(--bgr-file-container);
 }
 
 .file-container {
-    background:rgba(0, 0, 0, 0.212);
+    background: var(--bgr-transparent-dark);
+    max-width: 40rem;
     padding: 8px;
     margin: 8px;
     display: flex;
@@ -427,6 +428,7 @@ a.title:hover {
     top: 0;
     right: 0;
     cursor: zoom-out;
+    background-color: var(--bgr-default);
 }
 
 .video-container {
@@ -587,14 +589,26 @@ a.title:hover {
 }
 
 .vip-tag {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     background-color: var(--color-accent-vip);
     border-radius: 4px;
-    padding: 4px;
+    padding: 2px;
     margin: 2px;
     color: var(--color-primary);;
     box-shadow: 1px 1px #003509;
+    cursor: pointer;
+}
+
+.tag-model {
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 8px;
+    border-radius: 4px;
+    background-color: var(--bgr-tag-model);
+    padding: 2px;
+    color: var(--color-primary);
+    box-shadow: 1px 1px black;
     cursor: pointer;
 }
 
@@ -694,10 +708,21 @@ a.title:hover {
     margin-left: 10px;
     color: var(--color-primary);
     background: var(--bgr-input-2);
+    border: 1px solid transparent;
     border-radius: 8px;
     padding: 4px;
 }
 
 .search-form input::placeholder {
     color: var(--color-primary)!important;
+}
+
+.tag-input {
+    width: 6rem;
+    color: var(--color-primary);
+    background: var(--bgr-input-3);
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--color-hr);
+    padding: 4px;
 }

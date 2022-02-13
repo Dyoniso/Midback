@@ -38,11 +38,14 @@ html
                                 input(type="file" id="postFile" name="files" multiple accept="video/*")
                                 div(class="p-2" id="filePreview")
 
-                                div(align="end")
-                                    if (vip)
-                                        button(class="m-1 btn btn-success font-weight-bold" id="btnSkip") (VIP) Skip
-                                    else    
-                                        button(class="m-1 btn btn-danger font-weight-bold" id="btnPassport") Get Passport
+                                div(class="d-flex")
+                                    div(class="mr-auto mt-auto mb-auto")
+                                        input(class="tag-input" placeholder="Insert TAG" name="tag")
+                                    div(class="ml-auto")
+                                        if (vip)
+                                            button(class="m-1 btn btn-success font-weight-bold" id="btnSkip") (VIP) Skip
+                                        else    
+                                            button(class="m-1 btn btn-danger font-weight-bold" id="btnPassport") Get Passport
 
                 div(class="text-center p-2")
                     div(style="font-size:12px") - Note: Please do not post Nazism, CP, EXTREME GORE or Break Anonymity, your image will be deleted -

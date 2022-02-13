@@ -24,7 +24,7 @@ html
                 div(class="m-4")
                     div(class="video-container")
                         div(class="video-header" style=(file.vip ? 'background:var(--bgr-vip-2)' : ''))
-                            div(class="video-title") !{file.vip ? '<span class="vip-tag">VIP</span>' : ''} #{file.filename} !{`<span class="font-weight-bold" style="font-size:12px">No. ${file.id}</span>`} 
+                            div(class="video-title") !{file.vip ? '<span class="vip-tag">VIP</span>' : ''}!{file.vip ? ` <span class="tag-model">${file.tag}</span>` : ''} #{file.filename} !{`<span class="font-weight-bold" style="font-size:12px">No. ${file.id}</span>`} 
                             div(class="color-primary" style="font-size:12px") (#{file.size}) Posted in: #{file.date} !{`<a target="_blank" href="${archiveUrl + '/' + file.filename}" class="color-accent"> View raw source </a>`}
 
                         div(class="video-content")    

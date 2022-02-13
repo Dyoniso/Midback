@@ -34,8 +34,10 @@ $(document).ready((e) => {
 
     function swapAudio(tar) {
         let name = tar.data('filename')
+        let tag = tar.data('tag')
+        let vip = tar.data('vip')
         if (name.length > 80) name = name.substr(0, 80) + '...'
-        $('#playbackInfo').html(`<strong>No. ${tar.data('id')}</strong> - ${tar.data('date')} (${tar.data('size')})`)
+        $('#playbackInfo').html(`${vip ? `<span class="vip-tag">VIP</span> ` : ''}${tag && tag !== '' ? `<span class="tag-model">${tag}</span> ` : ''}<strong>No. ${tar.data('id')}</strong> - ${tar.data('date')} (${tar.data('size')})`)
         $('#playbackName').html(`<strong><a class="color-accent-2" href="${tar.data('src')}">${name}</strong>`)
 
         let a = $('#audioPlayer')

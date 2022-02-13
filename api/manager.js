@@ -910,7 +910,7 @@ async function getFilesLength(board, search) {
 
         let q = await db.query(`
             SELECT COUNT(*) FROM ${tl} WHERE  
-            id::varchar LIKE $1 OR filename LIKE $1 OR mimetype LIKE $1
+            id::varchar LIKE $1 OR tag LIKE $1 OR filename LIKE $1 OR mimetype LIKE $1
         `, [`%${search}%`])
 
         if (q[0] && q[0].count) count = q[0].count
@@ -958,7 +958,7 @@ async function getFiles(page, limit, set, board, rnd, search) {
             q = await db.query(`
                 SELECT * FROM ${tl} 
                 WHERE id != $2 
-                AND id::varchar LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
+                AND id::varchar LIKE $3 OR tag LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
                 ORDER by random() 
                 LIMIT $1
             `, [limit, set, `%${search}%`])
@@ -966,7 +966,7 @@ async function getFiles(page, limit, set, board, rnd, search) {
         } else {
             q = await db.query(`
                 SELECT * FROM ${tl} WHERE 
-                id::varchar LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
+                id::varchar LIKE $3 OR tag LIKE $3 OR filename LIKE $3 OR mimetype LIKE $3
                 ORDER by ID ${settable ? 'DESC' : 'ASC'} OFFSET $1 LIMIT $2
             `, [settable ? page * limit - limit : set, limit, `%${search}%`])
         }
@@ -994,7 +994,10 @@ async function passportLogic(req, res, board) {
     let files = req.files
     let errorMessage = ''
     let allowed = req.allowed
+    let tag = req.body.tag
 
+    if (!tag) tag = ''
+    if (tag.length > 30) tag = tag.substring(0, 30)
     if (admin === true) {
         postEnabled = true
         publicPost = true
@@ -1079,7 +1082,7 @@ async function passportLogic(req, res, board) {
 
         function throwErrorServer() {
             let err = `[!] Error after register file. Uid: ${uid}, Sequence: ${sequence}..`
-            errorMessage = errorMessage + err + '<br>'
+            errorMessage = 'Internal Server Error. Try again later'
             logger.error(err)
             remove(f)
         }
@@ -1093,7 +1096,7 @@ async function passportLogic(req, res, board) {
 
         //Function add file
         async function addFile() {
-            try {                
+            try {  
                 if (publicPost === true) {
                     if (sameFiles === true || await checkSameFiles(sequence, board) === false) {
                         let tl = tables.IMAGES
@@ -1150,19 +1153,19 @@ async function passportLogic(req, res, board) {
 
                         if (board === boards.AUDIOS.path) {
                             await db.query(`
-                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6)`, [uid, filename, f.mimetype, sequence, size, req.vip]
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, vip, tag) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, req.vip, tag]
                             )
 
                         } else if (board === boards.VIDEOS.path) {
                             await db.query(`
-                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7)`, [uid, filename, f.mimetype, sequence, size, file.thumbName, req.vip]
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, thumb_name, vip, tag) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [uid, filename, f.mimetype, sequence, size, file.thumbName, req.vip, tag]
                             )
                         } else {
                             await db.query(`
-                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip, preview) 
-                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip, file.preview]
+                                INSERT INTO ${tl}(uid, filename, mimetype, sequence, size, width, height, vip, preview, tag) 
+                                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, [uid, filename, f.mimetype, sequence, size, dims.width, dims.height, req.vip, file.preview, tag]
                             )
                         }
 
@@ -1216,7 +1219,7 @@ async function passportLogic(req, res, board) {
     }
 
     if (files.length === 0 && errorMessage.length === 0) {
-        errorMessage = 'file not found'
+        errorMessage = 'Could not find the files. Add files to enter the next part'
     }
     
     if (files.length === 0) {

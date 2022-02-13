@@ -24,6 +24,7 @@
     --bgr-default: #181818;
     --bgr-input: #0062cc6b;
     --bgr-input-2: #dddddd96;
+    --bgr-input-3: #a59cbb78;
     --bgr-video-preview: #3a43b7;
     --bgr-video-preview-container-bolder: #084f5c;
     --bgr-video-preview-container: #041024;
@@ -31,7 +32,9 @@
     --bgr-audio-popup: #ffffff;
     --bgr-vip: #460875;
     --bgr-vip-2: #651263;
+    --bgr-tag-model: #3a43b7;
     --bgr-transparent-dark: #000000c0;
     --bgr-modal-header: #ef0202;
+    --bgr-file-container: #07012a7c;
     --color-hr: #c0c0c08e;
 }
