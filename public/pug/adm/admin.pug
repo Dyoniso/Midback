@@ -12,7 +12,7 @@ html
         section
             input(type="hidden" value=(bdgePath) id="bdgePath")
 
-            div(class="container")
+            div(class="container" style="max-width:40rem")
                 form(action=(bdgePath + "/admin/login")  method="POST" enctype="multipart/form-data")
                     label(class="font-weight-bold" for="serverKey") Admin Password
                     div(class="input-group")
@@ -23,6 +23,6 @@ html
 
         div(class="m-4 text-center")
             hr
-            div Powered by Dyoniso - Copyright © Midback 2021-#{new Date().getFullYear()} - Contact: !{'<a class="text-light" href="mailto:7Retro.community@protonmail.com">7Retro.community@protonmail.com</a>'}
+            div Powered by Dyoniso - Copyright © Midback 2021-#{new Date().getFullYear()} - Contact: !{'<a href="mailto:7Retro.community@protonmail.com">7Retro.community@protonmail.com</a>'}
 
         script(src=(bdgePath + "/js/fonts.js")) 

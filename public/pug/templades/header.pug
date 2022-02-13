@@ -4,7 +4,7 @@ header(class="m-4")
     
     if (headerMode === 1)
         div(class="text-center")      
-            a(href=(bdgePath + "/") class="title") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-home)") Midback 2D
 
     if (headerMode === 22)
         div(class="text-center")      
@@ -12,7 +12,7 @@ header(class="m-4")
        
     else if (headerMode === 2 || headerMode === 6)
         div(class="text-center mt-2")    
-            a(href=(bdgePath + "/") class="title") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-image)") Midback 2D
             
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -23,7 +23,7 @@ header(class="m-4")
 
     else if (headerMode === 3 || headerMode === 8 || headerMode === 9)
         div(class="text-center mt-2")
-            a(href=(bdgePath + "/") class="title" style="color:#2196f3") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-video)") Midback 2D
 
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -34,7 +34,7 @@ header(class="m-4")
 
     else if (headerMode === 10 || headerMode === 12 || headerMode === 14)
         div(class="text-center mt-2")    
-            a(href=(bdgePath + "/") class="title" style="color:#f3216f") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-audio)") Midback 2D
 
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -45,7 +45,7 @@ header(class="m-4")
 
     else if (headerMode === 4)
         div(class="text-center mt-2")  
-            span(class="title" style="color:#97f321") Midback 2D
+            span(class="title" style="color:var(--color-title-home)") Midback 2D
 
             if holidays === 'halloween'
                 h6(class="main-title") ▲ Endless interaction of images and other files. Hallowen edition of !{new Date().getFullYear()} !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲
@@ -60,15 +60,15 @@ header(class="m-4")
             div(class="text-center")
                 if (aclAdmin === true)
                     h6 
-                        a(class="text-warning" href=(board === boards.VIDEOS.path ? (bdgePath + '/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i'))) - Mode : Admin -
+                        a(class="color-accent" href=(board === boards.VIDEOS.path ? (bdgePath + '/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i'))) - Mode : Admin -
                 else
                     h6
-                        a(class="text-warning" href=((board === boards.VIDEOS.path ? (bdgePath +'/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i')) + "?mode=admin")) - Moderate board -
+                        a(class="color-accent" href=((board === boards.VIDEOS.path ? (bdgePath +'/v') : board === boards.AUDIOS.path ? (bdgePath +'/a') : (bdgePath +'/i')) + "?mode=admin")) - Moderate board -
 
         //-if (mode === 'normal')
             div(class="text-center")
                 div Passport Expires in: 
-                    span(id="stopwatch" class="text-warning") #{exp.minutes}/#{exp.seconds}  
+                    span(id="stopwatch" class="color-accent") #{exp.minutes}/#{exp.seconds}  
 
     if (headerMode === 2 || headerMode === 3 || headerMode === 14)
         if (mode !== 'admin')

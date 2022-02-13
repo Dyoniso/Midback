@@ -11,17 +11,17 @@ function openModal(e) {
     let type = e.data('type')
     let vip = e.data('vip')
 
-    if (vip) $('.custom-modal-header').css({'background' : '#460875' })
+    if (vip) $('.custom-modal-header').css({'background' : 'var(--bgr-vip)' })
     else $('.custom-modal-header').css({'background' : '' })
 
     if (type !== 1) {
         $('#btnDownloadImgPreview').attr('href', href)
         $('#modalPreviewTitle').html(`
-        ${vip ? '<span class="vip-tag">VIP</span>' : ''} ${id} - <a href="${href}" class="file-name text-warning">${filename}</a> (${size} ${width}x${heigth}px) - ${date}
+        ${vip ? '<span class="vip-tag">VIP</span>' : ''} ${id} - <a href="${href}" class="file-name color-accent">${filename}</a> (${size} ${width}x${heigth}px) - ${date}
         `)
         href = location.origin + href
         $('#searchUrl').html(`
-            Search: <a target="_blank" class="text-warning" href="//www.google.com/searchbyimage?image_url=${href}">Google</a> / <a target="_blank" class="text-warning" href="//iqdb.org/?url=${href}">IQDB</a> / <a target="_blank" class="text-warning" href="//saucenao.com/search.php?url=${href}">SauceNao</a>
+            Search: <a target="_blank" class="color-accent" href="//www.google.com/searchbyimage?image_url=${href}">Google</a> / <a target="_blank" class="color-accent" href="//iqdb.org/?url=${href}">IQDB</a> / <a target="_blank" class="color-accent" href="//saucenao.com/search.php?url=${href}">SauceNao</a>
         `)
         $('#modalImgPreview').attr('src', e.attr('src'))
         $('#imgViewModal').modal('show')

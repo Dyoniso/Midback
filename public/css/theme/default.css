@@ -1,0 +1,37 @@
+:root { 
+    --color-primary : #fcdede;
+    --color-secondary : #d1cece;
+    --color-secondary-dark: #c2bebe;
+    --color-secondary-hover: #a8a7a7;
+    --color-secondary-dark-hover: #cfcece;
+    --color-link: #ffffff;
+    --color-link-hover: #cfcfcf;
+    --color-text-default: #000000;
+    --color-accent: #ffc107;
+    --color-accent-2: #dc3545;
+    --color-accent-vip: #1fd128a9;
+    --color-frame-bolder: #7070708e;
+    --color-frame-delete: #ef2b2b7a;
+    --color-frame-delete-hover: #ef2b2b;
+    --color-goal-progress: #e91e63;
+    --color-frame-vip-bolder: #36ff40a9;
+    --color-pagination-accent: #a37c07;
+    --color-srollbar: #6b6e705e;
+    --color-title-home: #97f321;
+    --color-title-image: #ff463c;
+    --color-title-video: #2196f3;
+    --color-title-audio: #f3216f;
+    --bgr-default: #181818;
+    --bgr-input: #0062cc6b;
+    --bgr-input-2: #dddddd96;
+    --bgr-video-preview: #3a43b7;
+    --bgr-video-preview-container-bolder: #084f5c;
+    --bgr-video-preview-container: #041024;
+    --bgr-video-vip-preview: #3a43b7;
+    --bgr-audio-popup: #ffffff;
+    --bgr-vip: #460875;
+    --bgr-vip-2: #651263;
+    --bgr-transparent-dark: #000000c0;
+    --bgr-modal-header: #ef0202;
+    --color-hr: #c0c0c08e;
+}

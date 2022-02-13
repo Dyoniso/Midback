@@ -1,17 +1,17 @@
 div(class="boardContent")
     div Available Boards: 
-    a(href=(bdgePath + "/") class="text-light") /home/ 
+    a(href=(bdgePath + "/")) /home/ 
     if (holidays === 'halloween')
         if (boards.IMAGES.enabled === true)
-            a(href=(bdgePath + '/' + boards.IMAGES.path) class="text-light")  /h#{boards.IMAGES.path.toUpperCase()}/ - Horror #{boards.IMAGES.name}
+            a(href=(bdgePath + '/' + boards.IMAGES.path))  /h#{boards.IMAGES.path.toUpperCase()}/ - Horror #{boards.IMAGES.name}
         if (boards.VIDEOS.enabled === true) 
-            a(href=(bdgePath + '/' + boards.VIDEOS.path) class="text-light")  /h#{boards.VIDEOS.path.toUpperCase()}/ - Horror #{boards.VIDEOS.name}
+            a(href=(bdgePath + '/' + boards.VIDEOS.path))  /h#{boards.VIDEOS.path.toUpperCase()}/ - Horror #{boards.VIDEOS.name}
         if (boards.AUDIOS.enabled === true)
-            a(href=(bdgePath + '/' + boards.AUDIOS.path) class="text-light")  /h#{boards.AUDIOS.path.toUpperCase()}/ - Horror #{boards.AUDIOS.name}
+            a(href=(bdgePath + '/' + boards.AUDIOS.path))  /h#{boards.AUDIOS.path.toUpperCase()}/ - Horror #{boards.AUDIOS.name}
     else
         if (boards.IMAGES.enabled === true)
-            a(href=(bdgePath + '/' + boards.IMAGES.path) class="text-light")  /#{boards.IMAGES.path.toUpperCase()}/ - #{boards.IMAGES.name}
+            a(href=(bdgePath + '/' + boards.IMAGES.path))  /#{boards.IMAGES.path.toUpperCase()}/ - #{boards.IMAGES.name}
         if (boards.VIDEOS.enabled === true) 
-            a(href=(bdgePath + '/' + boards.VIDEOS.path) class="text-light")  /#{boards.VIDEOS.path.toUpperCase()}/ - #{boards.VIDEOS.name}
+            a(href=(bdgePath + '/' + boards.VIDEOS.path))  /#{boards.VIDEOS.path.toUpperCase()}/ - #{boards.VIDEOS.name}
         if (boards.AUDIOS.enabled === true)
-            a(href=(bdgePath + '/' + boards.AUDIOS.path) class="text-light")  /#{boards.AUDIOS.path.toUpperCase()}/ - #{boards.AUDIOS.name}
+            a(href=(bdgePath + '/' + boards.AUDIOS.path))  /#{boards.AUDIOS.path.toUpperCase()}/ - #{boards.AUDIOS.name}

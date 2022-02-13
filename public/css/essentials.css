@@ -1,5 +1,46 @@
 hr {
-    border-top: 1px solid rgba(192, 192, 192, 0.555);
+    border-top: 1px solid var(--color-hr);
+}
+
+.color-primary {
+    color: var(--color-primary)!important;
+}
+
+.color-secondary { 
+    color: var(--color-secondary)!important;
+}
+
+.color-secondary-dark { 
+    color: var(--color-secondary-dark)!important;
+}
+
+.color-text-default {
+    color: var(--color-text-default);
+}
+
+.color-accent {
+    color: var(--color-accent)!important;
+}
+
+.color-accent-2 {
+    color: var(--color-accent-2)!important;
+}
+
+.btn-danger {
+    background-color: var(--color-accent-2);
+}
+
+div {
+    color: var(--color-secondary);
+}
+
+a {
+    color: var(--color-link);
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: unset;
 }
 
 .page-title {
@@ -19,7 +60,7 @@ hr {
 
 .theme-templade {
     color: #bebfc0;
-    background-color: #181818;
+    background-color: var(--bgr-default);
 }
 
 .passport-form {
@@ -30,18 +71,18 @@ hr {
     cursor: pointer;
     padding: 1em;
     font-size: 22px;
-    border: 4px solid rgb(255 255 255 / 30%);
+    border: 4px solid var(--color-hr);
     border-style: dashed;
 }
 
 .drag-file:hover {
-    border: 4px solid rgba(246, 190, 36, 0.479);
+    border: 4px solid var(--color-accent-2);
     border-style: dashed;
 }
 
 .halloween-font {
     font-size: 32px;
-    color:red;
+    color: var(--color-accent-2);;
     font-family: halloween;
 }
 
@@ -59,31 +100,31 @@ hr {
 
 .key-content, .uid-content {
     padding: 8px;
-    background: #00000057;
+    background: var(--bgr-transparent-dark);
     display: flex;
     margin: 4px;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #999999!important;
+    color: var(--color-secondary-dark)!important;
     opacity: 1; 
 }
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #999999!important;
+    color: var(--color-secondary-dark)!important;
 }
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #999999!important;
+    color: var(--color-secondary-dark)!important;
 }
 
 .form-control {
-    color: #b9b9b9;
-    background: #0062cc6b;
+    color: var(--color-primary);;
+    background: var(--bgr-input);
     border: 1px solid #ffffff4a;
 }
 
 .form-control:focus {
-    color: white;
-    background: #0062cc6b;
+    color: var(--color-primary);
+    background: var(--bgr-input);
 }
 
 .file-size {
@@ -108,8 +149,9 @@ hr {
     font-size: 4.5rem;
 }
 
-.title:hover {
+a.title:hover {
     color: #ff463c;
+    text-decoration: underline;
 }
 
 .main-title {
@@ -148,7 +190,7 @@ hr {
     background-clip: text;
     -webkit-background-clip: text;
     background-color: rgba(0,0,0,0);
-    background-image: linear-gradient(to right,red,#ffa600,#fff500,#06ff00,#00c9ff,#2300ff,#ff00fa,red);
+    background-image: linear-gradient(to right,#cc00ff,#ff00c8,#00aeff,#00c9ff,#00ff4c,#3516fd,#e100ff,#c300ff);
     background-size: 200%;
     animation: heading 1s linear infinite;
     font: bolder 18px boulder, sans-serif;
@@ -169,7 +211,7 @@ hr {
 }
 
 .btnRemove:hover {
-    color : red;
+    color : var(--color-accent-2);
 }
 
 #postFile {
@@ -219,7 +261,7 @@ hr {
     position: relative;
     width: 220px;
     height: 140px;
-    background-color: black;
+    background-color: var(--bgr-default);
 }
 
 .item-video::after {
@@ -252,13 +294,13 @@ hr {
 .item-img {
     width: 140px;
     height: 140px;
-    border: 1px solid rgba(112, 112, 112, 0.555);
+    border: 1px solid var(--color-frame-bolder);
 }
 
 .item-img-sm {
     width: 120px;
     height: 120px;
-    border: 1px solid rgba(112, 112, 112, 0.555);
+    border: 1px solid var(--color-frame-bolder);
 }
 
 .file-name {
@@ -284,6 +326,26 @@ hr {
     transform: scale(1.1);
 }
 
+::-webkit-scrollbar {
+    height: 8px;  
+    width: 10px;
+    -webkit-appearance: none;
+}
+::-webkit-scrollbar-corner { 
+    background: var(--color-srollbar); 
+}
+::-webkit-scrollbar-thumb:horizontal{
+    background: var(--color-srollbar); 
+}
+::-webkit-scrollbar-track {
+    background: var(--color-srollbar); 
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-srollbar); 
+    height:100px;
+    border-radius:12px;
+}
+
 .thread-container {
     max-width:max-content;
 }
@@ -293,7 +355,7 @@ hr {
 }
 
 .modal-img-content {
-    background-color: #000000a6;
+    background-color: var(--bgr-transparent-dark);
     display: flex;
     justify-content: center;
     padding: 8px;
@@ -338,9 +400,9 @@ hr {
 }
 
 .custom-modal-header {
-    color: whitesmoke;
+    color: var(--color-primary);
     display: flex;
-    background: #ef0202;
+    background: var(--bgr-modal-header);
     padding: 8px;
 }
 
@@ -368,18 +430,18 @@ hr {
 }
 
 .video-container {
-    border: 1px solid #084f5c;
+    border: 1px solid var(--bgr-video-preview-container-bolder);
     width: 100%;
 }
 
 .video-header {
-    background: #3a43b7;
+    background: var(--bgr-video-preview);
     padding: 0.4rem;
 }
 
 .video-content {
     padding: 1rem;
-    background-color: #041024;
+    background-color: var(--bgr-video-preview-container);
 }
 
 .video-title {
@@ -391,16 +453,6 @@ hr {
     width: 100%;
     max-height: 420px;
     object-fit: contain;
-}
-
-.color-link {
-    color :#4cc8e7;
-    text-decoration: none;
-}
-
-.color-link:hover {
-    color: #3a9ab3;;
-    text-decoration: none;
 }
 
 .color-secondary { 
@@ -469,7 +521,7 @@ hr {
 }
 
 .audio-close:hover {
-    color: red;
+    color: var(--color-accent-2);
 }
 
 .audio-header {
@@ -489,7 +541,7 @@ hr {
 
 .audio-popup {
     max-width: min-content;
-    background: white;
+    background: var(--bgr-audio-popup);
     position: fixed;
     bottom: 0;
     right: 0;
@@ -502,7 +554,7 @@ hr {
 }
 
 .goal-content {
-    border: 2px solid #ffffff6c;
+    border: 2px solid var(--color-hr);
     border-radius: 8px;
     padding: 8px;
 }
@@ -511,7 +563,7 @@ hr {
     width: 330px;
     height: 20px;
     border: 1px solid #616161af;
-    background: #000000c0;
+    background: var(--bgr-transparent-dark);
     border-radius: 4px;
 }
 
@@ -521,27 +573,27 @@ hr {
 }
 
 .goal-progress-percent {
-    background: #97f321;
+    background: var(--color-goal-progress);
 }
 
 .goal-highlight {
-    border: 1px solid #97f321;
+    border: 1px solid var(--color-goal-progress);
     border-radius: 8px;
     padding: 8px;
 }
 
 .vip-highlight {
-    border: 1px solid #36ff40a9!important;
+    border: 1px solid var(--color-frame-vip-bolder)!important;
 }
 
 .vip-tag {
     font-size: 10px;
     font-weight: bold;
-    background-color: #008c17;
+    background-color: var(--color-accent-vip);
     border-radius: 4px;
     padding: 4px;
     margin: 2px;
-    color: white;
+    color: var(--color-primary);;
     box-shadow: 1px 1px #003509;
     cursor: pointer;
 }
@@ -553,7 +605,7 @@ hr {
 }
 
 .vip-video-highlight::after {
-    background: #146422e6!important;
+    background: var(--color-accent-vip)!important;
 }
 
 .patreon-button {
@@ -578,7 +630,7 @@ hr {
 .file-item {
     padding: 4px;
     margin: 4px;
-    background-color: #00000067;
+    background-color: var(--bgr-transparent-dark);
 }
 
 .ads-content {
@@ -600,7 +652,7 @@ hr {
     color: #1b1b1b;
     cursor: pointer;
     font-size: 12px;
-    background: #dddddd96;
+    background: var(--color-secondary-dark);
     padding: 4px;
     border-radius: 4px;
     margin-left: 2px;
@@ -609,24 +661,25 @@ hr {
 
 .pagination .page:hover {
     text-decoration: none;
-    color: black;
-    background: #ddddddd5;
+    color: var(--color-text-default);
+    background: var(--color-secondary);
 }
 
 .pagination .quote {
-    color: white;
-    background : #a37c07;
+    color: var(--color-primary);
+    background : var(--color-pagination-accent);
 }
 
 .pagination .quote:hover {
-    color: white;
-    background : #a37c07;
+    color: var(--color-primary);
+    background : var(--color-pagination-accent);
 }
 
 .pagination .preview {
     color: #1b1b1b;
     font-size: 12px;
-    background: #dddddd96;
+    background: var(--bgr-input-2);
+    color: var(--color-text-default);
     padding: 4px;
     border-radius: 4px;
     margin-left: 2px;
@@ -639,12 +692,12 @@ hr {
     font-size: 14px;
     margin-right: 10px;
     margin-left: 10px;
-    color: white;
-    background: #dddddd96;
+    color: var(--color-primary);
+    background: var(--bgr-input-2);
     border-radius: 8px;
     padding: 4px;
 }
 
 .search-form input::placeholder {
-    color: #dddbdb!important;
+    color: var(--color-primary)!important;
 }

@@ -52,7 +52,7 @@ html
                         div(class="key-container" id="keyContainer")
                             each k in keys
                                 div(class="key-content" id="key-"+k.id data-id=(k.id))
-                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expiresFormat} | Key: !{`<a href="${bdgePath}/vip?activate=${k.key}" class="text-warning">${k.key}</a>`} | Activations: #{k.activate_count} 
+                                    span [!{`<strong>${k.id}</strong>`}]: #{k.date} ~ #{k.expiresFormat} | Key: !{`<a href="${bdgePath}/vip?activate=${k.key}" class="color-accent">${k.key}</a>`} | Activations: #{k.activate_count} 
                                     span(class="ml-auto btn-close btnDelete") X
 
         include ../templades/fotter.pug
@@ -82,12 +82,12 @@ html
                                 let data = await res.json()
                                 let el = $('#keyInfo')
 
-                                let message = `- Key <span class="text-warning">${data.key}</span> successful created! -`
+                                let message = `- Key <span class="color-accent">${data.key}</span> successful created! -`
                                 el.addClass('text-success').html(message)
                                 $('#btnGenerateKey').prop('disabled', false)
 
                             } else {
-                                $('#keyInfo').addClass('text-danger').text(`- Error after created Key. Status code [${res.status}] -`)
+                                $('#keyInfo').addClass('color-accent-2').text(`- Error after created Key. Status code [${res.status}] -`)
                             }
                         })
                     })
@@ -108,7 +108,7 @@ html
                                 if (res && res.status === 200) {
                                     el.remove()
                                 } else {
-                                    $('#keyInfo').html(`<span class="text-danger">Error after delete key ID: ${id} </span>`)
+                                    $('#keyInfo').html(`<span class="color-accent-2">Error after delete key ID: ${id} </span>`)
                                 }
                             })
                         }

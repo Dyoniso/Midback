@@ -324,6 +324,7 @@ async function renderAdmin(req, res) {
         boards : boards,
         bdgePath : bdgePath,
         archiveUrl : archiveUrl,
+        fmDirs : fm.dirName,
     })
     else return utils.renderHtml(res, '/adm/admin.pug', { bdgePath : bdgePath })
 }

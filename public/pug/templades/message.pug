@@ -15,9 +15,8 @@ html
             div(class="container")
                 div(class="text-center")
                     div Unable to process your post. The following errors occurred
-                    div(class="p-2 text-danger font-weight-bold" style="font-size:18px;word-break:break-all") !{message}
-                    h6(class="pixel-font" id="redirectTimer") You will be redirected on 
-                        span 5
+                    div(class="p-2 color-accent-2 font-weight-bold" style="font-size:18px;word-break:break-all") !{message}
+                    a(href="/" class="font-weight-bold" id="redirectTimer")
 
         include ./fotter.pug
         if (!vip)
@@ -25,12 +24,30 @@ html
 
         script(src=(bdgePath + "/js/fonts.js")) 
         script.
-            let c = 5
-            let interval = setInterval(() => {
-                $('#redirectTimer').children('span').text(c)
-                if (c-- <= 0) {
-                    clearInterval(interval)
+            $(document).ready(() => {
+                let oldText;
+                let pause = false
+                $('#redirectTimer').on('click', (e) => {
+                    e.preventDefault()
                     history.go(-1)
-                }
-            }, 1000)        
+                }).hover((e) => {
+                    oldText = $(e.target).text()
+                    pause = true
+                    $(e.target).text('Back to previous page')
+                }, (e) => {
+                    pause = false
+                    $(e.target).text(oldText)
+                })
+
+                let c = 5
+                let interval = setInterval(() => {
+                    if (!pause) {
+                        $('#redirectTimer').text(`You will be redirected on ${c}`)
+                        if (c-- <= 0) {
+                            clearInterval(interval)
+                            history.go(-1)
+                        }
+                    } 
+                }, 1000)        
+            })
                                   
