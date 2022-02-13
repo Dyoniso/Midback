@@ -83,7 +83,6 @@ a:hover {
 .halloween-font {
     font-size: 32px;
     color: var(--color-accent-2);;
-    font-family: halloween;
 }
 
 .bgr-transparent {
@@ -139,7 +138,6 @@ a:hover {
 
 .title {
     font-weight: bold;
-    font-family: 'Sarpanch', sans-serif;
     margin: 0;
     padding: 30px;
     color: #ff463c;
@@ -147,6 +145,9 @@ a:hover {
 }
 
 .title {
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
     font-size: 4.5rem;
 }
 
@@ -161,7 +162,6 @@ a.title:hover {
 }
 
 .christmas-title {
-    font: bolder 18px boulder, sans-serif;
     letter-spacing: -1px;
     font-size: 28px;
     color: #18b93c;
@@ -725,4 +725,8 @@ a.title:hover {
     border-radius: 4px;
     border: 1px solid var(--color-hr);
     padding: 4px;
+}
+
+.ui-menu-item-wrapper {
+    color : #2b2b2b!important;
 }

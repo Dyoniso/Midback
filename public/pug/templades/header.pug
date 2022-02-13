@@ -1,40 +1,40 @@
 header(class="m-4")
     - if (!headerMode) headerMode = 1
 
-    
+
     if (headerMode === 1)
         div(class="text-center")      
-            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-home)") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="font-family:'rowdies';color:var(--color-title-home)") MIDBACK 2D
 
     if (headerMode === 22)
         div(class="text-center")      
-            a(href=(bdgePath + "/") class="title p-0" style="white-space: pre;") Midback ADMIN
+            a(href=(bdgePath + "/") class="title p-0" style="font-family:'rowdies';white-space: pre;") MIDBACK ADMIN
        
     else if (headerMode === 2 || headerMode === 6)
         div(class="text-center mt-2")    
-            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-image)") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="font-family:'rowdies';color:var(--color-title-image)") MIDBACK 2D
             
             if holidays === 'halloween'
-                h6(class="halloween-font") Halloween Edition
+                h6(class="halloween-font" style="font-family:'halloween';") Halloween Edition
             else if holidays === 'natal'
-                h6(class="christmas-title") We wish everyone a merry Christmas    
+                h6(class="christmas-title" style="font:'bolder' 18px boulder;") We wish everyone a merry Christmas    
             else
                 h6(class="anim-color-change") ▲ Infinite image interaction ▲
 
     else if (headerMode === 3 || headerMode === 8 || headerMode === 9)
         div(class="text-center mt-2")
-            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-video)") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="font-family:'rowdies';color:var(--color-title-video)") MIDBACK 2D
 
             if holidays === 'halloween'
-                h6(class="halloween-font") Halloween Edition
+                h6(class="halloween-font" style="font-family:'halloween';") Halloween Edition
             else if holidays === 'natal'
-                h6(class="christmas-title") We wish everyone a merry Christmas
+                h6(class="christmas-title" style="font-family:'bolder';") We wish everyone a merry Christmas
             else
                 h6(class="anim-color-change") ▲ Infinite video interaction ▲
 
     else if (headerMode === 10 || headerMode === 12 || headerMode === 14)
         div(class="text-center mt-2")    
-            a(href=(bdgePath + "/") class="title" style="color:var(--color-title-audio)") Midback 2D
+            a(href=(bdgePath + "/") class="title" style="font-family:'rowdies';color:var(--color-title-audio)") MIDBACK 2D
 
             if holidays === 'halloween'
                 h6(class="halloween-font") Halloween Edition
@@ -45,7 +45,7 @@ header(class="m-4")
 
     else if (headerMode === 4)
         div(class="text-center mt-2")  
-            span(class="title" style="color:var(--color-title-home)") Midback 2D
+            span(class="title" style="font-family:'rowdies';color:var(--color-title-home)") MIDBACK 2D
 
             if holidays === 'halloween'
                 h6(class="main-title") ▲ Endless interaction of images and other files. Hallowen edition of !{new Date().getFullYear()} !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲

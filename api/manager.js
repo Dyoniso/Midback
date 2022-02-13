@@ -88,6 +88,10 @@ if (boards.IMAGES.enabled === true) {
     app.get(bdgePath + '/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.IMAGES.path)
     })
+
+    app.post(bdgePath + '/' + boards.IMAGES.path + '/tags/', middle.indexLimitter, (req, res) => {
+        return tagListLogic(req, res, boards.IMAGES.path)
+    })
     
     app.get(bdgePath + '/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, true, boards.IMAGES.path)
@@ -117,6 +121,10 @@ if (boards.VIDEOS.enabled === true) {
         return await passportLogic(req, res, boards.VIDEOS.path)
     })
 
+    app.post(bdgePath + '/' + boards.VIDEOS.path + '/tags/', middle.indexLimitter, (req, res) => {
+        return tagListLogic(req, res, boards.IMAGES.path)
+    })
+
     app.delete(bdgePath + `/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
         return await deleteLogic(req, res, boards.VIDEOS.path)
     })
@@ -139,6 +147,10 @@ if (boards.VIDEOS.enabled === true) {
 if (boards.AUDIOS.enabled === true) {
     app.post(bdgePath + `/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
         return await passportLogic(req, res, boards.AUDIOS.path)
+    })
+
+    app.post(bdgePath + '/' + boards.AUDIOS.path + '/tags/', middle.indexLimitter, (req, res) => {
+        return tagListLogic(req, res, boards.AUDIOS.path)
     })
     
     app.get(bdgePath + '/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
@@ -213,6 +225,24 @@ async function renderIndex(req, res) {
         goalEnabled : goalEnabled,
         bdgePath : bdgePath
     })
+}
+
+async function tagListLogic(req, res, board) {
+    let content = req.body.content
+    let tags = []
+    let tl = tables.IMAGES
+    if (board === boards.VIDEOS.path) tl = tables.VIDEOS
+    if (board === boards.AUDIOS.path) tl = tables.AUDIOS
+
+    if (content.length <= 30) {
+        try {
+            let pre = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND tag LIKE $1 LIMIT 50`, `%${content}%`)
+            for (p of pre) tags.push(p.tag)
+        } catch (err) {
+            logger.error('Error after get tag list', err)
+        }
+    }
+    return res.status(200).send(tags).end()
 }
 
 async function renderInfo(req, res) {

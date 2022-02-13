@@ -1,4 +1,4 @@
-let bdgePath = $('#bdgePath').val()
+let bdgePath = $('#bridgePath').val()
 $('#fontStyle').html(`
     @font-face {
         font-family: 'halloween';
@@ -8,5 +8,9 @@ $('#fontStyle').html(`
     @font-face {
         font-family: 'boulder';
         src: url('${bdgePath}/css/fonts/font_boulder.ttf');   
+    }
+    @font-face {
+        font-family: 'rowdies';
+        src: url('${bdgePath}/css/fonts/font_rowdies.ttf');   
     }
 `)
