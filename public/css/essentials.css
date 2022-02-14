@@ -727,6 +727,11 @@ a.title:hover {
     padding: 4px;
 }
 
+.ui-menu {
+    border-radius: 4px;
+    background: var(--bgr-input);
+}
+
 .ui-menu-item-wrapper {
-    color : #2b2b2b!important;
+    color : var(--color-primary)!important;
 }

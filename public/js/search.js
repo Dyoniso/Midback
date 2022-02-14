@@ -3,13 +3,10 @@ $(document).ready((e) => {
     let board = $('#boardPath').val()
     let tin = null
 
-    $('#searchContent').on('input', (e) => {
-        let content = $(e.target).val()
-        if (content.length > 30) return
-
+    function getSuggests(content, el) {
         if (tin) clearTimeout(tin)
         tin = setTimeout((e) => {
-            fetch(`${bridgePath}/${board}/tags`, {
+            fetch(`${bridgePath}/${board}/suggestions`, {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json' },
                 body: JSON.stringify({
@@ -19,11 +16,17 @@ $(document).ready((e) => {
             .then(async(res) => {
                 if (res && res.status === 200) {
                     let data = await res.json()
-                    $('#searchContent').autocomplete({
+                    el.autocomplete({
                         source : data
                     })
                 }
             })
         }, 500)
+    }
+
+    $('#searchContent, #tagInput').on('input', (e) => {
+        let content = $(e.target).val()
+        if (content.length > 30) return
+        getSuggests(content, $(e.target))
     })
 })

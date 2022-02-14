@@ -40,7 +40,7 @@ html
 
                                 div(class="d-flex")
                                     div(class="mr-auto mt-auto mb-auto")
-                                        input(class="tag-input" placeholder="Insert TAG" name="tag")
+                                        input(class="tag-input" placeholder="Insert TAG" name="tag" id="tagInput" style=(vip ? 'color:var(--color-accent-vip)' : '')) 
                                     div(class="ml-auto")
                                         if (vip)
                                             button(class="m-1 btn btn-success font-weight-bold" id="btnSkip") (VIP) Skip
@@ -56,6 +56,7 @@ html
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
+        script(src=(bdgePath + "/js/search.js"))
         script(src=(bdgePath + "/js/fonts.js")) 
         script(src=(bdgePath + "/js/itemPreview.js"))
                                   

@@ -10,7 +10,7 @@ html
         include ../templades/header.pug
         
         section
-            input(type="hidden" value=(bdgePath) id="bdgePath")
+            input(type="hidden" value=(bdgePath) id="bridgePath")
 
             div(class="container" style="max-width:40rem")
                 form(action=(bdgePath + "/admin/login")  method="POST" enctype="multipart/form-data")

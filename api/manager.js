@@ -89,8 +89,8 @@ if (boards.IMAGES.enabled === true) {
         return renderBoards(req, res, false, boards.IMAGES.path)
     })
 
-    app.post(bdgePath + '/' + boards.IMAGES.path + '/tags/', middle.indexLimitter, (req, res) => {
-        return tagListLogic(req, res, boards.IMAGES.path)
+    app.post(bdgePath + '/' + boards.IMAGES.path + '/suggestions/', middle.indexLimitter, (req, res) => {
+        return suggestionsLogic(req, res, boards.IMAGES.path)
     })
     
     app.get(bdgePath + '/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
@@ -121,8 +121,8 @@ if (boards.VIDEOS.enabled === true) {
         return await passportLogic(req, res, boards.VIDEOS.path)
     })
 
-    app.post(bdgePath + '/' + boards.VIDEOS.path + '/tags/', middle.indexLimitter, (req, res) => {
-        return tagListLogic(req, res, boards.IMAGES.path)
+    app.post(bdgePath + '/' + boards.VIDEOS.path + '/suggestions/', middle.indexLimitter, (req, res) => {
+        return suggestionsLogic(req, res, boards.IMAGES.path)
     })
 
     app.delete(bdgePath + `/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
@@ -149,8 +149,8 @@ if (boards.AUDIOS.enabled === true) {
         return await passportLogic(req, res, boards.AUDIOS.path)
     })
 
-    app.post(bdgePath + '/' + boards.AUDIOS.path + '/tags/', middle.indexLimitter, (req, res) => {
-        return tagListLogic(req, res, boards.AUDIOS.path)
+    app.post(bdgePath + '/' + boards.AUDIOS.path + '/suggestions/', middle.indexLimitter, (req, res) => {
+        return suggestionsLogic(req, res, boards.AUDIOS.path)
     })
     
     app.get(bdgePath + '/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
@@ -227,7 +227,7 @@ async function renderIndex(req, res) {
     })
 }
 
-async function tagListLogic(req, res, board) {
+async function suggestionsLogic(req, res, board) {
     let content = req.body.content
     let tags = []
     let tl = tables.IMAGES
@@ -236,7 +236,9 @@ async function tagListLogic(req, res, board) {
 
     if (content.length <= 30) {
         try {
-            let pre = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND tag LIKE $1 LIMIT 50`, `%${content}%`)
+            let vips = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = true AND tag LIKE $1 LIMIT 5`, `%${content}%`)
+            for (p of vips) tags.push(p.tag)
+            let pre = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = false AND tag LIKE $1 LIMIT 50`, `%${content}%`)
             for (p of pre) tags.push(p.tag)
         } catch (err) {
             logger.error('Error after get tag list', err)
