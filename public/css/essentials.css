@@ -136,7 +136,7 @@ a:hover {
     padding: 8px;
 }
 
-.title {
+.title, .search-title{
     font-weight: bold;
     margin: 0;
     padding: 30px;
@@ -144,14 +144,18 @@ a:hover {
     text-shadow: 0.3vmin 0.3vmin 0 #d62ed6, -0.3vmin -0.3vmin 0 #0520bd;
 }
 
-.title {
+.title, .search-title {
     font-style: normal;
     font-display: swap;
     font-weight: 900;
     font-size: 4.5rem;
 }
 
-a.title:hover {
+.search-title {
+    font-size: 3.2rem;
+}
+
+a.title:hover, a.search-title:hover {
     color: #ff463c;
     text-decoration: underline;
 }
@@ -506,6 +510,9 @@ a.title:hover {
     .igr {
         display: none;
     }
+    .search-title {
+        display: none;
+    }
 }
 @media only screen and (max-width: 400px) {
     .title {
@@ -734,4 +741,9 @@ a.title:hover {
 
 .ui-menu-item-wrapper {
     color : var(--color-primary)!important;
+}
+
+.search-container {
+    margin-left: 4rem;
+    margin-right: 4rem;
 }

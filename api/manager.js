@@ -76,6 +76,10 @@ app.all(bdgePath + '/*', middle.uidGen, async(req, res, next) => {
     return next()      
 })
 
+app.get(bdgePath + '/search', middle.indexLimitter, (req, res) => {
+    return renderSearch(req, res)
+})
+
 app.get(bdgePath + '/render/' + boards.AUDIOS.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
     return renderBoards(req, res, true, boards.AUDIOS.path)
 })
@@ -223,6 +227,14 @@ async function renderIndex(req, res) {
         stats : await getStats(),
         goal : goal,
         goalEnabled : goalEnabled,
+        bdgePath : bdgePath
+    })
+}
+
+async function renderSearch(req, res) {
+    return utils.renderHtml(res, '/home/search.pug',  { 
+        adsKey : adsKey,
+        holidays : holidays.checkHoliDays(),
         bdgePath : bdgePath
     })
 }

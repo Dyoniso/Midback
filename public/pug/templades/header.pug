@@ -1,7 +1,7 @@
 header(class="m-4")
     - if (!headerMode) headerMode = 1
 
-
+    
     if (headerMode === 1)
         div(class="text-center")      
             a(href=(bdgePath + "/") class="title" style="font-family:'rowdies';color:var(--color-title-home)") MIDBACK 2D
@@ -53,7 +53,14 @@ header(class="m-4")
                 h6(class="main-title") ▲ Endless interaction of images and other files. Christmas edition of !{new Date().getFullYear()} !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲
             else
                 h6(class="main-title") ▲ Endless interaction of images and other files. Get your passport now !{'</br>'} MIDPASSPORT - unlimited promotion for 1 image ▲
+    else if (headerMode === 18)
+        div(class="search-container")
+            div(class="text-center")      
+                a(href=(bdgePath + "/") class="search-title" style="font-family:'rowdies';") MULT FILE SEARCH
 
+            form(action=(bdgePath + "/search") class="passport-form" method="POST" enctype="multipart/form-data")
+                div(class="input-group")
+                    input(type="text" class="form-control" placeholder="Find lost images, videos or audios in the Midback hole")
 
     if (headerMode === 2 || headerMode === 3 || headerMode === 8 || headerMode === 14)
         if (admin === true)

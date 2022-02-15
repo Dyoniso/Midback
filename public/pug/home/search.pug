@@ -1,0 +1,26 @@
+doctype html
+html
+    include ../templades/head.pug
+    style(id="fontStyle")
+    include ../templades/themeChecker.pug
+
+    body(class="theme-templade" style=(styleTheme))
+        if (!vip)
+            include ../templades/adsContent.pug
+
+        - headerMode = 18
+        include ../templades/header.pug
+        
+        section
+            input(type="hidden" value=(bdgePath) id="bridgePath")
+            
+            div(class="search-content")
+                div(class="text-center" style="font-size:22px")
+
+        include ../templades/fotter.pug
+        if (!vip)
+            include ../templades/adsContent.pug
+        include ../templades/snow.pug
+
+        script(src=(bdgePath + "/js/fonts.js")) 
+                                  
