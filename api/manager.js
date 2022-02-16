@@ -88,13 +88,13 @@ app.get(bdgePath + '/render/' + boards.VIDEOS.path, middle.checkjwt, middle.inde
     return renderBoards(req, res, true, boards.VIDEOS.path)
 })
 
+app.post(bdgePath + '/suggestions', middle.indexLimitter, (req, res) => {
+    return suggestionsLogic(req, res)
+})
+
 if (boards.IMAGES.enabled === true) {
     app.get(bdgePath + '/' + boards.IMAGES.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
         return renderBoards(req, res, false, boards.IMAGES.path)
-    })
-
-    app.post(bdgePath + '/' + boards.IMAGES.path + '/suggestions/', middle.indexLimitter, (req, res) => {
-        return suggestionsLogic(req, res, boards.IMAGES.path)
     })
     
     app.get(bdgePath + '/render/' + boards.IMAGES.path, middle.checkjwt, middle.indexLimitter, (req, res) => {
@@ -125,10 +125,6 @@ if (boards.VIDEOS.enabled === true) {
         return await passportLogic(req, res, boards.VIDEOS.path)
     })
 
-    app.post(bdgePath + '/' + boards.VIDEOS.path + '/suggestions/', middle.indexLimitter, (req, res) => {
-        return suggestionsLogic(req, res, boards.IMAGES.path)
-    })
-
     app.delete(bdgePath + `/${boards.VIDEOS.path}/del`, middle.checkAdmin, middle.delLimiter, async(req, res) => {
         return await deleteLogic(req, res, boards.VIDEOS.path)
     })
@@ -151,10 +147,6 @@ if (boards.VIDEOS.enabled === true) {
 if (boards.AUDIOS.enabled === true) {
     app.post(bdgePath + `/${boards.AUDIOS.path}/passport`, upload.any(), middle.checkAdmin, middle.checkjwt, middle.checkVip, middle.limitter, async(req, res) => {
         return await passportLogic(req, res, boards.AUDIOS.path)
-    })
-
-    app.post(bdgePath + '/' + boards.AUDIOS.path + '/suggestions/', middle.indexLimitter, (req, res) => {
-        return suggestionsLogic(req, res, boards.AUDIOS.path)
     })
     
     app.get(bdgePath + '/' + boards.AUDIOS.path, middle.checkAdmin, middle.checkVip, middle.checkjwt, middle.indexLimitter, (req, res) => {
@@ -232,28 +224,34 @@ async function renderIndex(req, res) {
 }
 
 async function renderSearch(req, res) {
+    let search = req.query.q
+    let files = await getRandomFiles(search)
+
     return utils.renderHtml(res, '/home/search.pug',  { 
         adsKey : adsKey,
+        files : files,
         holidays : holidays.checkHoliDays(),
-        bdgePath : bdgePath
+        bdgePath : bdgePath,
+        search : search,
     })
 }
 
 async function suggestionsLogic(req, res, board) {
+    let limit = 20
     let content = req.body.content
+    let tls = [ tables.IMAGES, tables.VIDEOS, tables.AUDIOS ]
     let tags = []
-    let tl = tables.IMAGES
-    if (board === boards.VIDEOS.path) tl = tables.VIDEOS
-    if (board === boards.AUDIOS.path) tl = tables.AUDIOS
-
+    
     if (content.length <= 30) {
-        try {
-            let vips = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = true AND tag LIKE $1 LIMIT 5`, `%${content}%`)
-            for (p of vips) tags.push(p.tag)
-            let pre = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = false AND tag LIKE $1 LIMIT 50`, `%${content}%`)
-            for (p of pre) tags.push(p.tag)
-        } catch (err) {
-            logger.error('Error after get tag list', err)
+        for (tl of tls) {
+            try {
+                let vips = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = true AND tag LIKE $1 LIMIT 3`, `%${content}%`)
+                for (p of vips) tags.push(p.tag)
+                let pre = await db.query(`SELECT tag FROM ${tl} WHERE tag != '' AND vip = false AND tag LIKE $1 LIMIT  $2`, [`%${content}%`, limit])
+                for (p of pre) tags.push(p.tag)
+            } catch (err) {
+                logger.error('Error after get tag list', err)
+            }
         }
     }
     return res.status(200).send(tags).end()
@@ -982,6 +980,47 @@ async function getFile(id, board) {
     }
 
     return file
+}
+
+async function getRandomFiles(search) {
+    let limit = 20
+    let files = []
+    let slf = []
+    let board = boards.IMAGES.path
+    
+    slf = await getFiles(0, limit, 0, board, false, search)
+    for (f of slf) {
+        try {
+            f.fileType = f.mimetype.split('/')[0]
+        } catch (err) { f.fileType = f.mime }
+        f.board = board
+        f.archiveUrl = archiveUrl + '/' + fm.dirName.image
+        f.archivePreviewUrl = archiveUrl + '/' + fm.dirName.preview
+        files.push(f)
+    }
+
+    board = boards.VIDEOS.path
+    slf = await getFiles(0, limit, 0, board, false, search)
+    for (f of slf) {
+        try {
+            f.fileType = f.mimetype.split('/')[0]
+        } catch (err) { f.fileType = f.mime }
+        f.board = board
+        f.archiveUrl = archiveUrl + '/' + fm.dirName.thumb
+        files.push(f)
+    }
+    
+    board = boards.AUDIOS.path
+    slf = await getFiles(0, limit, 0, board, false, search)
+    for (f of slf) {
+        try {
+            f.fileType = f.mimetype.split('/')[0]
+        } catch (err) { f.fileType = f.mime }
+        f.board = board
+        f.archiveUrl = archiveUrl + '/' + fm.dirName.video
+        files.push(f)
+    }
+    return files
 }
 
 async function getFiles(page, limit, set, board, rnd, search) {

@@ -1,0 +1,19 @@
+each r in files
+    if (r.fileType === 'image')
+        div(onClick="openModal(this)" class=`item-img ${r.vip ? 'vip-highlight' : ''} m-2` id=`itemImg-${r.id}`)
+            - href = (r.preview) ? `${r.archivePreviewUrl}/${r.preview}` : `${r.archiveUrl}/${r.filename}`
+            img(src=(href) data-href=(href) data-type=(0) data-tag=(r.tag) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) data-width=(r.width) data-height=(r.height) data-vip=(String(r.vip)) onerror=`this.src='${bdgePath}/assets/404.jpg'`)
+    
+    if (r.fileType === 'video')
+        div(class=`item-img-v ${r.vip ? 'vip-video-highlight' : ''} m-2` id=`itemVideo-${r.id}`)
+            - href = `${r.archiveUrl}/${r.thumb_name}`
+            a(href=`?watch=${r.id}`)
+                img(src=(href) data-type=(1) data-href=(href) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) onerror=`this.src='${bdgePath}/assets/404.jpg'`)
+
+    if (r.fileType === 'audio')
+        div(class=`item-audio ${r.vip ? 'audio-vip-highlight' : ''} m-2` id=`itemAudio-${r.id}` onClick=(admin === true && aclAdmin === true ? "delEvent(this)" : ""))
+            - src = `${r.archiveUrl}/${r.filename}`
+            img(src=(bdgePath + '/assets/audio_icon.png') data-type=(2) data-src=(src) data-date=(r.date) data-tag=(r.tag) data-vip=(String(r.vip)) data-filename=(r.filename) data-id=(r.id) data-size=(r.size))        
+
+            - let n = r.filename.length > 24 ? r.filename.substr(0, 24) : r.filename
+            small !{r.vip ? '(VIP)' : ''} #{n}

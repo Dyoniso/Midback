@@ -15,12 +15,18 @@ html
             input(type="hidden" value=(bdgePath) id="bridgePath")
             
             div(class="search-content")
-                div(class="text-center" style="font-size:22px")
+                div(class="container-fluid")
+                    div(class="row justify-content-center" id="itemContainer")
+                        if (files.length > 0)
+                            include ../templades/itemFile.pug
+                        else
+                            h2 Your search returned no results
 
         include ../templades/fotter.pug
         if (!vip)
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
+        script(src=(bdgePath + "/js/search.js"))
         script(src=(bdgePath + "/js/fonts.js")) 
                                   

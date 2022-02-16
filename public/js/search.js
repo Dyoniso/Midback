@@ -1,12 +1,11 @@
 $(document).ready((e) => {
     let bridgePath = $('#bridgePath').val()
-    let board = $('#boardPath').val()
     let tin = null
 
     function getSuggests(content, el) {
         if (tin) clearTimeout(tin)
         tin = setTimeout((e) => {
-            fetch(`${bridgePath}/${board}/suggestions`, {
+            fetch(`${bridgePath}/suggestions`, {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json' },
                 body: JSON.stringify({
@@ -24,7 +23,7 @@ $(document).ready((e) => {
         }, 500)
     }
 
-    $('#searchContent, #tagInput').on('input', (e) => {
+    $('#searchContent, #tagInput, #searchInput').on('input', (e) => {
         let content = $(e.target).val()
         if (content.length > 30) return
         getSuggests(content, $(e.target))
