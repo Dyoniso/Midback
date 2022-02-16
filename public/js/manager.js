@@ -110,18 +110,21 @@ $(document).ready((e) => {
     })
 
     function startNotifyTimer() {
-        let tinInit = 5
-        let c = tinInit
-        setInterval(() => {
-            if (c-- < 0) {
-                if (tinInit < 120) tinInit = tinInit + 2            
-                c = tinInit
+        if (boardType) {
+            let tinInit = 5
+            let c = tinInit
 
-                let totalPage = parseInt($('#totalPage').val())
-                if (isNaN(totalPage) || totalPage <= 0) totalPage = 0
-                fetchFiles(totalPage)
-            }
-        }, 1000)
+            setInterval(() => {
+                if (c-- < 0) {
+                    if (tinInit < 120) tinInit = tinInit + 2            
+                    c = tinInit
+    
+                    let totalPage = parseInt($('#totalPage').val())
+                    if (isNaN(totalPage) || totalPage <= 0) totalPage = 0
+                    fetchFiles(totalPage)
+                }
+            }, 1000)
+        }
     }
     if (!page || page && page <= 1) startNotifyTimer()
 })

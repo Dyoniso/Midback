@@ -7,7 +7,7 @@ each r in files
     if (r.fileType === 'video')
         div(class=`item-img-v ${r.vip ? 'vip-video-highlight' : ''} m-2` id=`itemVideo-${r.id}`)
             - href = `${r.archiveUrl}/${r.thumb_name}`
-            a(href=`?watch=${r.id}`)
+            a(href=`/${r.board}?watch=${r.id}`)
                 img(src=(href) data-type=(1) data-href=(href) data-date=(r.date) data-filename=(r.filename) data-id=(r.id) data-size=(r.size) onerror=`this.src='${bdgePath}/assets/404.jpg'`)
 
     if (r.fileType === 'audio')

@@ -58,9 +58,16 @@ header(class="m-4")
             div(class="text-center")      
                 a(href=(bdgePath + "/") class="search-title" style="font-family:'rowdies';") MULT FILE SEARCH
 
-            form(action=(bdgePath + "/search") class="passport-form" method="GET" enctype="multipart/form-data")
+            form(action=(bdgePath + "/search") class="search-large-form" method="GET" enctype="multipart/form-data")
                 div(class="input-group")
                     input(type="text" class="form-control" placeholder="Find lost images, videos or audios in the Midback hole" name="q" value=(search) id="searchInput")
+
+            div(align="end")
+                small Deep search: 
+                    a(id="deepImages" class="ml-1 font-weight-bold" href=`${boards.IMAGES.path}?search=`) /#{boards.IMAGES.path}/
+                    a(id="deepVideos" class="ml-1 font-weight-bold" href=`${boards.VIDEOS.path}?search=`) /#{boards.VIDEOS.path}/
+                    a(id="deepAudios" class="ml-1 font-weight-bold" href=`${boards.AUDIOS.path}?search=`) /#{boards.AUDIOS.path}/
+
 
     if (headerMode === 2 || headerMode === 3 || headerMode === 8 || headerMode === 14)
         if (admin === true)

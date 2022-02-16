@@ -2,17 +2,20 @@ const MODE_BRIDGE = require('../bridge').MODE_BRIDGE
 const Logger = require('./logger')
 let app
 let logger
+let searchLogger
 if (MODE_BRIDGE) {
     let p = require('../bridge').P
     boards = require('../bridge').boards
     app = require('../bridge').app
     logger = new Logger(require('../bridge').P.name)
+    searchLogger = new Logger(require('../bridge').P.name + '-' + 'search')
     API_VERSION = p.version
 } else {
     API_VERSION = require('../app').API_VERSION
     boards = require('../app').boards
     app = require('../app').app
     logger = new Logger('app')
+    searchLogger = new Logger('search')
 }
 
 const tables = require('./database').tables
@@ -224,8 +227,12 @@ async function renderIndex(req, res) {
 }
 
 async function renderSearch(req, res) {
+    let uid = req.uuid
     let search = req.query.q
     let files = await getRandomFiles(search)
+
+    if (!search) search = ''
+    if (search.length > 0 && files.length > 0) searchLogger.info(`User: ${uid} started search query: ${search}`)
 
     return utils.renderHtml(res, '/home/search.pug',  { 
         adsKey : adsKey,
@@ -233,6 +240,7 @@ async function renderSearch(req, res) {
         holidays : holidays.checkHoliDays(),
         bdgePath : bdgePath,
         search : search,
+        boards : boards,
     })
 }
 
@@ -380,7 +388,7 @@ async function removeAdmin(req, res) {
 }
 
 async function adminLogic(req, res) {
-    let uid = req.uid
+    let uid = req.uuid
     let password = String(req.body.password)
 
     if (password === admPassword) {
@@ -763,6 +771,7 @@ async function renderBoards(req, res, render, board) {
     let set = parseInt(req.query.set)
     let page = parseInt(req.query.page)
     let search = req.query.search
+    let uid = req.uuid
 
     if (!page && isNaN(page)) page = 1
     if (isNaN(watch) || watch <= 0) watch = -1
@@ -792,6 +801,8 @@ async function renderBoards(req, res, render, board) {
     } else {
         file = await getFile(watch, board)
     }
+
+    if (search.length > 0 && files.length > 0) searchLogger.info(`User: ${uid} started search query: ${search}`)
 
     let hdz = holidays.checkHoliDays()
 
@@ -1017,10 +1028,17 @@ async function getRandomFiles(search) {
             f.fileType = f.mimetype.split('/')[0]
         } catch (err) { f.fileType = f.mime }
         f.board = board
-        f.archiveUrl = archiveUrl + '/' + fm.dirName.video
+        f.archiveUrl = archiveUrl + '/' + fm.dirName.audio
         files.push(f)
     }
-    return files
+
+    let shuffled = files
+    if (!search || search.length.length === 0) {
+        shuffled = shuffled.map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+    }
+    return shuffled
 }
 
 async function getFiles(page, limit, set, board, rnd, search) {

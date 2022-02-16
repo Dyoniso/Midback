@@ -5,6 +5,8 @@ html
     include ../templades/themeChecker.pug
 
     body(class="theme-templade" style=(styleTheme))
+        include ../templades/imgPreview.pug
+
         if (!vip)
             include ../templades/adsContent.pug
 
@@ -27,6 +29,10 @@ html
             include ../templades/adsContent.pug
         include ../templades/snow.pug
 
+        include ../templades/audioPopup.pug
+
+        script(src=(bdgePath + "/js/audioPreview.js"))
+        script(src=(bdgePath + "/js/manager.js"))
         script(src=(bdgePath + "/js/search.js"))
         script(src=(bdgePath + "/js/fonts.js")) 
                                   

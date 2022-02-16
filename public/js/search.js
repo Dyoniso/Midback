@@ -23,6 +23,21 @@ $(document).ready((e) => {
         }, 500)
     }
 
+    let orinI = $('#deepImages').attr('href')
+    let orinV = $('#deepVideos').attr('href')
+    let orinA = $('#deepAudios').attr('href')
+    $('#searchInput').on('input', (e) => {
+        let content = $(e.target).val()
+        setTextInDeepSearchInput(content)
+    })
+
+    function setTextInDeepSearchInput(content) {
+        $('#deepImages').attr('href', orinI + content)
+        $('#deepVideos').attr('href', orinV + content)
+        $('#deepAudios').attr('href', orinA + content)
+    }
+    if ($('#searchInput').val().length > 0) setTextInDeepSearchInput($('#searchInput').val())
+
     $('#searchContent, #tagInput, #searchInput').on('input', (e) => {
         let content = $(e.target).val()
         if (content.length > 30) return
