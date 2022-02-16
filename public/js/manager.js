@@ -22,7 +22,7 @@ function openModal(e) {
         `)
         href = location.origin + href
         $('#searchUrl').html(`
-            Search: <a target="_blank" class="color-accent" href="//www.google.com/searchbyimage?image_url=${href}">Google</a> / <a target="_blank" class="color-accent" href="//iqdb.org/?url=${href}">IQDB</a> / <a target="_blank" class="color-accent" href="//saucenao.com/search.php?url=${href}">SauceNao</a>
+            Search: <a target="_blank" class="color-accent" href="/search?q=${filename}">Midback</a> / <a target="_blank" class="color-accent" href="//www.google.com/searchbyimage?image_url=${href}">Google</a> / <a target="_blank" class="color-accent" href="//iqdb.org/?url=${href}">IQDB</a> / <a target="_blank" class="color-accent" href="//saucenao.com/search.php?url=${href}">SauceNao</a>
         `)
         $('#modalImgPreview').attr('src', e.attr('src'))
         $('#imgViewModal').modal('show')
