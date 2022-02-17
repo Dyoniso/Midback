@@ -262,6 +262,10 @@ async function suggestionsLogic(req, res, board) {
             }
         }
     }
+
+    tags = tags.filter((item, pos, self) => {
+        return self.indexOf(item) == pos;
+    })
     return res.status(200).send(tags).end()
 }
 

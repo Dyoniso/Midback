@@ -36,7 +36,7 @@ $(document).ready((e) => {
         $('#deepVideos').attr('href', orinV + content)
         $('#deepAudios').attr('href', orinA + content)
     }
-    if ($('#searchInput').val().length > 0) setTextInDeepSearchInput($('#searchInput').val())
+    if (Object.keys($('#searchInput')).length > 0 && $('#searchInput').val().length > 0) setTextInDeepSearchInput($('#searchInput').val())
 
     $('#searchContent, #tagInput, #searchInput').on('input', (e) => {
         let content = $(e.target).val()
