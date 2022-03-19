@@ -4,6 +4,8 @@
 
 Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
 
+Preview Video:
+
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/dq_5pX_fdbQ/0.jpg)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
 
 1. Support users who don't use javascript
