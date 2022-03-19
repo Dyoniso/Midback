@@ -6,7 +6,7 @@ Midback is an imageboard that only accepts images as a form of posting, it was d
 
 Preview Video:
 
-[![IMAGE ALT TEXT HERE](https://github.com//Dyoniso/Midback/blob/3.2/public/assets/preview.jpg?raw=true)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
+[![IMAGE ALT TEXT HERE](https://github.com//Dyoniso/Midback/blob/3.2/public/assets/MidPreview.jpg?raw=true)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
 
 1. Support users who don't use javascript
 2. Easy and practical code customization
