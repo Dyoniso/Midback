@@ -2,16 +2,17 @@
 
 # 7Retro Engine - Midback Relative 2D Imageboard
 
-Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
-
 Preview Video:
 
 [![IMAGE ALT TEXT HERE](https://github.com//Dyoniso/Midback/blob/3.2/public/assets/MidPreview.jpg?raw=true)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
+
+Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
 
 1. Support users who don't use javascript
 2. Easy and practical code customization
 3. Front-end with modular technology for greater compatibility
 4. Easy instalation
+5. File Buffer Optimization
 
 # Required dependencies
 * [Node.js](http://nodejs.org)
