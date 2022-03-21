@@ -39,7 +39,7 @@ Set permission and run the setup script:
 chmod 777 setup.sh
 ./setup.sh
 ```
-For more information see the video: https://www.youtube.com/watch?v=7oONH93n_Bo&ab_channel=7RetroEngine
+For more information [see this video](https://www.youtube.com/watch?v=7oONH93n_Bo&ab_channel=7RetroEngine).
 
 The install script will configure all dependencies, database and nginx proxy automatically.
 You can also choose manual installation, see more on the [wiki](https://github.com/Dyoniso/Midback/wiki)
