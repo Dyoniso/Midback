@@ -39,11 +39,16 @@ Set permission and run the setup script:
 chmod 777 setup.sh
 ./setup.sh
 ```
+For more information see the video: https://www.youtube.com/watch?v=7oONH93n_Bo&ab_channel=7RetroEngine
+
 The install script will configure all dependencies, database and nginx proxy automatically.
 You can also choose manual installation, see more on the [wiki](https://github.com/Dyoniso/Midback/wiki)
 
 # Copyright
 Dyoniso - Copyright © Midback 2021
+
+# Donate
+https://www.patreon.com/dyoniso
 
 # License
 Licensed under the [WTFPL License](http://www.wtfpl.net/).
