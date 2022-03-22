@@ -4,7 +4,7 @@
 
 Preview Video:
 
-[![IMAGE ALT TEXT HERE](https://github.com//Dyoniso/Midback/blob/3.2/public/assets/MidPreview.jpg?raw=true)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
+[![IMAGE ALT TEXT HERE](https://github.com//Dyoniso/Midback/blob/3.2/public/assets/MidPreview.png?raw=true)](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
 
 Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
 
