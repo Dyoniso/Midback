@@ -2,7 +2,7 @@
 
 # 7Retro Engine - Midback Relative 2D Imageboard
 
-![Preview Video](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
+[Preview Video](https://www.youtube.com/watch?v=dq_5pX_fdbQ)
 
 Midback is an imageboard that only accepts images as a form of posting, it was designed with the following objectives
 
