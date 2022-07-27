@@ -7,12 +7,22 @@ cd ../
 
 CONFIG_MASTER_PASSWORD="admin"
 
+echo "Do upgrade packages? [RECOMMENDED] (y,n)"
+read answerDemp
+
+if [ "$answerDemp" == "y" ]; then
+    apt update -y && apt upgrade -y
+fi
+
 echo "Do you want to install recommended dependencies? (y,n)"
 read answerDemp
 
 if [ "$answerDemp" == "y" ]; then
     echo "Installing dependencies (Node js, Postgresql, Nginx, ffmpeg)"
-    apt install nodejs -y && apt install postgresql-10 -y && apt install ufw -y && apt install goaccess -y && apt install -y nginx && apt install -y ffmpeg && apt install -y npm
+    apt install openssl -y && apt install ufw -y && apt install postgresql -y && apt install ufw -y && apt install goaccess -y && apt install -y nginx && apt install -y ffmpeg
+    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+    apt update -y
+    apt install -y nodejs && apt install npm -y
     echo "[OK] Dependencies installed!"
     echo ""
 
