@@ -17,9 +17,6 @@ Midback is an imageboard that only accepts images as a form of posting, it was d
 * [Postgresql 10](https://www.postgresql.org)
 * [ffmpeg](https://ffmpeg.org/)
 
-# Donate
-https://www.patreon.com/dyoniso
-
 # Instalation
 The entire system has only been tested on [Ubuntu Server LTS 18.04](https://releases.ubuntu.com/18.04/), if there is any deployment error,
 create a new topic and inform the server version and error details.
